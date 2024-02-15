@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Recepcio {% endblock %}
+
+{% block content %}
+<h2>TEXTO DE HOME.HTML<br/> Descargar node js 20.11.1 LTS</h2>
+<p>L'habitacio {{ room.number }}
+    {% if room.is_clean %}
+        esta lliure per a entrar
+    {% else %}
+        esta pendent de fer
+    {% endif %}
+</p>
+
+<table>
+    <tr>
+    <th>Room number</th>
+    <th>Is clean</th>
+    </tr>
+    {%  for Room in rooms  %}
+    <tr>
+    <td>{{ Room.number }}</td>
+    <td>{% if Room.is_clean %}
+        esta lliure per a entrar
+    {% else %}
+        esta pendent de fer
+    {% endif %}</td>
+    </tr>
+    
+    {%  endfor  %}
+</table>
+
+    {% endblock %}
