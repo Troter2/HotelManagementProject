@@ -20,5 +20,5 @@ from Reception.views import receptionIni
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', receptionIni),
+    path('', receptionIni),
 ]
