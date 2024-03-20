@@ -1,19 +1,25 @@
-name: Checklist Automático
+name: Generar Informe Semanal
 
 on:
-  issues:
-    types: [opened, closed]
+  schedule:
+    - cron: '0 0 * * 1'  # Ejecutar todos los lunes a la medianoche
 
 jobs:
-  update-checklist:
+  generate-report:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout código
+    - name: Checkout del código
       uses: actions/checkout@v2
 
-    - name: Actualizar Checklist
+    - name: Configurar Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Instalar dependencias
+      run: pip install PyGithub
+
+    - name: Ejecutar script Python
       run: |
-        node update-checklist.py
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        python generate_report.py ${{ secrets.GITHUB_TOKEN }}
