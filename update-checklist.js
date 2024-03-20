@@ -2,52 +2,54 @@ const { Octokit } = require("@octokit/core");
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-async function updateChecklist() {
+async function generateWeeklyReport() {
   try {
     const issues = await octokit.request('GET /repos/{owner}/{repo}/issues', {
-      owner: 'tu-usuario',
-      repo: 'tu-repositorio'
+      owner: 'Troter2',
+      repo: 'HotelManagementProject'
     });
 
-    // Lógica para contar el número de issues abiertas y cerradas en la semana
-    let openedThisWeek = 0;
-    let closedThisWeek = 0;
-    const currentDate = new Date();
-    const oneWeekAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+    // Objeto para almacenar el recuento de issues por día de la semana
+    const weeklyCounts = {
+      'Monday': { opened: 0, closed: 0 },
+      'Tuesday': { opened: 0, closed: 0 },
+      'Wednesday': { opened: 0, closed: 0 },
+      'Thursday': { opened: 0, closed: 0 },
+      'Friday': { opened: 0, closed: 0 },
+      'Saturday': { opened: 0, closed: 0 },
+      'Sunday': { opened: 0, closed: 0 }
+    };
 
+    // Función para obtener el nombre del día de la semana
+    function getDayOfWeek(dateString) {
+      const date = new Date(dateString);
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return daysOfWeek[date.getDay()];
+    }
+
+    // Recorre todas las issues y cuenta las abiertas y cerradas por día de la semana
     issues.data.forEach(issue => {
-      const createdAt = new Date(issue.created_at);
-      const closedAt = issue.closed_at ? new Date(issue.closed_at) : null;
+      const dayOfWeek = getDayOfWeek(issue.created_at);
+      const closedAt = issue.closed_at ? getDayOfWeek(issue.closed_at) : null;
 
-      if (createdAt >= oneWeekAgo) {
-        openedThisWeek++;
-      }
+      // Aumenta el contador de issues abiertas para el día correspondiente
+      weeklyCounts[dayOfWeek].opened++;
 
-      if (closedAt && closedAt >= oneWeekAgo) {
-        closedThisWeek++;
+      // Si la issue está cerrada, aumenta el contador de issues cerradas para el día correspondiente
+      if (closedAt) {
+        weeklyCounts[closedAt].closed++;
       }
     });
 
-    // Lógica para actualizar la checklist en algún archivo markdown dentro del repositorio
-    // Por ejemplo, podrías actualizar un archivo llamado CHECKLIST.md
-    const checklistContent = `
-- Issues Abiertas Esta Semana: ${openedThisWeek}
-- Issues Cerradas Esta Semana: ${closedThisWeek}
-`;
-
-    await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
-      owner: 'tu-usuario',
-      repo: 'tu-repositorio',
-      path: 'CHECKLIST.md',
-      message: 'Actualizar Checklist',
-      content: Buffer.from(checklistContent).toString('base64'),
-      sha: 'SHA del archivo CHECKLIST.md actual'
-    });
-
-    console.log('Checklist actualizado con éxito.');
+    // Genera la tabla gráfica
+    console.log('Día de la Semana | Abiertas | Cerradas');
+    console.log('----------------------------------------');
+    for (const day in weeklyCounts) {
+      console.log(`${day.padEnd(16)}| ${weeklyCounts[day].opened.toString().padStart(8)} | ${weeklyCounts[day].closed.toString().padStart(8)}`);
+    }
   } catch (error) {
-    console.error('Error al actualizar el checklist:', error);
+    console.error('Error al generar el informe semanal:', error);
   }
 }
 
-updateChecklist();
+generateWeeklyReport();
