@@ -6,7 +6,7 @@ from github import Github
 github_token = os.getenv('GITHUB_TOKEN')
 
 # Nombre de usuario y nombre del repositorio
-repository_name = 'Troter2/HotelManagementProject'
+repository_name = 'HotelManagementProject'
 
 # Crear una instancia de la clase Github
 g = Github(github_token)
