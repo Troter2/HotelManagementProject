@@ -1,8 +1,8 @@
 name: Generar Informe Semanal
 
 on:
-  schedule:
-    - cron: '0 0 * * 1'  # Ejecutar todos los lunes a la medianoche
+  issues:
+    types: [opened, closed]
 
 jobs:
   generate-report:
