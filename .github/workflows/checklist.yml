@@ -22,4 +22,4 @@ jobs:
 
     - name: Ejecutar script Python
       run: |
-        python generate_report.py ${{ secrets.GITHUB_TOKEN }}
+        python generate_report.py ${{ secrets.TOKEN }}
