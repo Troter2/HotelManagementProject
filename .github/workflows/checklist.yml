@@ -1,0 +1,19 @@
+name: Checklist Automático
+
+on:
+  issues:
+    types: [opened, closed]
+
+jobs:
+  update-checklist:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v2
+
+    - name: Actualizar Checklist
+      run: |
+        node update-checklist.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
