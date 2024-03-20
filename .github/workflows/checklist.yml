@@ -14,6 +14,6 @@ jobs:
 
     - name: Actualizar Checklist
       run: |
-        node update-checklist.js
+        node update-checklist.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
