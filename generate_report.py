@@ -48,14 +48,18 @@ def generate_weekly_report(github_token, username, repository_name):
     # Imprimir la tabla
     print('Día de la Semana | Abiertas | Cerradas')
     print('----------------------------------------')
+    total_closed = 0
+    total_opened = 0
     for day, counts in weekly_counts.items():
         print(f'{day.ljust(16)}| {str(counts["opened"]).rjust(8)} | {str(counts["closed"]).rjust(8)}')
+        total_opened =+ counts["opened"]
+        total_closed =+ counts["closed"]
+        
+    print(f'({"Total").ljust(16)}| {str(total_opened).rjust(8)} | {str(total_closed).rjust(8)}')
+    print('----------------------------------------')
 
 # Obtener el token de acceso personal de GitHub de los secrets
 github_token = os.getenv('GITHUB_TOKEN')
-print("======================\n")
-print(github_token)
-print("======================\n")
 
 # Nombre de usuario y nombre del repositorio
 username = 'Troter2'
