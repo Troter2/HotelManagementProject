@@ -7,7 +7,7 @@ def generate_weekly_report(github_token, username, repository_name):
     g = Github(github_token)
 
     # Obtener el repositorio
-    repo = g.get_repo(f"{repository_name}")
+    repo = g.get_repo(f"{username}/{repository_name}")
 
     # Obtener todas las issues del repositorio
     issues = repo.get_issues(state='all')
