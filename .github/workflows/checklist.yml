@@ -4,7 +4,7 @@ on:
   issues:
     types: [opened, closed]
 env:
-    TOKEN: ${{ secrets.TOKEN }}
+    TOKEN: ${{ secrets.API_KEY_FULL }}
     TEST: ${{ secrets.TEST }}
 
 jobs:
@@ -25,4 +25,4 @@ jobs:
 
     - name: Ejecutar script Python
       run: |
-        python generate_report.py ${{ secrets.TOKEN }}
+        python generate_report.py ${{ secrets.API_KEY_FULL }}
