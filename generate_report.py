@@ -53,7 +53,9 @@ def generate_weekly_report(github_token, username, repository_name):
 
 # Obtener el token de acceso personal de GitHub de los secrets
 github_token = os.getenv('TEST')
+print("======================\n")
 print(github_token)
+print("======================\n")
 
 # Nombre de usuario y nombre del repositorio
 username = 'Troter2'
