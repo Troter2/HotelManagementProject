@@ -5,8 +5,7 @@ on:
   issues:
     types: [opened, closed]
 env:
-    TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-    TEST: ${{ secrets.TEST }}
+    MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
 jobs:
   generate-report:
@@ -26,4 +25,4 @@ jobs:
 
     - name: Ejecutar script Python
       run: |
-        python generate_report.py ${{ secrets.MY_GITHUB_TOKEN }}
+        python generate_report.py
