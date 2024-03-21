@@ -22,6 +22,7 @@ jobs:
 
     - name: Ejecutar script Python
       env:
-        API_KEY: ${{ secrets.TOKEN }}
+          TOKEN: ${{ secrets.TOKEN }}
+          TEST: ${{ secrets.TEST }}
       run: |
         python generate_report.py ${{ secrets.TOKEN }}
