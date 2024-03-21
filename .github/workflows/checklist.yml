@@ -3,6 +3,9 @@ name: Generar Informe Semanal
 on:
   issues:
     types: [opened, closed]
+env:
+    TOKEN: ${{ secrets.TOKEN }}
+    TEST: ${{ secrets.TEST }}
 
 jobs:
   generate-report:
@@ -21,8 +24,5 @@ jobs:
       run: pip install PyGithub
 
     - name: Ejecutar script Python
-      env:
-          TOKEN: ${{ secrets.TOKEN }}
-          TEST: ${{ secrets.TEST }}
       run: |
         python generate_report.py ${{ secrets.TOKEN }}
