@@ -1,10 +1,11 @@
 name: Generar Informe Semanal
 
 on:
+  workflow_dispatch:
   issues:
     types: [opened, closed]
 env:
-    TOKEN: ${{ secrets.API_KEY_FULL }}
+    TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
     TEST: ${{ secrets.TEST }}
 
 jobs:
@@ -25,4 +26,4 @@ jobs:
 
     - name: Ejecutar script Python
       run: |
-        python generate_report.py ${{ secrets.API_KEY_FULL }}
+        python generate_report.py ${{ secrets.MY_GITHUB_TOKEN }}
