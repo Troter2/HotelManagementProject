@@ -55,7 +55,7 @@ def generate_weekly_report(github_token, username, repository_name):
         total_opened =+ counts["opened"]
         total_closed =+ counts["closed"]
         
-    print(f'({"Total").ljust(16)}| {str(total_opened).rjust(8)} | {str(total_closed).rjust(8)}')
+    print(f'("Total").ljust(16)}| {str(total_opened).rjust(8)} | {str(total_closed).rjust(8)}')
     print('----------------------------------------')
 
 # Obtener el token de acceso personal de GitHub de los secrets
