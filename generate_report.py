@@ -52,7 +52,7 @@ def generate_weekly_report(github_token, username, repository_name):
         print(f'{day.ljust(16)}| {str(counts["opened"]).rjust(8)} | {str(counts["closed"]).rjust(8)}')
 
 # Obtener el token de acceso personal de GitHub de los secrets
-github_token = os.getenv('TOKEN')
+github_token = os.getenv('TEST')
 print(github_token)
 
 # Nombre de usuario y nombre del repositorio
