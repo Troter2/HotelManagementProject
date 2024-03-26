@@ -52,8 +52,8 @@ def generate_weekly_report(github_token, username, repository_name):
     total_opened = 0
     for day, counts in weekly_counts.items():
         print(f'{day.ljust(16)}| {str(counts["opened"]).rjust(8)} | {str(counts["closed"]).rjust(8)}')
-        total_opened =+ counts["opened"]
-        total_closed =+ counts["closed"]
+        total_opened = total_opened + counts["opened"]
+        total_closed = total_closed + counts["closed"]
         
     print(f'{("Total").ljust(16)}| {str(total_opened).rjust(8)} | {str(total_closed).rjust(8)}')
     print('----------------------------------------')
