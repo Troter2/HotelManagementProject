@@ -22,9 +22,20 @@ def generate_weekly_report(github_token, username, repository_name):
         'Saturday': {'opened': 0, 'closed': 0},
         'Sunday': {'opened': 0, 'closed': 0}
     }
+    for issue in issues:
+        created_at = issue.created_at.replace(tzinfo=None)
+        if created_at >= one_week_ago:
+            day_of_week = get_day_of_week(str(created_at))
+            weekly_counts[day_of_week]['opened'] += 1
 
+        if issue.closed_at:
+            closed_at = issue.closed_at.replace(tzinfo=None)
+            if closed_at >= one_week_ago:
+                day_of_week = get_day_of_week(str(closed_at))
+                weekly_counts[day_of_week]['closed'] += 1
+                
     # Extraer los datos para la tabla
-    dias = list(data.keys())
+    dias = list(weekly_counts.keys())
     abiertas = [weekly_counts[d]["opened"] for d in weekly_counts]
     cerradas = [weekly_counts[d]["closed"] for d in weekly_counts]
     
@@ -59,17 +70,7 @@ def generate_weekly_report(github_token, username, repository_name):
     one_week_ago = current_date - timedelta(days=7)
 
     # Recorrer todas las issues y contar las abiertas y cerradas por día de la semana
-    """for issue in issues:
-        created_at = issue.created_at.replace(tzinfo=None)
-        if created_at >= one_week_ago:
-            day_of_week = get_day_of_week(str(created_at))
-            weekly_counts[day_of_week]['opened'] += 1
-
-        if issue.closed_at:
-            closed_at = issue.closed_at.replace(tzinfo=None)
-            if closed_at >= one_week_ago:
-                day_of_week = get_day_of_week(str(closed_at))
-                weekly_counts[day_of_week]['closed'] += 1
+    """
 
     # Imprimir la tabla
     print('Día de la Semana | Abiertas | Cerradas')
