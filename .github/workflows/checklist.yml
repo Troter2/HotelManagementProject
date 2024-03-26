@@ -10,6 +10,8 @@ on:
   
 env:
     GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+    USER: Troter2
+    PROJECT: HotelManagementProject
 
 jobs:
   generate-report:
