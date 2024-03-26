@@ -23,6 +23,10 @@ def generate_weekly_report(github_token, username, repository_name):
         'Sunday': {'opened': 0, 'closed': 0}
     }
     
+    def get_day_of_week(date_str):
+        date = datetime.strptime(date_str[:10], '%Y-%m-%d')
+        return date.strftime('%A')
+    
     current_date = datetime.now()
     one_week_ago = current_date - timedelta(days=7)
     
@@ -65,9 +69,7 @@ def generate_weekly_report(github_token, username, repository_name):
     plt.show()
 
     # Función para obtener el día de la semana
-    def get_day_of_week(date_str):
-        date = datetime.strptime(date_str[:10], '%Y-%m-%d')
-        return date.strftime('%A')
+    
 
     # Calcular la semana actual
     current_date = datetime.now()
