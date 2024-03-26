@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 from datetime import datetime, timedelta
 from github import Github
 import matplotlib.pyplot as plt
@@ -47,30 +48,37 @@ def generate_weekly_report(github_token, username, repository_name):
     dias = list(weekly_counts.keys())
     abiertas = [weekly_counts[d]["opened"] for d in weekly_counts]
     cerradas = [weekly_counts[d]["closed"] for d in weekly_counts]
-    
+
+    data = {
+        "Día de la Semana": dias],
+        "Abiertas": abiertas,
+        "Cerradas": cerradas
+    }
     # Crear la tabla
-    tabla = [dias, abiertas, cerradas]
-    encabezados = ["Día de la Semana", "Abiertas", "Cerradas"]
-    anchos = [0.4, 0.3, 0.3]
-    filas = zip(encabezados, tabla)
+    df = pd.DataFrame()
     
-    # Configurar la figura y la tabla
-    plt.figure(figsize=(8, 6))
-    ax = plt.gca()
+    # Crear figura y eje
+    fig, ax = plt.subplots()
+    
+    # Eliminar marcas del eje
     ax.axis('off')
-    tabla_plot = plt.table(cellText=tabla, colLabels=encabezados, colWidths=anchos, loc='center')
     
-    # Estilo de la tabla
-    tabla_plot.auto_set_font_size(False)
-    tabla_plot.set_fontsize(12)
-    tabla_plot.scale(1.2, 1.2)
-    
+    # Crear tabla
+    tabla = ax.table(cellText=df.values,
+                     colLabels=df.columns,
+                     cellLoc='center',
+                     loc='center')
+
+    # Ajustar tamaño de la fuente
+    tabla.auto_set_font_size(False)
+    tabla.set_fontsize(12)
+
+    # Ajustar tamaño de la tabla
+    tabla.scale(1.5, 1.5)
+
     # Guardar la imagen como PNG
     plt.savefig('tabla_semanal.png', bbox_inches='tight', pad_inches=0.1, transparent=True)
     plt.show()
-
-    # Función para obtener el día de la semana
-    
 
     # Calcular la semana actual
     current_date = datetime.now()
