@@ -50,7 +50,7 @@ def generate_weekly_report(github_token, username, repository_name):
     cerradas = [weekly_counts[d]["closed"] for d in weekly_counts]
 
     data = {
-        "Día de la Semana": dias],
+        "Día de la Semana": dias,
         "Abiertas": abiertas,
         "Cerradas": cerradas
     }
