@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, timedelta
 from github import Github
+import matplotlib.pyplot as plt
 
 def generate_weekly_report(github_token, username, repository_name):
     # Crear una instancia de la clase Github
