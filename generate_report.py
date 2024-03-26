@@ -50,15 +50,16 @@ def generate_weekly_report(github_token, username, repository_name):
     cerradas = [weekly_counts[d]["closed"] for d in weekly_counts]
 
 
+    
     data = {
-    "Día de la Semana": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Total"],
-    "Abiertas": [0, 1, 10, 11, 0, 0, 0, 22],
-    "Cerradas": [0, 1, 3, 11, 0, 0, 0, 15]
+        "Día de la Semana": dias,
+        "Abiertas": abiertas,
+        "Cerradas": cerradas
     }
 
     
     # Crear la tabla
-    df = pd.DataFrame()
+    df = pd.DataFrame(data)
     
     # Crear figura y eje
     fig, ax = plt.subplots()
