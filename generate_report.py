@@ -109,8 +109,8 @@ def generate_weekly_report(github_token, username, repository_name):
 github_token = os.getenv('GITHUB_TOKEN')
 
 # Nombre de usuario y nombre del repositorio
-username = 'Troter2'
-repository_name = 'HotelManagementProject'
+username = os.getenv('USER')
+repository_name = os.getenv('PROJECT')
 
 # Generar el informe semanal
 generate_weekly_report(github_token, username, repository_name)
