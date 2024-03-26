@@ -22,6 +22,10 @@ def generate_weekly_report(github_token, username, repository_name):
         'Saturday': {'opened': 0, 'closed': 0},
         'Sunday': {'opened': 0, 'closed': 0}
     }
+    
+    current_date = datetime.now()
+    one_week_ago = current_date - timedelta(days=7)
+    
     for issue in issues:
         created_at = issue.created_at.replace(tzinfo=None)
         if created_at >= one_week_ago:
