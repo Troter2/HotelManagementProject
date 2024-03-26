@@ -25,13 +25,7 @@ jobs:
         python-version: '3.x'
 
     - name: Instalar dependencias
-      run: pip install PyGithub
-      
-    - name: Instalar dependencias
-      run: pip install pandas
-      
-    - name: Instalar dependencias
-      run: pip install matplotlib -q
+      run: pip install PyGithub pandas matplotlib -q
 
     - name: Ejecutar script Python
       run: |
