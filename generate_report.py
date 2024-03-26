@@ -23,6 +23,32 @@ def generate_weekly_report(github_token, username, repository_name):
         'Sunday': {'opened': 0, 'closed': 0}
     }
 
+    # Extraer los datos para la tabla
+    dias = list(data.keys())
+    abiertas = [weekly_counts[d]["opened"] for d in weekly_counts]
+    cerradas = [weekly_counts[d]["closed"] for d in weekly_counts]
+    
+    # Crear la tabla
+    tabla = [dias, abiertas, cerradas]
+    encabezados = ["Día de la Semana", "Abiertas", "Cerradas"]
+    anchos = [0.4, 0.3, 0.3]
+    filas = zip(encabezados, tabla)
+    
+    # Configurar la figura y la tabla
+    plt.figure(figsize=(8, 6))
+    ax = plt.gca()
+    ax.axis('off')
+    tabla_plot = plt.table(cellText=tabla, colLabels=encabezados, colWidths=anchos, loc='center')
+    
+    # Estilo de la tabla
+    tabla_plot.auto_set_font_size(False)
+    tabla_plot.set_fontsize(12)
+    tabla_plot.scale(1.2, 1.2)
+    
+    # Guardar la imagen como PNG
+    plt.savefig('tabla_semanal.png', bbox_inches='tight', pad_inches=0.1, transparent=True)
+    plt.show()
+
     # Función para obtener el día de la semana
     def get_day_of_week(date_str):
         date = datetime.strptime(date_str[:10], '%Y-%m-%d')
@@ -33,7 +59,7 @@ def generate_weekly_report(github_token, username, repository_name):
     one_week_ago = current_date - timedelta(days=7)
 
     # Recorrer todas las issues y contar las abiertas y cerradas por día de la semana
-    for issue in issues:
+    """for issue in issues:
         created_at = issue.created_at.replace(tzinfo=None)
         if created_at >= one_week_ago:
             day_of_week = get_day_of_week(str(created_at))
@@ -57,7 +83,8 @@ def generate_weekly_report(github_token, username, repository_name):
         
     print(f'{("Total").ljust(16)}| {str(total_opened).rjust(8)} | {str(total_closed).rjust(8)}')
     print('----------------------------------------')
-
+    """
+    
 # Obtener el token de acceso personal de GitHub de los secrets
 github_token = os.getenv('GITHUB_TOKEN')
 
