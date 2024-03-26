@@ -5,7 +5,7 @@ on:
   schedule:
     - cron: '0 22 * * 0'
   issues:
-    - types: [opened, closed]
+    types: [opened, closed]
   push:
   
 env:
