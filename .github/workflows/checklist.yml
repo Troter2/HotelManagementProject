@@ -1,9 +1,10 @@
 name: Generar Informe Semanal
 
 on:
+  schedule:
+    - cron: '0 22 * * 0'  # Ejecutar todos los domingos a las 22:00 (UTC)
   workflow_dispatch:
-  issues:
-    - cron: '0 22 * * 0'
+  push:
   
 env:
     GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
