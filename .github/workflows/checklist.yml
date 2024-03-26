@@ -3,7 +3,6 @@ name: Generar Informe Semanal
 on:
   workflow_dispatch:
   issues:
-    - cron: '0 22 * * 0'
     - types: [opened, closed]
   push:
   
