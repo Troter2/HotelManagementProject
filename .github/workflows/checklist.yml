@@ -22,7 +22,16 @@ jobs:
 
     - name: Instalar dependencias
       run: pip install PyGithub
+      
+    - name: Instalar dependencias
+      run: pip install matplotlib -q
 
     - name: Ejecutar script Python
       run: |
         python generate_report.py
+        
+    - name: Subir imagen generada
+      uses: actions/upload-artifact@v2
+      with:
+        name: tabla-semanal
+        path: tabla_semanal.png
