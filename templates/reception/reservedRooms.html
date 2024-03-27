@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>Lista de habitaciones reservadas</h1>
+<div class="reservations-list">
+    {% for reserva in reserves %}
+    <div class="reservation-card">
+        <h2>Nombre: {{reserva.guests_name }}</h2>
+        <p>Fecha entrada: {{reserva.guest_checkin }}</p>
+        <p>Fecha salida: {{reserva.guest_checkout }}</p>
+        <!--<button class="room-reservation-button">Reservar</button>-->
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
