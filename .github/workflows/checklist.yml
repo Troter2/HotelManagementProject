@@ -1,0 +1,40 @@
+name: Generar Informe Semanal
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 22 * * 0'
+  issues:
+    types: [opened, closed]
+  push:
+  
+env:
+    GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+    USER: Troter2
+    PROJECT: HotelManagementProject
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v2
+
+    - name: Configurar Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Instalar dependencias
+      run: pip install PyGithub pandas matplotlib -q
+
+    - name: Ejecutar script Python
+      run: |
+        python generate_report.py
+        
+    - name: Subir imagen generada
+      uses: actions/upload-artifact@v2
+      with:
+        name: tabla-semanal
+        path: tabla_semanal.png
