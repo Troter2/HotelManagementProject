@@ -11,6 +11,6 @@ class RoomReservation(models.Model):
     guests_phone = models.CharField(max_length=100)
     guest_checkin = models.DateField()
     guest_checkout = models.DateField()
-    guests_number = models.IntegerField()
+    guests_number = models.IntegerField(default=0)
     # room_type = lo de creus
     price = models.DecimalField(max_digits=10, decimal_places=2)
