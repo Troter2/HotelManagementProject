@@ -1,0 +1,42 @@
+body {
+    width: 100%;
+    height: 100%;
+    /* Add your background pattern here */
+    background-color: #eee;
+    background-image: radial-gradient(rgba(155, 155, 155, 0.18) 2px, transparent 0);
+    background-size: 30px 30px;
+    background-position: -5px -5px
+}
+
+.login_button {
+    width: fit-content;
+    display: flex;
+    padding: 0.6em 1.6rem;
+    cursor: pointer;
+    gap: 0.4rem;
+    font-weight: bold;
+    border-radius: 10px;
+    text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
+    background: linear-gradient(15deg, #427FE3, #0994B9, #09B6BF, #8FCBC0, #EBD19E) no-repeat;
+    background-size: 300%;
+    color: #fff;
+    border: none;
+    background-position: left center;
+    box-shadow: 0 30px 10px -20px rgba(0, 0, 0, .2);
+    transition: background .3s ease;
+}
+
+.login_button:hover {
+    background-size: 320%;
+    background-position: right center;
+}
+
+.login_button:hover svg {
+    fill: #fff;
+}
+
+.login_button svg {
+    width: 23px;
+    fill: #f09f33;
+    transition: .3s ease;
+}
