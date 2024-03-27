@@ -1,10 +1,11 @@
 # Daily Meeting: DD-MM-YYYY
 
-| Assistant  | Role  |  
-|---|---|
-| XXXXX  | Developer  |   
-| XXXXX |  Front-End Expert |  
-| XXXXX |  Scrum Master |  
+| Assistant     | Role             |  
+|---------------|------------------|
+| Marc Ferreres | Developer        |   
+| Josep Prades  | Front-End Expert |  
+| Adria Creus   | Scrum Master     |  
+| Sergi Vila    | Back-End Expert  |  
 
 ## Problems/Difficulties
 | Problem  | Task  | Owner | Description |

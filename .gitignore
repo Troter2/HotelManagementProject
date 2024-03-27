@@ -1,9 +1,4 @@
 # created by virtualenv automatically
-*
-.idea\workspace.xml
-.idea\misc.xml
-.idea/workspace.xml
 *.pyc
-.idea/misc.xml
-.idea/hotelManagementProject.iml
-
+/.idea
+/.venv
