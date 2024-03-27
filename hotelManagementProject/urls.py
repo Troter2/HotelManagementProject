@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Reception.views import receptionIni
+from Cleaning.views import CleanerPage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', receptionIni),
+    path('cleaner', CleanerPage, name='cleaner_page'),
 ]
