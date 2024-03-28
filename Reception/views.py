@@ -3,8 +3,9 @@ import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template.loader import get_template
-
+from Reception.models import RoomReservation
 from Reception.forms import ReservationForm
+
 
 
 # Create your views here.
@@ -22,6 +23,22 @@ def receptionIni(request):
     return render(request, 'reception/home.html',
                   ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
 
+
+
+def roomView(request):
+    habitacions = RoomReservation.objects.all()
+    context = {
+        'habitacions': habitacions
+    }
+    return render(request, 'reception/roomsType.html', context)
+
+
+def reservedRoomsView(request):
+    reserves = RoomReservation.objects.all()
+    context = {
+        'reserves': reserves
+    }
+    return render(request, 'reception/reservedRooms.html', context)
 
 def book_room(request):
     if request.method == 'POST':
@@ -45,3 +62,4 @@ def validar_dni(dni):
     if not dni[8].isalpha():
         return False
     return True
+

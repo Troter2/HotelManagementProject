@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>Lista de habitaciones</h1>
+<div class="rooms-list">
+    {% for habitacio in habitacions %}
+    <div class="room-card">
+        <h2>Tipo de habitación: {{habitacio. }}</h2>
+        <p>Descripción: {{habitacio. }}</p>
+        <p>Nº camas: {{habitacio. }}</p>
+        <p>Precio 1 noche: {{habitacio. }}</p>
+        <button class="room-reservation-button">Reservar</button>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
