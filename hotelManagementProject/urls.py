@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
-from Reception.views import reception_ini, book_room
+from Reception.views import receptionIni, book_room, checkin_form
 from register import views as register
 from Restaurant.views import restaurant_reservation_page
 
@@ -30,5 +30,6 @@ urlpatterns = [
     path('cleaner', cleaner_page, name='cleaner_page'),
     path('update_room_status/', update_room_status, name='update_room_status'),
     path('restaurant/reservations/', restaurant_reservation_page, name='restaurant_reservation_page'),
+    path('checkin/', checkin_form, name='checkin_form'),
 
 ]
