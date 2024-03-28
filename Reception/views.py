@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template.loader import get_template
 
+from Reception.forms import ReservationForm
+
 
 # Create your views here.
 class Room(object):
@@ -15,7 +17,31 @@ class Room(object):
 def receptionIni(request):
     test = "hello world"
     cur_date = datetime.datetime.now()
-    rooms = [Room(103, True),Room(104, True),Room(105, True),Room(106, True),Room(107, True)]
+    rooms = [Room(103, True), Room(104, True), Room(105, True), Room(106, True), Room(107, True)]
+
+    return render(request, 'reception/home.html',
+                  ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
 
 
-    return render(request, 'reception/home.html', ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
+def book_room(request):
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            dni = form.cleaned_data['DNI']
+            if not validar_dni(dni):
+                form.add_error('DNI', 'El DNI no es válido.')
+                return render(request, 'reception/reserve_room.html', {'form': form})
+            return render(request, 'reception/thank_you.html')
+    else:
+        form = ReservationForm()
+    return render(request, 'reception/reserve_room.html', {'form': form})
+
+
+def validar_dni(dni):
+    if len(dni) != 9:
+        return False
+    if not dni[:8].isdigit():
+        return False
+    if not dni[8].isalpha():
+        return False
+    return True
