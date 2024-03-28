@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>Formulario de Reserva de Hotel</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enviar Reserva</button>
+    </form>
+
+{% endblock %}
