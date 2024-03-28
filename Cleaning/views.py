@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from Cleaning.models import
+from Reception.models import Room
 
 
 # Create your views here.
 
-def CleanerPage(request):
-    rooms = Cleaning.objects.all()
-    return render(request, 'Cleaner/cleaner_page.html')
+def cleaner_page(request):
+    rooms = Room.objects.all()
+    return render(request, 'Cleaner/cleaner_page.html', {'rooms': rooms})
