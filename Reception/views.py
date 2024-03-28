@@ -7,7 +7,6 @@ from Reception.models import RoomReservation
 from Reception.forms import ReservationForm, CheckIn
 
 
-
 # Create your views here.
 class Room(object):
     def __init__(self, number, is_clean):
@@ -15,7 +14,7 @@ class Room(object):
         self.is_clean = is_clean
 
 
-def receptionIni(request):
+def reception_ini(request):
     test = "hello world"
     cur_date = datetime.datetime.now()
     rooms = [Room(103, True), Room(104, True), Room(105, True), Room(106, True), Room(107, True)]
@@ -24,8 +23,7 @@ def receptionIni(request):
                   ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
 
 
-
-def roomView(request):
+def room_view(request):
     habitacions = RoomReservation.objects.all()
     context = {
         'habitacions': habitacions
@@ -33,12 +31,13 @@ def roomView(request):
     return render(request, 'reception/roomsType.html', context)
 
 
-def reservedRoomsView(request):
+def reserved_rooms_view(request):
     reserves = RoomReservation.objects.all()
     context = {
         'reserves': reserves
     }
     return render(request, 'reception/reservedRooms.html', context)
+
 
 def book_room(request):
     if request.method == 'POST':
@@ -62,7 +61,6 @@ def validar_dni(dni):
     if not dni[8].isalpha():
         return False
     return True
-
 
 def checkin_form(request):
     if request.method == 'POST':
