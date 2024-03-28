@@ -24,19 +24,6 @@ class RoomReservation(models.Model):
 
 
 class Room(models.Model):
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, null=True)
     room_number = models.CharField(max_length=50)
     is_clean = models.BooleanField(default=True)
-
-
-class RoomType(models.Model):
-    name = models.CharField(max_length=255)
-    capacity = models.IntegerField()
-    photo = models.ImageField(upload_to='room_photos/')
-    description = models.TextField()
-
-
-class Room(models.Model):
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
-    room_number = models.CharField(max_length=50)
-
