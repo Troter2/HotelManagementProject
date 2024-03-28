@@ -62,6 +62,7 @@ def validar_dni(dni):
         return False
     return True
 
+
 def checkin_form(request):
     if request.method == 'POST':
         form = CheckIn(request.POST)
