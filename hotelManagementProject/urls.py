@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
-from Reception.views import receptionIni, book_room, checkin_form
+from Reception.views import reception_ini, book_room, checkin_form
 from register import views as register
 from Restaurant.views import restaurant_reservation_page
 

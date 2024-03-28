@@ -1,6 +1,6 @@
 import datetime
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template.loader import get_template
 from Reception.models import RoomReservation
@@ -67,12 +67,22 @@ def checkin_form(request):
         form = CheckIn(request.POST)
         if form.is_valid():
             dni = form.cleaned_data['DNI']
+            guest_name = form.cleaned_data['guest_name']
+            guest_checkin = form.cleaned_data['guest_checkin']
+            guest_surname = form.cleaned_data['guest_surname']
             if not validar_dni(dni):
                 form.add_error('DNI', 'El DNI no es válido.')
-        # if form.is_valid():
-                # form.save()
-        # dfsdsfg
-            # return redirect('success_url')  Reemplaza 'success_url' con la URL de tu página de éxito
+            existing_reservation = RoomReservation.objects.filter(DNI=dni).first()
+            if existing_reservation:
+                existing_reservation.guest_checkin = guest_checkin
+                existing_reservation.save()
+            else:
+                # Si no existeix el DNI en la BBDD
+                form.add_error('DNI', 'El DNI no se ha encontrado en la base de datos')
+
+            return redirect('reception/thank_you.html') 
+        else:
+            form = CheckIn()
     else:
         form = CheckIn()
     return render(request, 'reception/checkIn.html', {'form': form})
