@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 22 * * 0'
-  issues:
-    types: [opened, closed]
-  push:
   
 env:
     GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+{% for room in rooms %}
+<!-- Modal -->
+<div class="modal fade" id="Pop-up-{{ room.room_number }}" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    L'habitacio {{ room.room_number }} esta complerta?
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'update_room_status' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="room_id" value="{{ room.id }}">
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" name="action" value="clean">Si</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <!-- You can add additional buttons here if needed -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <table class="table table-striped table-dark">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Room number</th>
+                    <th scope="col">Is clean</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for room in rooms %}
+                <tr>
+                    <td>{{ room.room_number }}</td>
+                    <td>
+                        {% if room.is_clean %}
+                        Clean
+                        {% else %}
+                        Pending
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="float-right">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#Pop-up-{{ room.room_number }}">
+                                <img src="{% static 'img/broom.svg' %}" alt="Your Image"
+                                     style="width: 20px; height: 20px;">
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
