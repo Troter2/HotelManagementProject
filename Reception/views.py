@@ -73,6 +73,7 @@ def checkin_form(request):
                 form.add_error('DNI', 'El DNI no es válido.')
         # if form.is_valid():
                 # form.save()
+        # dfsdsfg
             # return redirect('success_url')  Reemplaza 'success_url' con la URL de tu página de éxito
     else:
         form = CheckIn()
