@@ -1,3 +1,19 @@
-from django.shortcuts import render
+from Reception.models import Room
+from django.shortcuts import render, redirect
+
 
 # Create your views here.
+
+def cleaner_page(request):
+    rooms = Room.objects.all()
+    return render(request, 'Cleaner/cleaner_page.html', {'rooms': rooms})
+
+
+def update_room_status(request):
+    if request.method == 'POST':
+        room_id = request.POST.get('room_id')
+        action = request.POST.get('action')
+        room = Room.objects.get(pk=room_id)
+        room.is_clean = (action == 'clean')
+        room.save()
+    return redirect('cleaner_page')

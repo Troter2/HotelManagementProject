@@ -3,8 +3,9 @@ import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template.loader import get_template
-
 from Reception.models import RoomReservation
+from Reception.forms import ReservationForm
+
 
 
 # Create your views here.
@@ -23,6 +24,7 @@ def receptionIni(request):
                   ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
 
 
+
 def roomView(request):
     habitacions = RoomReservation.objects.all()
     context = {
@@ -37,3 +39,27 @@ def reservedRoomsView(request):
         'reserves': reserves
     }
     return render(request, 'reception/reservedRooms.html', context)
+
+def book_room(request):
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            dni = form.cleaned_data['DNI']
+            if not validar_dni(dni):
+                form.add_error('DNI', 'El DNI no es válido.')
+                return render(request, 'reception/reserve_room.html', {'form': form})
+            return render(request, 'reception/thank_you.html')
+    else:
+        form = ReservationForm()
+    return render(request, 'reception/reserve_room.html', {'form': form})
+
+
+def validar_dni(dni):
+    if len(dni) != 9:
+        return False
+    if not dni[:8].isdigit():
+        return False
+    if not dni[8].isalpha():
+        return False
+    return True
+
