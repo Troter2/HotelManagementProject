@@ -37,3 +37,8 @@ class RoomReservation(models.Model):
 
 
 
+class Room(models.Model):
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, null=True)
+    room_number = models.CharField(max_length=50)
+    is_clean = models.BooleanField(default=False)
+

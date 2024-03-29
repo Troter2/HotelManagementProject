@@ -19,7 +19,7 @@
                 <input type="hidden" name="room_id" value="{{ room.id }}">
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success" name="action" value="clean">Si</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-danger" name="action" value="pending">No</button>
                     <!-- You can add additional buttons here if needed -->
                 </div>
             </form>
@@ -52,7 +52,9 @@
                     </td>
                     <td>
                         <div class="float-right">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            <button type="button"
+                                    class="btn {% if room.is_clean %}btn-success{% else %}btn-danger{% endif %}"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-{{ room.room_number }}">
                                 <img src="{% static 'img/broom.svg' %}" alt="Your Image"
                                      style="width: 20px; height: 20px;">
