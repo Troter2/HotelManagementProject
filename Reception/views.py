@@ -74,9 +74,14 @@ def validar_dni(dni):
 def checkin_form(request):
     if request.method == 'POST':
         form = CheckIn(request.POST)
+        if form.is_valid():
+            dni = form.cleaned_data['DNI']
+            if not validar_dni(dni):
+                form.add_error('DNI', 'El DNI no es válido.')
         # if form.is_valid():
         # form.save()
         # return redirect('success_url')  Reemplaza 'success_url' con la URL de tu página de éxito
+
     else:
         form = CheckIn()
     return render(request, 'reception/checkIn.html', {'form': form})
