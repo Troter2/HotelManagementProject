@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
-from Reception.views import reception_ini, book_room, checkin_form
+from Reception.views import reception_ini, book_room, reserved_rooms_view, rooms_view, checkin_form, update_book_arrive
 from register import views as register
 from Restaurant.views import restaurant_reservation_page
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,7 +31,13 @@ urlpatterns = [
     path('formulari/', book_room, name="book_room"),
     path('cleaner', cleaner_page, name='cleaner_page'),
     path('update_room_status/', update_room_status, name='update_room_status'),
+    path('update_book_status', update_book_arrive, name='update_book_arrive'),
     path('restaurant/reservations/', restaurant_reservation_page, name='restaurant_reservation_page'),
     path('checkin/', checkin_form, name='checkin_form'),
+    path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
+    path('rooms/', rooms_view, name='rooms_view'),
+
 
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

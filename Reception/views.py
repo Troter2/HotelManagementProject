@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template.loader import get_template
-from Reception.models import RoomReservation
+from Reception.models import RoomReservation, RoomType
 from Reception.forms import ReservationForm, CheckIn
 
 
@@ -23,16 +23,24 @@ def reception_ini(request):
                   ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
 
 
-def room_view(request):
-    habitacions = RoomReservation.objects.all()
+def rooms_view(request):
+    rooms = RoomType.objects.all()
     context = {
-        'habitacions': habitacions
+        'rooms': rooms
     }
     return render(request, 'reception/roomsType.html', context)
 
 
+def update_book_arrive(request):
+    if request.method == 'POST':
+        reservation = RoomReservation.objects.get(id=request.POST.get('id'))
+        reservation.guest_is_here = True
+        reservation.save()
+    return redirect('reserved_rooms_view')
+
+
 def reserved_rooms_view(request):
-    reserves = RoomReservation.objects.all()
+    reserves = RoomReservation.objects.all().filter(guest_is_here=False)
     context = {
         'reserves': reserves
     }
