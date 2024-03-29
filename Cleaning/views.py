@@ -4,9 +4,14 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 
+def cleaner_shift(request):
+    room = Room.objects.all()
+    return render(request, 'shifts/shift.html', {'room': room})
+
+
 def cleaner_page(request):
     rooms = Room.objects.all()
-    return render(request, 'Cleaner/cleaner_page.html', {'rooms': rooms})
+    return render(request, 'cleaner/cleaner_page.html', {'rooms': rooms})
 
 
 def update_room_status(request):
