@@ -2,11 +2,11 @@
 {% load static %}
 {% block content %}
 
-<h1>Formulario de Reserva de Hotel</h1>
+<h1>Formulario de Check-In del Cliente</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Enviar Reserva</button>
+        <button type="submit">Enviar Check-In</button>
     </form>
 
 {% endblock %}

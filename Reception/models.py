@@ -11,11 +11,11 @@ class RoomType(models.Model):
     def __str__(self):
         return self.name
 
-
 class Room(models.Model):
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, null=True)
     room_number = models.CharField(max_length=50)
     is_clean = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.room_number
@@ -34,6 +34,8 @@ class RoomReservation(models.Model):
     guests_number = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     room_number = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+
 
 
 
