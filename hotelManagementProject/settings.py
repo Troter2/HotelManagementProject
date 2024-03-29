@@ -24,6 +24,8 @@ SECRET_KEY = 'django-insecure-wpqe^4onwg#=#cm%p8x$iebn+y1gk+^o_77a0ikwx62%f3=9oe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LANGUAGE_CODE = 'es'
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -118,7 +120,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR/'media'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = "/"
 

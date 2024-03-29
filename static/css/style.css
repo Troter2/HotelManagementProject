@@ -1,4 +1,9 @@
+.page-title {
+    font-family: Georgia, serif !important;
+}
+
 body {
+    font-family: sans-serif;
     width: 100%;
     height: 100%;
     /* Add your background pattern here */
@@ -39,4 +44,94 @@ body {
     width: 23px;
     fill: #f09f33;
     transition: .3s ease;
+}
+
+
+.room-button {
+    border: none;
+    display: block;
+    position: relative;
+    padding: 0.7em 2.4em;
+    font-size: 18px;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    color: #4B4C4C;
+    z-index: 1;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.room-button span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: -1;
+    border: 4px solid #4B4C4C;
+}
+
+.room-button span::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 8%;
+    height: 500%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-60deg);
+    transition: all 0.3s;
+}
+
+.room-button:hover span::before {
+    transform: translate(-50%, -50%) rotate(-90deg);
+    width: 100%;
+    background: #4B4C4C;
+}
+
+.room-button:hover {
+    color: white;
+}
+
+.room-button:active span::before {
+    background: #3c3d3d;
+}
+
+.room-image-container {
+    max-height: 500px; /* Establece la altura máxima deseada */
+    overflow: hidden; /* Oculta el contenido que excede el tamaño del contenedor */
+    position: relative;
+}
+
+.room-image-container img {
+    width: 100%; /* Establece el ancho de la imagen al 100% del contenedor */
+    height: auto; /* Permite que la altura se ajuste automáticamente para mantener la proporción */
+    position: absolute; /* Establece la posición absoluta para la imagen */
+    top: 50%; /* Coloca el borde superior de la imagen en el 50% de la altura del contenedor */
+    left: 0; /* Alinea la imagen a la izquierda del contenedor */
+    transform: translateY(-50%);
+}
+
+.room-bg {
+    background-size: cover;
+    background-position: center;
+    filter: opacity(1.5);
+    -webkit-filter: opacity(1.5);
+    -moz-filter: opacity(1.5);
+}
+
+.endark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.endark p{
+    font-size: 4rem
+
 }

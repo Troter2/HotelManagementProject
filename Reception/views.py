@@ -1,11 +1,10 @@
 import datetime
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template.loader import get_template
-from Reception.models import RoomReservation
+from Reception.models import RoomReservation, RoomType
 from Reception.forms import ReservationForm, CheckIn
-
 
 
 # Create your views here.
@@ -15,7 +14,7 @@ class Room(object):
         self.is_clean = is_clean
 
 
-def receptionIni(request):
+def reception_ini(request):
     test = "hello world"
     cur_date = datetime.datetime.now()
     rooms = [Room(103, True), Room(104, True), Room(105, True), Room(106, True), Room(107, True)]
@@ -24,21 +23,29 @@ def receptionIni(request):
                   ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
 
 
-
-def roomView(request):
-    habitacions = RoomReservation.objects.all()
+def rooms_view(request):
+    rooms = RoomType.objects.all()
     context = {
-        'habitacions': habitacions
+        'rooms': rooms
     }
     return render(request, 'reception/roomsType.html', context)
 
 
-def reservedRoomsView(request):
-    reserves = RoomReservation.objects.all()
+def update_book_arrive(request):
+    if request.method == 'POST':
+        reservation = RoomReservation.objects.get(id=request.POST.get('id'))
+        reservation.guest_is_here = True
+        reservation.save()
+    return redirect('reserved_rooms_view')
+
+
+def reserved_rooms_view(request):
+    reserves = RoomReservation.objects.all().filter(guest_is_here=False)
     context = {
         'reserves': reserves
     }
     return render(request, 'reception/reservedRooms.html', context)
+
 
 def book_room(request):
     if request.method == 'POST':
@@ -72,8 +79,9 @@ def checkin_form(request):
             if not validar_dni(dni):
                 form.add_error('DNI', 'El DNI no es válido.')
         # if form.is_valid():
-                # form.save()
-            # return redirect('success_url')  Reemplaza 'success_url' con la URL de tu página de éxito
+        # form.save()
+        # return redirect('success_url')  Reemplaza 'success_url' con la URL de tu página de éxito
+
     else:
         form = CheckIn()
     return render(request, 'reception/checkIn.html', {'form': form})
