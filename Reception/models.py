@@ -6,7 +6,19 @@ class RoomType(models.Model):
     capacity = models.IntegerField()
     photo = models.ImageField(upload_to='room_photos/')
     description = models.TextField()
+    square_meter = models.IntegerField()
 
+    def __str__(self):
+        return self.name
+
+
+class Room(models.Model):
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, null=True)
+    room_number = models.CharField(max_length=50)
+    is_clean = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.room_number
 
 # Create your models here.
 class RoomReservation(models.Model):
@@ -18,12 +30,15 @@ class RoomReservation(models.Model):
     guests_phone = models.CharField(max_length=100)
     guest_checkin = models.DateField(null=True, blank=True)
     guest_checkout = models.DateField(null=True, blank=True)
+    guest_is_here = models.BooleanField(default=False)
     guests_number = models.IntegerField(default=0)
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    room_number = models.ForeignKey(Room, on_delete=models.CASCADE)
+
 
 
 class Room(models.Model):
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, null=True)
     room_number = models.CharField(max_length=50)
     is_clean = models.BooleanField(default=False)
+
