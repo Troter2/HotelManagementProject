@@ -35,3 +35,4 @@ class RoomReservation(models.Model):
     guests_number = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     room_number = models.ForeignKey(Room, on_delete=models.CASCADE)
+
