@@ -53,9 +53,9 @@
                         Recepcion
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <li  class="dropdown-item" ><a href="{% url 'shift' %}">Turno</a></li>
-                        <li class="dropdown-item" ><a href="{% url 'reserved_rooms_view' %}">CheckIn</a>
-                        <li class="dropdown-item" ><a  href="{% url 'reserved_rooms_view2' %}">CheckOut</a>
+                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="{% url 'reserved_rooms_view' %}">CheckIn</a>
+                        <li class="dropdown-item"><a href="{% url 'ocuped_rooms_view' %}">CheckOut</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -64,12 +64,12 @@
                         Limpieza
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarLimpieza">
-                        <li  class="dropdown-item" >
+                        <li class="dropdown-item">
                             <a href="{% url 'shift' %}">
                                 Turno
                             </a>
                         </li>
-                        <li class="dropdown-item" >
+                        <li class="dropdown-item">
                             <a href="{% url 'cleaner_page' %}">
                                 Habitaciones pendientes
                             </a>
@@ -81,7 +81,7 @@
                         Camarero
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarCamarero">
-                        <li class="dropdown-item" ><a href="#">Reservas</a>
+                        <li class="dropdown-item"><a href="#">Reservas</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -90,8 +90,8 @@
                         Contable
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarContable">
-                        <li class="dropdown-item" ><a href="{% url 'shift' %}">Turno</a></li>
-                        <li class="dropdown-item" ><a href="#">Facturacion</a>
+                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="#">Facturacion</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -101,7 +101,7 @@
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarAdministratiu">
                         <li class="dropdown-item" ><a href="{% url 'shift' %}">Turno</a></li>
-                        <li class="dropdown-item" ><a href="#">Gestion de turnos</a>
+                        <li class="dropdown-item"><a href="{% url 'shift_management_page' %}">Gestion de turnos</a>
                     </ul>
                 </li>
                 <li class="nav-item ">

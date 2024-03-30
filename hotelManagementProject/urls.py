@@ -17,11 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status, cleaner_shift
+
+
 from User.views import add_guest_view, save_more_guest, save_guest
-from Reception.views import reception_ini, book_room, reserved_rooms_view, reserved_rooms_view2, rooms_view, \
+from Reception.views import reception_ini, book_room, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     checkin_form, update_book_arrive, pay_reservation
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
+from User.views import shift_management_page, previous_week, next_week
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -38,13 +41,16 @@ urlpatterns = [
     path('restaurant/reservations/', restaurant_reservation_page, name='restaurant_reservation_page'),
     path('checkin/', checkin_form, name='checkin_form'),
     path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
+    path('reception/checkout/', ocuped_rooms_view, name='ocuped_rooms_view'),
     path('reception/add_guest/<int:id>/', add_guest_view, name='add_guest_view'),
     path('reception/save_more_guest/', save_more_guest, name='save_more_guest'),
     path('reception/save_guest/<int:id>/', save_guest, name='save_guest'),
-    path('reception/checkout/', reserved_rooms_view2, name='reserved_rooms_view2'),
     path('pay-reservation/', pay_reservation, name='pay_reservation'),
     path('rooms/', rooms_view, name='rooms_view'),
-    path('restaurant/', restaurant_page, name='restaurant_page')
+    path('restaurant/', restaurant_page, name='restaurant_page'),
+    path('shift_management/', shift_management_page, name='shift_management_page'),
+    path('previous_week/', previous_week, name='previous_week'),
+    path('next_week/', next_week, name='next_week'),
 
 ]
 

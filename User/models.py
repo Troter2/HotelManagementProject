@@ -5,6 +5,7 @@ from Reception.models import RoomReservation
 
 # Create your models here.
 
+
 class Shift(models.Model):
     user = models.CharField(max_length=16)
     password = models.CharField(max_length=50)
@@ -16,12 +17,4 @@ class Customer(models.Model):
     lastname = models.CharField(max_length=200)
     DNI = models.CharField(max_length=9)
     reservation = models.ForeignKey(RoomReservation, on_delete=models.CASCADE)
-
-
-
-
-
-
-
-
 
