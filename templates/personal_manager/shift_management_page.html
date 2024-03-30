@@ -7,33 +7,39 @@
             <table class="table table-striped table-dark">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Room number</th>
-                    <th scope="col">Is clean</th>
-                    <th scope="col"></th>
+                    <th colspan="8" class="text-center">Selecciona el turno a asignar</th>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <a href="{% url 'previous_week' %}" class="btn btn-primary">&#8249;</a>
+                    </th>
+                    <th colspan="4">1-7 Abril</th>
+                    <th colspan="2">
+                        <a href="{% url 'next_week' %}" class="btn btn-primary">&#8250;</a>
+                    </th>
+                </tr>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                    <th>Sábado</th>
+                    <th>Domingo</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for room in rooms %}
+                {% for customer in customers %}
                 <tr>
-                    <td>{{ room.room_number }}</td>
-                    <td>
-                        {% if room.is_clean %}
-                        Clean
-                        {% else %}
-                        Pending
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div class="float-right">
-                            <button type="button"
-                                    class="btn {% if room.is_clean %}btn-success{% else %}btn-danger{% endif %}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#Pop-up-{{ room.room_number }}">
-                                <img src="{% static 'img/broom.svg' %}" alt="Your Image"
-                                     style="width: 20px; height: 20px;">
-                            </button>
-                        </div>
-                    </td>
+                    <td>{{ customer.name }}</td>
+                    <td>M mañana</td>
+                    <td>M mañana</td>
+                    <td>M mañana</td>
+                    <td>M mañana</td>
+                    <td>M mañana</td>
+                    <td>M mañana</td>
+                    <td>M mañana</td>
                 </tr>
                 {% endfor %}
                 </tbody>

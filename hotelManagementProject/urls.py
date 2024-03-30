@@ -24,7 +24,7 @@ from Reception.views import reception_ini, book_room, reserved_rooms_view, ocupe
     checkin_form, update_book_arrive, pay_reservation
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
-from User.views import shift_management_page
+from User.views import shift_management_page, previous_week, next_week
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -49,6 +49,8 @@ urlpatterns = [
     path('rooms/', rooms_view, name='rooms_view'),
     path('restaurant/', restaurant_page, name='restaurant_page'),
     path('shift_management/', shift_management_page, name='shift_management_page'),
+    path('previous_week/', previous_week, name='previous_week'),
+    path('next_week/', next_week, name='next_week'),
 
 ]
 
