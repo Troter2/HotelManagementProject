@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <section class="h-100 gradient-form ">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-10">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-3 mx-md-4">
+                                    <div>
+                                        <a href="{% url 'reserved_rooms_view' %}" class="btn btn-secondary"
+                                           style="text-decoration: none">
+
+                                            <i class="bi bi-arrow-left"></i> Volver
+                                        </a>
+                                    </div>
+                                    <div class="text-center">
+                                        <img src="{% static 'img/Logo.png' %}"
+                                             style="width: 185px;" alt="logo">
+                                        <h4 class="mt-1 mb-5 pb-1">Agregar huesped</h4>
+                                    </div>
+                                    <form method="post" action="{% url 'save_guest' id=book_id %}">
+                                        {% csrf_token %}
+                                        <div class=" mb-3 mx-4 form-floating ">
+                                            <input type="text" name="DNI" required="" class="form-control"
+                                                   id="DNIInput"
+                                                   placeholder="12345678A">
+                                            <label for="DNIInput">DNI</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating ">
+                                            <input type="text" name="name" required="" class="form-control"
+                                                   id="nameInput"
+                                                   placeholder="name@example.com">
+                                            <label for="nameInput">Nombre</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating ">
+                                            <input type="text" name="lastname" required="" class="form-control"
+                                                   id="lastnameInput"
+                                                   placeholder="name@example.com">
+                                            <label for="lastnameInput">Apellidos</label>
+                                        </div>
+                                        {% csrf_token %}
+                                        <div class="text-center mx-4 mt-2 mb-5 pb-1">
+                                            <button class=" mx-auto login_button" type="submit">
+                                                Añadir huesped
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
+                                <div class="text-black px-3 py-4 p-md-5 h-100 "
+                                     style="background-image: url({% static 'img/add_guest.jpg' %});background-repeat: no-repeat;background-size: cover;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
