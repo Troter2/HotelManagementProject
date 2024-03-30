@@ -55,7 +55,7 @@
                     <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarRecepcio">
                         <li><a class="dropdown-item" href="{% url 'shift' %}">Turno</a></li>
                         <li><a class="dropdown-item" href="{% url 'reserved_rooms_view' %}">CheckIn</a>
-                        <li><a class="dropdown-item" href="{% url 'reserved_rooms_view2' %}">CheckOut</a>
+                        <li><a class="dropdown-item" href="{% url 'ocuped_rooms_view' %}">CheckOut</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -101,7 +101,7 @@
                     </a>
                     <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarAdministratiu">
                         <li><a class="dropdown-item" href="{% url 'shift' %}">Turno</a></li>
-                        <li><a class="dropdown-item" href="#">Gestion de turnos</a>
+                        <li><a class="dropdown-item" href="{% url 'shift_management_page' %}">Gestion de turnos</a>
                     </ul>
                 </li>
                 <li class="nav-item ">

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <table class="table table-striped table-dark">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Room number</th>
+                    <th scope="col">Is clean</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for room in rooms %}
+                <tr>
+                    <td>{{ room.room_number }}</td>
+                    <td>
+                        {% if room.is_clean %}
+                        Clean
+                        {% else %}
+                        Pending
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="float-right">
+                            <button type="button"
+                                    class="btn {% if room.is_clean %}btn-success{% else %}btn-danger{% endif %}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#Pop-up-{{ room.room_number }}">
+                                <img src="{% static 'img/broom.svg' %}" alt="Your Image"
+                                     style="width: 20px; height: 20px;">
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

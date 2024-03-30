@@ -55,7 +55,7 @@ def reserved_rooms_view(request):
     return render(request, 'reception/reservedRooms.html', context)
 
 
-def reserved_rooms_view2(request):
+def ocuped_rooms_view(request):
     reserves = RoomReservation.objects.all().filter(guest_is_here=False)
     context = {
         'reserves': reserves
