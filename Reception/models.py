@@ -20,6 +20,7 @@ class Room(models.Model):
     def __str__(self):
         return self.room_number
 
+
 # Create your models here.
 class RoomReservation(models.Model):
     reservation_number = models.CharField(max_length=100)
@@ -34,11 +35,3 @@ class RoomReservation(models.Model):
     guests_number = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     room_number = models.ForeignKey(Room, on_delete=models.CASCADE)
-
-
-
-class Room(models.Model):
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, null=True)
-    room_number = models.CharField(max_length=50)
-    is_clean = models.BooleanField(default=False)
-
