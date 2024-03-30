@@ -39,12 +39,37 @@ def update_book_arrive(request):
     return redirect('reserved_rooms_view')
 
 
+def update_book_gone(request):
+    if request.method == 'POST':
+        reservation = RoomReservation.objects.get(id=request.POST.get('id'))
+        reservation.guest_is_here = True
+        reservation.save()
+    return redirect('reserved_rooms_view')
+
+
 def reserved_rooms_view(request):
     reserves = RoomReservation.objects.all().filter(guest_is_here=False)
     context = {
         'reserves': reserves
     }
     return render(request, 'reception/reservedRooms.html', context)
+
+
+def reserved_rooms_view2(request):
+    reserves = RoomReservation.objects.all().filter(guest_is_here=False)
+    context = {
+        'reserves': reserves
+    }
+    return render(request, 'reception/ocuped_rooms.html', context)
+
+
+def pay_reservation(request):
+    if request.method == 'POST':
+        reserva_id = request.POST.get('id')
+        reserva = RoomReservation.objects.get(pk=reserva_id)
+        reserva.room_is_payed = True
+        reserva.save()
+    return redirect('reserved_rooms_view2')
 
 
 def book_room(request):
@@ -89,7 +114,7 @@ def checkin_form(request):
                 # Si no existeix el DNI en la BBDD
                 form.add_error('DNI', 'El DNI no se ha encontrado en la base de datos')
 
-            return redirect('reception/thank_you.html') 
+            return redirect('reception/thank_you.html')
         else:
             form = CheckIn()
     else:

@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status, cleaner_shift
-from Reception.views import reception_ini, book_room, reserved_rooms_view, rooms_view, checkin_form, update_book_arrive
+from Reception.views import reception_ini, book_room, reserved_rooms_view, reserved_rooms_view2, rooms_view, \
+    checkin_form, update_book_arrive, pay_reservation
 from register import views as register
 from Restaurant.views import restaurant_reservation_page
 from django.conf import settings
@@ -36,8 +37,9 @@ urlpatterns = [
     path('restaurant/reservations/', restaurant_reservation_page, name='restaurant_reservation_page'),
     path('checkin/', checkin_form, name='checkin_form'),
     path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
+    path('reception/checkout/', reserved_rooms_view2, name='reserved_rooms_view2'),
+    path('pay-reservation/', pay_reservation, name='pay_reservation'),
     path('rooms/', rooms_view, name='rooms_view'),
-
 
 ]
 
