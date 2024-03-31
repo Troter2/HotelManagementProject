@@ -130,7 +130,7 @@ def filtrar_reservas(request):
     # Filtrar las reservas basadas en los parámetros recibidos
     reserves_filtradas = RoomReservation.objects.all()
     if nombre_habitacion:
-        reserves_filtradas = reserves_filtradas.filter(room_number__room_type__name__icontains=nombre_habitacion)
+        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
     if fecha:
         reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha)
 
