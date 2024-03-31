@@ -5,12 +5,13 @@ from User.models import Shift
 from Reception.models import RoomReservation
 from User.forms import CustomerForm
 from User.models import Customer
+from django.contrib.auth.models import User
 
 
 # Create your views here.
 
 def shift_management_page(request):
-    users = Shift.objects.all()
+    users = User.objects.all()
     return render(request, 'personal_manager/shift_management_page.html', {'users': users})
 
 
