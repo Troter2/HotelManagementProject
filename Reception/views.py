@@ -1,14 +1,14 @@
 import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template.loader import get_template
-from Reception.models import RoomReservation, RoomType
+from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm, CheckIn
 
 
 # Create your views here.
-class Room(object):
+class Room2(object):
     def __init__(self, number, is_clean):
         self.number = number
         self.is_clean = is_clean
@@ -17,7 +17,7 @@ class Room(object):
 def reception_ini(request):
     test = "hello world"
     cur_date = datetime.datetime.now()
-    rooms = [Room(103, True), Room(104, True), Room(105, True), Room(106, True), Room(107, True)]
+    rooms = [Room2(103, True), Room2(104, True), Room2(105, True), Room2(106, True), Room2(107, True)]
 
     return render(request, 'reception/home.html',
                   ({"test": test, "test2": "i'm here", "cur_date": cur_date, "rooms": rooms}))
@@ -84,6 +84,23 @@ def book_room(request):
     else:
         form = ReservationForm()
     return render(request, 'reception/reserve_room.html', {'form': form})
+
+
+def reserve_room(request):
+    rooms = Room.objects.all()
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            dni = form.cleaned_data['DNI']
+            if not validar_dni(dni):
+                form.add_error('DNI', 'El DNI no es válido.')
+                return render(request, 'reception/reserve_room.html', {'form': form, 'rooms': rooms})
+            form.instance.price = 60
+            form.save()
+            return render(request, 'reception/thank_you.html')
+    else:
+        form = ReservationForm()
+    return render(request, 'reception/reservation_form.html', {'form': form, 'rooms': rooms})
 
 
 def validar_dni(dni):

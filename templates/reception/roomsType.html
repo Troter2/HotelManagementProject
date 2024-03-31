@@ -33,7 +33,7 @@
                     <p class="h5 mx-4 mt-3">{{ room.description }}</p>
                     <form action="" class="mx-4 mt-3">
                         {% csrf_token %}
-                        <button class="room-button float-end"> Reservar
+                        <button class="room-button float-end"><a class="nav-link text-black" href="{% url 'reserve_room' %}"> Reservar</a>
                             <span></span>
                         </button>
                     </form>
@@ -55,7 +55,7 @@
                     <p class="h5 mx-4 mt-3">{{ room.description }}</p>
                     <form action="" class="mx-4 mt-3">
                         {% csrf_token %}
-                        <button class="room-button float-start"> Reservar
+                        <button class="room-button float-start"><a class="nav-link text-black" href="{% url 'reserve_room' %}"> Reservar</a>
                             <span></span>
                         </button>
                     </form>
