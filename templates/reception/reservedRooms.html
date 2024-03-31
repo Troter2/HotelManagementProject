@@ -13,16 +13,27 @@
 
 <!-- Modal para el filtro -->
 <div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
+    <div class="modal-content w-50">
+        <span class="close ">&times;</span>
+        <p class="h1 px-2">Filtro de Habitaciones Reservadas</p>
         <form id="filtroForm">
-            <label for="nombre_habitacion">Nombre de la habitación:</label>
-            <input type="text" id="nombre_habitacion" name="nombre_habitacion">
-
-            <label for="fecha">Fecha (YYYY-MM-DD):</label>
-            <input type="date" id="fecha" name="fecha">
-
-            <button type="submit" class="btn btn-primary mt-3">Filtrar</button>
+            <div class="row justify-content-start">
+                <div class="row">
+                    <div class="col-6 px-4">
+                        <label for="nombre_habitacion">Nombre de la habitación:</label>
+                        <input class="form-control col" type="text" id="nombre_habitacion" name="nombre_habitacion">
+                    </div>
+                    <div class="col-6 px-4">
+                        <label for="fecha">Fecha:</label>
+                        <input class="form-control col" type="date" id="fecha" name="fecha">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 px-4 text-end">
+                        <button type="submit" class="btn btn-primary mt-3">Aplicar Filtro</button>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>
