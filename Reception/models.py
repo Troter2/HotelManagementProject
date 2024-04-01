@@ -7,6 +7,7 @@ class RoomType(models.Model):
     photo = models.ImageField(upload_to='room_photos/')
     description = models.TextField()
     square_meter = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name

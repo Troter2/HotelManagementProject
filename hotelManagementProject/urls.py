@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status, cleaner_shift
 from User.views import add_guest_view, save_more_guest, save_guest, shift_management_page, previous_week, next_week
-from Reception.views import reception_ini, book_room, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
+from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     checkin_form, update_book_arrive, pay_reservation, reserve_room
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
@@ -30,7 +30,6 @@ urlpatterns = [
     path("accounts/register/", register.register, name="register"),
     path("accounts/", include("django.contrib.auth.urls")),
     path('', reception_ini, name="home"),
-    path('formulari/', book_room, name="book_room"),
     path('cleaner/', cleaner_page, name='cleaner_page'),
     path('shifts/', cleaner_shift, name="shift"),
     path('update_room_status/', update_room_status, name='update_room_status'),
