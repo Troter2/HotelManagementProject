@@ -144,3 +144,19 @@ def checkin_form(request):
     else:
         form = CheckIn()
     return render(request, 'reception/checkIn.html', {'form': form})
+
+
+def filtrar_reservas(request):
+    # Obtener los parámetros de filtrado desde la URL
+    nombre_habitacion = request.GET.get('nombre_habitacion', None)
+    fecha = request.GET.get('fecha', None)
+
+    # Filtrar las reservas basadas en los parámetros recibidos
+    reserves_filtradas = RoomReservation.objects.all()
+    if nombre_habitacion:
+        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
+    if fecha:
+        reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha)
+
+    # Renderizar la plantilla con las reservas filtradas
+    return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
