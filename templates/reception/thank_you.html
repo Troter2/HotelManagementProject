@@ -11,6 +11,11 @@
 <body>
     <h1>¡Gracias por tu reserva!</h1>
     <!-- Puedes agregar cualquier contenido adicional aquí -->
+    <form action="{% url 'descargar_factura' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="reserva_numero" value="{{ numero_de_reserva }}">
+        <button type="submit">Descargar Factura</button>
+    </form>
 </body>
 </html>
 
