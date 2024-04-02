@@ -49,7 +49,7 @@ urlpatterns = [
     path('next_week/', next_week, name='next_week'),
     path('reserve/', reserve_room, name='reserve_room'),
     path('contact/', contact, name='contact'),
-    path('descargar-factura/', generate_reservation_pdf, name='descargar_factura'),
+    path('comprobante/', generate_reservation_pdf, name='comprobante'),
     path('thank_you', thank_you, name='thank_you'),
     path('what_todo/', what_todo, name='what_todo')
 
