@@ -1,6 +1,44 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+{% for reserva in reserves %}
+<!-- Modal -->
+<div class="modal fade" id="Pop-up-{{ reserva.id }}" tabindex="-1" role="dialog"
+     aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Reserva habitació Nº{{ reserva.room_number }}
+                </h5>
+            </div>
+            <div class="modal-body d-flex row">
+                <div class="col-6">
+                    <p>DNI reserva: {{ reserva.DNI }}</p>
+                </div>
+                <div class="col-6">
+                    <p>Nºreserva: {{ reserva.reservation_number }}</p>
+                </div>
+                <div class="col-6">
+                    <p>Numero de huespedes: {{ reserva.guests_number }}</p>
+                </div>
+                <div class="col-6">
+                    <p>Tipo de habitacion: {{ reserva.room_number.room_type.name }}</p>
+                </div>
+            </div>
+            <form action="{% url 'update_book_arrive' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ reserva.id }}">
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success " name="action" value="clean">Validar</button>
+                    <!-- You can add additional buttons here if needed -->
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
 <h1>Lista de habitaciones reservadas</h1>
 <div class="container-fluid">
     <!-- Botón de filtrado -->

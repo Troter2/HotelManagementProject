@@ -183,7 +183,7 @@ body {
 }
 
 /* Estilo para el modal */
-.modal {
+.modal_filter {
     display: none; /* Por defecto, el modal estará oculto */
     position: absolute; /* Posicionamiento absoluto */
     top: 50px; /* Ajusta la posición vertical según sea necesario */
@@ -194,7 +194,7 @@ body {
 }
 
 /* Estilo para el contenido del modal */
-.modal-content {
+.modal_content_filter {
     background-color: #fefefe; /* Color de fondo del modal */
     margin: 15% auto; /* Margen para centrar verticalmente */
     padding: 20px;
@@ -203,7 +203,7 @@ body {
 }
 
 /* Estilo para el botón de cerrar */
-.close {
+.close_filter {
     color: #aaa;
     float: right;
     font-size: 28px;
