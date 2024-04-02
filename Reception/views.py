@@ -162,6 +162,7 @@ def booking_filter(request):
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
 
 
+
 def what_todo(request):
     return render(request, 'generic/what_to_do.html')
 
