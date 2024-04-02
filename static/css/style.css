@@ -185,35 +185,37 @@ body {
 /* Estilo para el modal */
 .modal_filter {
     display: none; /* Por defecto, el modal estará oculto */
-    position: absolute; /* Posicionamiento absoluto */
-    top: 50px; /* Ajusta la posición vertical según sea necesario */
-    left: 0; /* Ajusta la posición horizontal según sea necesario */
-    width: 100%; /* Ocupa el ancho completo del contenedor padre */
-    z-index: 1; /* Asegura que el modal esté encima del resto del contenido */
-    background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente para el modal */
+    position: fixed; /* Posicionamiento fijo */
+    top: 50%; /* Ajusta la posición vertical según sea necesario */
+    left: 50%; /* Ajusta la posición horizontal según sea necesario */
+    transform: translate(-50%, -50%); /* Centra vertical y horizontalmente */
+    width: 80%; /* Ancho del modal */
+    max-width: 500px; /* Ancho máximo del modal */
+    z-index: 1050; /* Asegura que el modal esté encima del resto del contenido */
+    background-color: rgb(255, 255, 255); /* Fondo semi-transparente para el modal */
+    border-radius: 10px; /* Borde redondeado */
 }
 
 /* Estilo para el contenido del modal */
 .modal_content_filter {
     background-color: #fefefe; /* Color de fondo del modal */
-    margin: 15% auto; /* Margen para centrar verticalmente */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Ancho del contenido del modal */
+    padding: 20px; /* Espaciado interno */
+    border: none; /* Sin borde */
 }
 
 /* Estilo para el botón de cerrar */
 .close_filter {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    color: black; /* Color del botón de cerrar */
+    position: absolute; /* Posicionamiento absoluto */
+    top: 10px; /* Ajusta la posición vertical según sea necesario */
+    right: 10px; /* Ajusta la posición horizontal según sea necesario */
+    font-size: 30px; /* Tamaño de la fuente del botón */
+    font-weight: bold; /* Peso de la fuente */
+    cursor: pointer; /* Cursor al pasar sobre el botón */
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.close_filter:hover {
+    color: #aaa; /* Cambio de color al pasar el ratón sobre el botón */
+    text-decoration: none; /* Sin subrayado */
 }
 
