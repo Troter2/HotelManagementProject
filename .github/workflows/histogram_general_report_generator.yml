@@ -1,0 +1,28 @@
+name: General Report - Histogram of Issues (all)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub matplotlib
+      - name: Generate histogram (all issues)
+        run: python generate_histogram.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      - name: Upload Histogram
+        uses: actions/upload-artifact@v2
+        with:
+          name: histogram_issues
+          path: histogram_issues.png

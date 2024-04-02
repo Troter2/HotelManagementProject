@@ -17,8 +17,8 @@
     <div class="container-fluid">
         <!-- icono o nombre -->
 
-        <a class="navbar-brand" href="#">
-            <span class="text-warning">hotel</span>
+        <a class="navbar-brand" href="{% url 'home' %} ">
+            <img class="menu-logo" style="max-height: 50px" src="{% static 'img/Logo.png' %}"/>
         </a>
 
         <!-- boton del menu -->
@@ -33,7 +33,7 @@
         <div class="collapse navbar-collapse" id="menu">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Habitaciones</a>
+                    <a class="nav-link" href="{% url 'rooms_view' %}">Habitaciones</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contacto</a>
@@ -45,16 +45,17 @@
                     <a class="nav-link" href="#">Reservar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Restaurante</a>
+                    <a class="nav-link" href="{% url 'restaurant_page'%}">Restaurante</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarRecepcio" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Recepcion
                     </a>
-                    <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarRecepcio">
-                        <li><a class="dropdown-item" href="#">Turno</a></li>
-                        <li><a class="dropdown-item" href="#">Reserves</a>
+                    <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
+                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="{% url 'reserved_rooms_view' %}">CheckIn</a>
+                        <li class="dropdown-item"><a href="{% url 'ocuped_rooms_view' %}">CheckOut</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -62,9 +63,16 @@
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Limpieza
                     </a>
-                    <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarLimpieza">
-                        <li><a class="dropdown-item" href="#">Turno</a></li>
-                        <li><a class="dropdown-item" href="#">Habitaciones pendientes</a>
+                    <ul class="dropdown-menu bg-light" aria-labelledby="navbarLimpieza">
+                        <li class="dropdown-item">
+                            <a href="{% url 'shift' %}">
+                                Turno
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="{% url 'cleaner_page' %}">
+                                Habitaciones pendientes
+                            </a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -72,9 +80,8 @@
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Camarero
                     </a>
-                    <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarCamarero">
-                        <li><a class="dropdown-item" href="#">Turno</a></li>
-                        <li><a class="dropdown-item" href="#">Reservas</a>
+                    <ul class="dropdown-menu bg-light" aria-labelledby="navbarCamarero">
+                        <li class="dropdown-item"><a href="#">Reservas</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -82,9 +89,9 @@
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Contable
                     </a>
-                    <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarContable">
-                        <li><a class="dropdown-item" href="#">Turno</a></li>
-                        <li><a class="dropdown-item" href="#">Facturacion</a>
+                    <ul class="dropdown-menu bg-light" aria-labelledby="navbarContable">
+                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="#">Facturacion</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -92,22 +99,22 @@
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Administrativo
                     </a>
-                    <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarAdministratiu">
-                        <li><a class="dropdown-item" href="#">Turno</a></li>
-                        <li><a class="dropdown-item" href="#">Gestion de turnos</a>
+                    <ul class="dropdown-menu bg-light" aria-labelledby="navbarAdministratiu">
+                        <li class="dropdown-item" ><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="{% url 'shift_management_page' %}">Gestion de turnos</a>
                     </ul>
                 </li>
                 <li class="nav-item ">
                     {% if user.is_authenticated %}
-                        <form action="{% url 'logout' %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-link bg-dark border-0">Log Out</button>
-                        </form>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link bg-dark border-0">Log Out</button>
+                    </form>
                     {% else %}
-                        <a class="nav-link" href="{% url 'login' %}" id="navbarLogout" role="button"
-                           aria-expanded="false">
-                            Log in
-                        </a>
+                    <a class="nav-link" href="{% url 'login' %}" id="navbarLogout" role="button"
+                       aria-expanded="false">
+                        Log in
+                    </a>
                     {% endif %}
                 </li>
             </ul>

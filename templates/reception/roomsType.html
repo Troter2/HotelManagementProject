@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class=" w-100 min-vh-100 room-bg col-12 text-center d-flex "
+         style="background-image: url({% static 'img/rooms-img.jpg' %}); background-repeat:no-repeat">
+        <div class="text-center endark align-items-center d-flex">
+            <p class="text-white main-text-over-img  w-100">Habitaciones y suites</p>
+        </div>
+    </div>
+    <section class="text-center py-4">
+        <div class="my-4">
+            <p class=" fw-bold h2">La comodidad a tu alcance.</p>
+        </div>
+        <div class="text-center ">
+            <div class="w-75 mx-auto my-4 text-center">
+                <p class="h4">Setenta y seis habitaciones y suites elevan la habitación de
+                    hotel de 5 estrellas a nuevas cotas. Reúna la esencia de un club privado contemporáneo y la
+                    comodidad de una residencia privada en el centro de Madrid. Disfrute del ambiente tranquilo
+                    y la tranquilidad de un hogar lejos de casa. Descubra la personalidad única de cada una de
+                    las emblemáticas habitaciones y suites del hotel.</p>
+            </div>
+        </div>
+    </section>
+    <div class="px-4">
+    {% for room in rooms %}
+
+        {% if forloop.counter|divisibleby:2 %}
+            <div class="d-flex m-5" style="height: 400px">
+                <div class="col-5 text-start  ">
+                    <p class="mx-4 mt-4 h3">{{ room.name.upper }}</p>
+                    <span class="h2 mx-4"><i class="bi bi-people"></i> {{ room.capacity }}</span>
+                    <span class="h2 mx-4">{{ room.square_meter }} m&sup2</span>
+                    <p class="h5 mx-4 mt-3">{{ room.description }}</p>
+                    <form action="" class="mx-4 mt-3">
+                        {% csrf_token %}
+                        <button class="room-button float-end"><a class="nav-link text-black" href="{% url 'reserve_room' %}"> Reservar</a>
+                            <span></span>
+                        </button>
+                    </form>
+                </div>
+                <div class="col-7 room-image-container">
+                    <img src="{{ room.photo.url }}" class="w-100 img-fluid">
+                </div>
+            </div>
+        {% else %}
+
+            <div class="d-flex m-5" style="height: 400px">
+                <div class="col-7 room-image-container">
+                    <img src="{{ room.photo.url }}" class="w-100 img-fluid">
+                </div>
+                <div class="col-5 text-end ">
+                    <p class="mx-4 mt-4 h3">{{ room.name.upper }}</p>
+                    <span class="h2 mx-4"><i class="bi bi-people"></i> {{ room.capacity }}</span>
+                    <span class="h2 mx-4">{{ room.square_meter }} m&sup2</span>
+                    <p class="h5 mx-4 mt-3">{{ room.description }}</p>
+                    <form action="" class="mx-4 mt-3">
+                        {% csrf_token %}
+                        <button class="room-button float-start"><a class="nav-link text-black" href="{% url 'reserve_room' %}"> Reservar</a>
+                            <span></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}
