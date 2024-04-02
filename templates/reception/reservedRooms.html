@@ -45,7 +45,7 @@
             <tr>
                 <th scope="col">Nombre reserva</th>
                 <th scope="col">Nº Habitación</th>
-                <th scope="col">Fecha salida</th>
+                <th scope="col">Fecha entrada</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
@@ -55,7 +55,7 @@
             <tr>
                 <th>{{ reserva.guests_name }}</th>
                 <td>{{ reserva.room_number.room_number }}</td>
-                <td>{{ reserva.guest_checkout }}</td>
+                <td>{{ reserva.guest_checkin }}</td>
                 <td>
                     <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#Pop-up-{{ reserva.id }}">Validar checkin
@@ -98,7 +98,7 @@
         var nombreHabitacion = document.getElementById("nombre_habitacion").value;
         var fecha = document.getElementById("fecha").value;
 
-        window.location.href = `/reception/reservations/filtrar?nombre_habitacion=${nombreHabitacion}&fecha=${fecha}`;
+        window.location.href = `/reception/reservations/filter?nombre_habitacion=${nombreHabitacion}&fecha=${fecha}`;
     });
 </script>
 
