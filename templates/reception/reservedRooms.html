@@ -51,9 +51,12 @@
 </div>
 
 <!-- Modal para el filtro -->
-<div id="myModal" class="modal">
-    <div class="modal-content w-50">
-        <span class="close ">&times;</span>
+
+<div id="Modal_filter" class="modal_filter">
+    <div class="modal-content_filter">
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
         <p class="h1 px-2">Filtro de Habitaciones Reservadas</p>
         <form id="filtroForm">
             <div class="row justify-content-start">
@@ -114,8 +117,8 @@
 <!-- Script para manejar el modal y el envío del formulario -->
 <script>
     var btn = document.getElementById("filtrarReservasBtn");
-    var modal = document.getElementById("myModal");
-    var span = document.getElementsByClassName("close")[0];
+    var modal = document.getElementById("Modal_filter");
+    var span = document.getElementsByClassName("close_filter")[0];
 
     btn.onclick = function () {
         modal.style.display = "block";
