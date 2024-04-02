@@ -162,7 +162,12 @@ def booking_filter(request):
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
 
 
-def booking_filter_check_out(request):
+
+def what_todo(request):
+    return render(request, 'generic/what_to_do.html')
+
+
+def filtrar_reservas_check_out(request):
     # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)

@@ -19,7 +19,7 @@ from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status, cleaner_shift
 from User.views import add_guest_view, save_more_guest, save_guest, shift_management_page, previous_week, next_week
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
-    checkin_form, update_book_arrive, pay_reservation, booking_filter, booking_filter_check_out,reserve_room
+    checkin_form, update_book_arrive, pay_reservation, booking_filter, booking_filter_check_out,reserve_room, what_todo
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
 from django.conf import settings
@@ -35,7 +35,7 @@ urlpatterns = [
     path('update_room_status/', update_room_status, name='update_room_status'),
     path('update_book_status', update_book_arrive, name='update_book_arrive'),
     path('restaurant/reservations/', restaurant_reservation_page, name='restaurant_reservation_page'),
-    path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
+    path('reception/reservations/filtrar', booking_filter, name='filtrar_reservas'),
     path('checkin/', checkin_form, name='checkin_form'),
     path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
     path('reception/checkout/', ocuped_rooms_view, name='ocuped_rooms_view'),
@@ -50,6 +50,8 @@ urlpatterns = [
     path('previous_week/', previous_week, name='previous_week'),
     path('next_week/', next_week, name='next_week'),
     path('reserve/', reserve_room, name='reserve_room'),
+    path('what_todo/', what_todo, name='what_todo')
+
 
 ]
 
