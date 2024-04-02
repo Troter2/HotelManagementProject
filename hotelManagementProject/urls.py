@@ -19,7 +19,8 @@ from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status, cleaner_shift
 from User.views import add_guest_view, save_more_guest, save_guest, shift_management_page, previous_week, next_week
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
-    update_book_arrive, what_todo, filtrar_reservas_check_out,reserve_room, generate_reservation_pdf, thank_you, \
+    checkin_form, contact,
+    what_todo, filtrar_reservas_check_out,reserve_room, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter,reserve_room
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
@@ -48,9 +49,10 @@ urlpatterns = [
     path('previous_week/', previous_week, name='previous_week'),
     path('next_week/', next_week, name='next_week'),
     path('reserve/', reserve_room, name='reserve_room'),
+    path('contact/', contact, name='contact'),
     path('descargar-factura/', generate_reservation_pdf, name='descargar_factura'),
     path('thank_you', thank_you, name='thank_you'),
-    path('what_todo/', what_todo, name='what_todo'),
+    path('what_todo/', what_todo, name='what_todo')
 
 ]
 
