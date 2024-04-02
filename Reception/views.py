@@ -58,7 +58,7 @@ def pay_reservation(request):
         reserva = RoomReservation.objects.get(pk=reserva_id)
         reserva.room_is_payed = True
         reserva.save()
-    return redirect('reserved_rooms_view2')
+    return redirect('ocuped_rooms_view')
 
 
 def habitaciones_libres(guest_entry, guest_leave):

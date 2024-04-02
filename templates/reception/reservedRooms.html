@@ -12,6 +12,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     Reserva habitació Nº{{ reserva.room_number }}
                 </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex row">
                 <div class="col-6">
@@ -40,18 +41,10 @@
     </div>
 </div>
 {% endfor %}
-<h1>Lista de habitaciones reservadas</h1>
-<!-- Botón de filtrado -->
-<div class="container-fluid">
-    <div class="row mt-3">
-        <div class="col">
-            <button id="filtrarReservasBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal_filter">Filtrar Reservas</button>
-        </div>
-    </div>
-</div>
 
 <!-- Modal para el filtro -->
-<div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true"
+     data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -81,6 +74,17 @@
     </div>
 </div>
 
+<h1>Lista de habitaciones reservadas</h1>
+<!-- Botón de filtrado -->
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col">
+            <button id="filtrarReservasBtn" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#Modal_filter">Filtrar Reservas
+            </button>
+        </div>
+    </div>
+</div>
 
 <div class="reservations-list mt-3">
     <div class="container-fluid">
@@ -120,7 +124,7 @@
 <script>
     var btn = document.getElementById("filtrarReservasBtn");
     var modal = document.getElementById("Modal_filter");
-    var span = document.getElementsByClassName("close_filter")[0];
+    var span = document.getElementsByClassName("btn-close")[0];
 
     btn.onclick = function () {
         modal.style.display = "block";
@@ -135,15 +139,23 @@
             modal.style.display = "none";
         }
     }
-
     document.getElementById("filtroForm").addEventListener("submit", function (event) {
         event.preventDefault();
 
         var nombreHabitacion = document.getElementById("nombre_habitacion").value;
         var fecha = document.getElementById("fecha").value;
 
-        window.location.href = `/reception/reservations/filter?nombre_habitacion=${nombreHabitacion}&fecha=${fecha}`;
+        // Construir la URL absoluta
+        var baseUrl = window.location.protocol + "//" + window.location.host;
+        var url = `${baseUrl}/reception/checkout/filter/?nombre_habitacion=${nombreHabitacion}&fecha=${fecha}`;
+
+        // Redirigir a la URL construida
+        window.location.href = url;
     });
+    // Volver a habilitar el botón de filtrar después de cargar la página
+    window.onload = function () {
+        toggleFilterButton();
+    };
 </script>
 
 {% endblock %}
