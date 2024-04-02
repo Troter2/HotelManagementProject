@@ -39,7 +39,7 @@
                     <a class="nav-link" href="#">Contacto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Que hacer</a>
+                    <a class="nav-link" href="{% url 'what_todo' %}">Que hacer</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Reservar</a>
@@ -47,6 +47,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'restaurant_page'%}">Restaurante</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarRecepcio" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
@@ -104,6 +105,7 @@
                         <li class="dropdown-item"><a href="{% url 'shift_management_page' %}">Gestion de turnos</a>
                     </ul>
                 </li>
+                {% endif %}
                 <li class="nav-item ">
                     {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post">
