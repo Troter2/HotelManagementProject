@@ -150,7 +150,7 @@ def contact(request):
     return render(request, 'generic/contact.html')
 
 
-def filtrar_reservas_check_out(request):
+def booking_filter_check_out(request):
     # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %} Formulario reserva {% endblock %}
 {% block content %}
 <section class="h-100 gradient-form">
     <div class="container py-5 h-100">
@@ -69,12 +70,6 @@
                                                id="guests_number" placeholder="Número de Huéspedes" required>
                                         <label for="guests_number">Número de Huéspedes</label>
                                     </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="text" name="price" class="form-control" id="price"
-                                               placeholder="Precio" required>
-                                        <label for="price">Precio</label>
-                                    </div>
-
                                     <div class="text-center mx-4 mt-2 mb-5 pb-1">
                                         <button class="mx-auto login_button" type="submit">Reservar</button>
                                     </div>
