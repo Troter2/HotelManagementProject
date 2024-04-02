@@ -164,6 +164,8 @@ def booking_filter(request):
 
 def what_todo(request):
     return render(request, 'generic/what_to_do.html')
+def contact(request):
+    return render(request, 'generic/contact.html')
 
 
 def filtrar_reservas_check_out(request):
