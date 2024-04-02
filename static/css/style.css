@@ -181,3 +181,38 @@ body {
     font: 400 1.3em/2.4rem 'Barlow', sans-serif;
     line-height: 1.1;
 }
+
+/* Estilo para el modal */
+.modal {
+    display: none; /* Por defecto, el modal estará oculto */
+    position: absolute; /* Posicionamiento absoluto */
+    top: 50px; /* Ajusta la posición vertical según sea necesario */
+    left: 0; /* Ajusta la posición horizontal según sea necesario */
+    width: 100%; /* Ocupa el ancho completo del contenedor padre */
+    z-index: 1; /* Asegura que el modal esté encima del resto del contenido */
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente para el modal */
+}
+
+/* Estilo para el contenido del modal */
+.modal-content {
+    background-color: #fefefe; /* Color de fondo del modal */
+    margin: 15% auto; /* Margen para centrar verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ancho del contenido del modal */
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

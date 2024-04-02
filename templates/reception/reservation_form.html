@@ -23,11 +23,6 @@
                                 <form method="post">
                                     {% csrf_token %}
                                     <div class="mb-3 mx-4 form-floating">
-                                        <input type="text" name="reservation_number" class="form-control"
-                                               id="reservation_number" placeholder="Número de Reserva" required>
-                                        <label for="reservation_number">Número de Reserva</label>
-                                    </div>
-                                    <div class="mb-3 mx-4 form-floating">
                                         <input type="text" name="DNI" class="form-control" id="DNI" placeholder="DNI"
                                                required>
                                         <label for="DNI">DNI</label>
@@ -52,6 +47,14 @@
                                                placeholder="Teléfono" required>
                                         <label for="guests_phone">Teléfono</label>
                                     </div>
+                                    <div class="mb-4 mx-4">
+                                        <label for="room_type">Tipo de habitación</label>
+                                        <select name="room_type" id="room_type" class="form-control">
+                                            {% for roomType in roomTypes %}
+                                            <option value="{{ roomType.pk }}">{{ roomType.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                     <div class="mb-4 mx-4 form-floating">
                                         <input type="date" name="guest_checkin" class="form-control" id="guest_checkin"
                                                placeholder="Fecha de Entrada">
@@ -61,12 +64,6 @@
                                         <input type="date" name="guest_checkout" class="form-control"
                                                id="guest_checkout" placeholder="Fecha de Salida">
                                         <label for="guest_checkout">Fecha de Salida</label>
-                                    </div>
-                                    <div class="mb-4 mx-4 form-check">
-                                        <input type="checkbox" name="guest_is_here" class="form-check-input"
-                                               id="guest_is_here">
-                                        <label class="form-check-label" for="guest_is_here">¿El huésped está
-                                            aquí?</label>
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
                                         <input type="number" name="guests_number" class="form-control"
@@ -78,20 +75,7 @@
                                                placeholder="Precio" required>
                                         <label for="price">Precio</label>
                                     </div>
-                                    <div class="mb-4 mx-4">
-                                        <label for="room_number">Número de Habitación</label>
-                                        <select name="room_number" id="room_number" class="form-control">
-                                            {% for room in rooms %}
-                                            <option value="{{ room.pk }}">{{ room.room_number }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="mb-4 mx-4 form-check">
-                                        <input type="checkbox" name="room_is_payed" class="form-check-input"
-                                               id="room_is_payed">
-                                        <label class="form-check-label" for="room_is_payed">¿La habitación está
-                                            pagada?</label>
-                                    </div>
+
                                     <div class="text-center mx-4 mt-2 mb-5 pb-1">
                                         <button class="mx-auto login_button" type="submit">Reservar</button>
                                     </div>
