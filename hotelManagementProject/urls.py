@@ -17,13 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status, cleaner_shift
-
-from User.views import add_guest_view, save_more_guest, save_guest
+from User.views import add_guest_view, save_more_guest, save_guest, shift_management_page, previous_week, next_week
 from Reception.views import reception_ini, book_room, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
-    checkin_form, update_book_arrive, pay_reservation, filtrar_reservas, filtrar_reservas_check_out
+    checkin_form, update_book_arrive, pay_reservation, filtrar_reservas, filtrar_reservas_check_out,reserve_room
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
-from User.views import shift_management_page, previous_week, next_week
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -32,7 +30,6 @@ urlpatterns = [
     path("accounts/register/", register.register, name="register"),
     path("accounts/", include("django.contrib.auth.urls")),
     path('', reception_ini, name="home"),
-    path('formulari/', book_room, name="book_room"),
     path('cleaner/', cleaner_page, name='cleaner_page'),
     path('shifts/', cleaner_shift, name="shift"),
     path('update_room_status/', update_room_status, name='update_room_status'),
@@ -49,9 +46,10 @@ urlpatterns = [
     path('pay-reservation/', pay_reservation, name='pay_reservation'),
     path('rooms/', rooms_view, name='rooms_view'),
     path('restaurant/', restaurant_page, name='restaurant_page'),
-    path('shift_management/', shift_management_page, name='shift_management_page'),
+    path('shift_management_page/', shift_management_page, name='shift_management_page'),
     path('previous_week/', previous_week, name='previous_week'),
     path('next_week/', next_week, name='next_week'),
+    path('reserve/', reserve_room, name='reserve_room'),
 
 ]
 
