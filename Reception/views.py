@@ -146,7 +146,7 @@ def checkin_form(request):
     return render(request, 'reception/checkIn.html', {'form': form})
 
 
-def filtrar_reservas(request):
+def booking_filter(request):
     # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)
@@ -162,7 +162,7 @@ def filtrar_reservas(request):
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
 
 
-def filtrar_reservas_check_out(request):
+def booking_filter_check_out(request):
     # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)
