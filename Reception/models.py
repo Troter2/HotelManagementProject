@@ -25,7 +25,7 @@ class Room(models.Model):
 # Create your models here.
 class RoomReservation(models.Model):
     reservation_number = models.CharField(max_length=100)
-    DNI = models.CharField(max_length=10, unique=True)
+    DNI = models.CharField(max_length=10)
     guests_name = models.CharField(max_length=100)
     guests_surname = models.CharField(max_length=100)
     guests_email = models.EmailField()

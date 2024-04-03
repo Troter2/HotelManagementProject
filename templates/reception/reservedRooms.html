@@ -74,7 +74,7 @@
     </div>
 </div>
 
-<h1>Lista de habitaciones reservadas</h1>
+<h1 class="mx-3 my-3">Lista de habitaciones reservadas</h1>
 <!-- Botón de filtrado -->
 <div class="container-fluid">
     <div class="row mt-3">
@@ -85,7 +85,6 @@
         </div>
     </div>
 </div>
-
 <div class="reservations-list mt-3">
     <div class="container-fluid">
         <table class="table table-striped table-dark col-sm-11">
@@ -101,9 +100,9 @@
             <tbody>
             {% for reserva in reserves %}
             <tr>
-                <th>{{ reserva.guests_name }}</th>
-                <td>{{ reserva.room_number.room_number }}</td>
-                <td>{{ reserva.guest_checkin }}</td>
+                <th>{{reserva.guests_name}}</th>
+                <td>{{reserva.room_number.room_number}}</td>
+                <td>{{reserva.guest_checkin}}</td>
                 <td>
                     <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#Pop-up-{{ reserva.id }}">Validar checkin
@@ -157,5 +156,4 @@
         toggleFilterButton();
     };
 </script>
-
 {% endblock %}

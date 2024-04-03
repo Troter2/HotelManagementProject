@@ -20,7 +20,7 @@ from Cleaning.views import cleaner_page, update_room_status, cleaner_shift
 from User.views import add_guest_view, save_more_guest, save_guest, shift_management_page, previous_week, next_week
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
-    update_book_arrive, pay_reservation, booking_filter, reserve_room
+    update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
 from django.conf import settings
@@ -51,7 +51,9 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
     path('comprobante/', generate_reservation_pdf, name='comprobante'),
     path('thank_you', thank_you, name='thank_you'),
-    path('what_todo/', what_todo, name='what_todo')
+    path('what_todo/', what_todo, name='what_todo'),
+    path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
+    path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),
 
 ]
 
