@@ -35,7 +35,7 @@ Considering the proposed distribution in the model Kanban, the overall activitie
 | Josep Prades         | Form to realize checkout                          |  
 | Josep Prades         | Create booking for customers form                 |  
 | Josep Prades         | Auto update rooms status in view                  |  
-| Adrià Creus          | Create reservation filter                         |  
+| Adrià Creus          | Create reservation filter & thank you page        |  
 | Adrià Creus          | Create booking form                               | 
 | Adrià Creus          | Create what to do page                            |
 | Adrià Creus          | Create contact page                               | 
