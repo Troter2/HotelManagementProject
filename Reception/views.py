@@ -116,6 +116,7 @@ def reserve_room(request):
 
                                                   )
             return render(request, 'reception/thank_you.html', {'id': room.id})
+
     else:
         form = ReservationForm()
     return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
