@@ -1,10 +1,12 @@
-# Sprint Retrospective Title (YY-MM-YYYY)
+# Sprint Retrospective Title (04-04-2024)
 
-| Assistant  | Role  |  
-|---|---|
-| XXXXX  | Developer  |   
-| XXXXX |  Front-End Expert |  
-| XXXXX |  Scrum Master |  
+| Assistant            | Role             |  
+|----------------------|------------------|
+| Marc Ferreres        | Developer        |   
+| Josep Prades         | Front-End Expert |  
+| Adria Creus          | Scrum Master     |  
+| Sergi Vila           | Back-End Expert  |  
+| Joan Carles Turégano | VCS Master       | 
 
 ## Retrospective Overview 
 
