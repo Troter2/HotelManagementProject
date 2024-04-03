@@ -4,6 +4,7 @@ def delete_files_in_migrations(directory):
     for root, dirs, files in os.walk(directory):
         if '.venv' in dirs:
             dirs.remove('.venv')
+        if 'venv' in dirs:
             dirs.remove('venv')
         
         if 'migrations' in dirs:
