@@ -9,10 +9,6 @@ from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm, CheckIn
 from io import BytesIO
 from reportlab.pdfgen import canvas
-from barcode import generate
-import tempfile
-import barcode
-from barcode.writer import ImageWriter
 from reportlab.lib.utils import ImageReader
 
 
