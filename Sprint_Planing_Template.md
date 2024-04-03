@@ -1,10 +1,12 @@
-# Sprint Planing Title (YY-MM-YYYY)
+# Sprint Planing Title (12-03-2024)
 
-| Assistant  | Role  |  
-|---|---|
-| XXXXX  | Developer  |   
-| XXXXX |  Front-End Expert |  
-| XXXXX |  Scrum Master |  
+| Assistant            | Role             |  
+|----------------------|------------------|
+| Marc Ferreres        | Developer        |   
+| Josep Prades         | Front-End Expert |  
+| Adria Creus          | Scrum Master     |  
+| Sergi Vila           | Back-End Expert  |  
+| Joan Carles Turégano | VCS Master       |
 
 
 ## Spring Planing Overview
@@ -13,6 +15,7 @@
 ![Spring Planing](SprintPlaning.png)
 
 Considering the proposed distribution in the model Kanban, the overall activities to be performed by the team are: 
+
 
 | Team Member          | Overall Task Desription                           |  
 |----------------------|---------------------------------------------------|
@@ -37,4 +40,7 @@ Considering the proposed distribution in the model Kanban, the overall activitie
 | Adrià Creus          | Create what to do page                            |
 | Adrià Creus          | Create contact page                               |
 | Joan Carles Turegano | Check out filter from                             | 
+| Marc Ferreres        | Generate pdf with reservation data                 |  
+| Marc Ferreres        | Create list to visualize restaurant reserves       |  
+| Marc Ferreres        | Create form to send host data to autorities        |  
 
