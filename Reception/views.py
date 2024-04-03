@@ -1,11 +1,19 @@
 import datetime
 from datetime import datetime
+from datetime import date
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template.loader import get_template
 from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm, CheckIn
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from barcode import generate
+import tempfile
+import barcode
+from barcode.writer import ImageWriter
+from reportlab.lib.utils import ImageReader
 
 
 def reception_ini(request):
@@ -58,7 +66,7 @@ def pay_reservation(request):
         reserva = RoomReservation.objects.get(pk=reserva_id)
         reserva.room_is_payed = True
         reserva.save()
-    return redirect('reserved_rooms_view2')
+    return redirect('ocuped_rooms_view')
 
 
 def habitaciones_libres(guest_entry, guest_leave):
@@ -81,7 +89,7 @@ def reserve_room(request):
             dni = form.cleaned_data['DNI']
             if not validar_dni(dni):
                 form.add_error('DNI', 'El DNI no es válido.')
-                return render(request, 'reception/reserve_room.html', {'form': form, 'roomTypes': roomTypes})
+                return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
             form.instance.price = 60
             uuid = 1
             nights = (datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d') - datetime.strptime(
@@ -91,7 +99,7 @@ def reserve_room(request):
             if len(free_rooms) < 1:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
-            RoomReservation.objects.create(reservation_number=uuid, DNI=request.POST['DNI'],
+            room = RoomReservation.objects.create(reservation_number=uuid, DNI=request.POST['DNI'],
                                            guests_name=request.POST['guests_name'],
                                            guests_surname=request.POST['guests_surname'],
                                            guests_email=request.POST['guests_email'],
@@ -104,7 +112,7 @@ def reserve_room(request):
                                            room_number=free_rooms[0]
 
                                            )
-            return render(request, 'reception/thank_you.html')
+            return render(request, 'reception/thank_you.html', {'id':room.id})
     else:
         form = ReservationForm()
     return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
@@ -120,33 +128,8 @@ def validar_dni(dni):
     return True
 
 
-def checkin_form(request):
-    if request.method == 'POST':
-        form = CheckIn(request.POST)
-        if form.is_valid():
-            dni = form.cleaned_data['DNI']
-            guest_name = form.cleaned_data['guest_name']
-            guest_checkin = form.cleaned_data['guest_checkin']
-            guest_surname = form.cleaned_data['guest_surname']
-            if not validar_dni(dni):
-                form.add_error('DNI', 'El DNI no es válido.')
-            existing_reservation = RoomReservation.objects.filter(DNI=dni).first()
-            if existing_reservation:
-                existing_reservation.guest_checkin = guest_checkin
-                existing_reservation.save()
-            else:
-                # Si no existeix el DNI en la BBDD
-                form.add_error('DNI', 'El DNI no se ha encontrado en la base de datos')
 
-            return redirect('reception/thank_you.html')
-        else:
-            form = CheckIn()
-    else:
-        form = CheckIn()
-    return render(request, 'reception/checkIn.html', {'form': form})
-
-
-def filtrar_reservas(request):
+def booking_filter(request):
     # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)
@@ -162,7 +145,14 @@ def filtrar_reservas(request):
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
 
 
-def filtrar_reservas_check_out(request):
+
+def what_todo(request):
+    return render(request, 'generic/what_to_do.html')
+def contact(request):
+    return render(request, 'generic/contact.html')
+
+
+def booking_filter_check_out(request):
     # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)
@@ -176,3 +166,44 @@ def filtrar_reservas_check_out(request):
 
     # Renderizar la plantilla con las reservas filtradas
     return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+
+def generate_reservation_pdf(request):
+    now = datetime.now()
+    # Recuperar el número de reserva de la solicitud POST
+    id = request.POST.get('id', '')
+    reservation = RoomReservation.objects.get(pk=id)
+
+    # Generar el contenido del PDF
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer)
+
+    # Agregar el logotipo al PDF
+    logo_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
+    logo = ImageReader(logo_path)
+    c.drawImage(logo, x=50, y=730, width=100, height=100, mask='auto')
+
+    texto_comprobante = f"\n\n\nComprobante emitido el {date.today()} a las {now.hour}:{now.minute}\n\nPara la reserva número {reservation.reservation_number} con DNI {reservation.DNI},\nde nombre {reservation.guests_name} y apellido {reservation.guests_surname} para {reservation.guests_number} persona/s con\nentrada el {reservation.guest_checkin} y salida el {reservation.guest_checkout}."
+
+    # Coordenadas iniciales para el texto
+    x = 100
+    y = 750
+
+    # Dibujar el texto en diferentes líneas
+    textobject = c.beginText(x, y)
+    textobject.setFont("Helvetica", 12)
+    textobject.setTextOrigin(x, y)
+
+    for linea in texto_comprobante.split('\n'):
+        textobject.textLine(linea)
+
+    c.drawText(textobject)
+    c.save()
+
+    # Preparar la respuesta HTTP con el PDF
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="comprobante.pdf"'
+    return response
+
+def thank_you(request):
+    return render(request, 'reception/thank_you.html')

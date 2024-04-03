@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
 
+    <link rel="icon" type="image/x-icon" href="../static/img/Logo.png">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
@@ -36,26 +37,33 @@
                     <a class="nav-link" href="{% url 'rooms_view' %}">Habitaciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contacto</a>
+                    <a class="nav-link" href="{% url 'contact' %}">Contacto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Que hacer</a>
+                    <a class="nav-link" href="{% url 'what_todo' %}">Que hacer</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Reservar</a>
+                    <a class="nav-link" href="{% url 'reserve_room' %}">Reservar</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'restaurant_page'%}">Restaurante</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarRecepcio" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Recepcion
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
-                        <li class="dropdown-item"><a href="{% url 'reserved_rooms_view' %}">CheckIn</a>
-                        <li class="dropdown-item"><a href="{% url 'ocuped_rooms_view' %}">CheckOut</a>
+                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
+                            <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
+                        </div>
+                        <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
+                            <li class="dropdown-item"><a href="{% url 'reserved_rooms_view' %}">CheckIn</a>
+                        </div>
+                        <div class="nav-link-div" onclick="navigateToURL('{% url 'ocuped_rooms_view' %}')">
+                            <li class="dropdown-item"><a href="{% url 'ocuped_rooms_view' %}">CheckOut</a>
+                        </div>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -100,10 +108,11 @@
                         Administrativo
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarAdministratiu">
-                        <li class="dropdown-item" ><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
                         <li class="dropdown-item"><a href="{% url 'shift_management_page' %}">Gestion de turnos</a>
                     </ul>
                 </li>
+                {% endif %}
                 <li class="nav-item ">
                     {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post">
@@ -130,6 +139,11 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 
+<script>
+    function navigateToURL(url) {
+        window.location.href = url;
+    }
+</script>
 
 </body>
 </html>
