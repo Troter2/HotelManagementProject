@@ -6,6 +6,7 @@
 | Josep Prades         | Front-End Expert |  
 | Adria Creus          | Scrum Master     |  
 | Sergi Vila           | Back-End Expert  |  
+| Joan Carles Turégano | VCS Master       |  
 
 ## Problems/Difficulties
 | Problem  | Task  | Owner | Description |
