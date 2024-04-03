@@ -123,7 +123,7 @@ body {
     -moz-filter: opacity(1.5);
 }
 
-.endark{
+.endark {
     position: absolute;
     top: 0;
     left: 0;
@@ -131,7 +131,91 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
 }
-.endark p{
+
+.endark p {
     font-size: 4rem
 
 }
+
+.dropdown-item a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.home-title {
+    font: 500 5rem/6rem 'Spectral', serif
+}
+
+.main-text-over-img {
+    font: 6rem/7.2rem 'Spectral', serif
+}
+
+.home-image-container {
+
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.home-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.3s ease;
+}
+
+.home-image:hover {
+    transform: translateX(-50%) scale(1.2);
+}
+
+.home-card-title {
+    font: 2.6rem/3.2rem 'Spectral', serif;
+}
+
+.home-card-content {
+    font: 400 1.3em/2.4rem 'Barlow', sans-serif;
+    line-height: 1.1;
+}
+
+/* Estilo para el modal */
+.modal_filter {
+    display: none; /* Por defecto, el modal estará oculto */
+    position: fixed; /* Posicionamiento fijo */
+    top: 50%; /* Ajusta la posición vertical según sea necesario */
+    left: 50%; /* Ajusta la posición horizontal según sea necesario */
+    transform: translate(-50%, -50%); /* Centra vertical y horizontalmente */
+    width: 80%; /* Ancho del modal */
+    max-width: 500px; /* Ancho máximo del modal */
+    z-index: 1050; /* Asegura que el modal esté encima del resto del contenido */
+    background-color: rgb(255, 255, 255); /* Fondo semi-transparente para el modal */
+    border-radius: 10px; /* Borde redondeado */
+}
+
+/* Estilo para el contenido del modal */
+.modal_content_filter {
+    background-color: #fefefe; /* Color de fondo del modal */
+    padding: 20px; /* Espaciado interno */
+    border: none; /* Sin borde */
+}
+
+/* Estilo para el botón de cerrar */
+.close_filter {
+    color: black; /* Color del botón de cerrar */
+    position: absolute; /* Posicionamiento absoluto */
+    top: 10px; /* Ajusta la posición vertical según sea necesario */
+    right: 10px; /* Ajusta la posición horizontal según sea necesario */
+    font-size: 30px; /* Tamaño de la fuente del botón */
+    font-weight: bold; /* Peso de la fuente */
+    cursor: pointer; /* Cursor al pasar sobre el botón */
+}
+
+.close_filter:hover {
+    color: #aaa; /* Cambio de color al pasar el ratón sobre el botón */
+    text-decoration: none; /* Sin subrayado */
+}
+

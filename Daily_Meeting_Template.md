@@ -1,11 +1,12 @@
-# Daily Meeting: DD-MM-YYYY
+# Daily Meeting: 25-03-2024
 
-| Assistant     | Role             |  
-|---------------|------------------|
-| Marc Ferreres | Developer        |   
-| Josep Prades  | Front-End Expert |  
-| Adria Creus   | Scrum Master     |  
-| Sergi Vila    | Back-End Expert  |  
+| Assistant            | Role             |  
+|----------------------|------------------|
+| Marc Ferreres        | Developer        |   
+| Josep Prades         | Front-End Expert |  
+| Adria Creus          | Scrum Master     |  
+| Sergi Vila           | Back-End Expert  |  
+| Joan Carles Turégano | VCS Master       |  
 
 ## Problems/Difficulties
 | Problem  | Task  | Owner | Description |

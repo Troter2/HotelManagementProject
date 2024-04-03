@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Restaurante {% endblock %}
+{% block content %}
+
+<div class="mm-page mm-slideout">
+    <div id="page">
+        <section>
+            <div class=" w-100 min-vh-100 room-bg col-12 text-center d-flex "
+                 style="background-image: url({% static 'img/restaurant-img.jpg' %}); background-repeat:no-repeat">
+                <div class="text-center endark align-items-center d-flex">
+                    <p class="text-white main-text-over-img  w-100">Restaurante</p>
+                </div>
+            </div>
+            <div class="row my-5">
+                <div class="col-md-4 text-center">
+                    <img src="{% static 'img/plato-1.png' %}" alt="Plato" class="e-img1 e-img-other img-fluid mb-3">
+                </div>
+                <div class="col-md-4 text-center">
+                    <h3>La pasión por la cocina</h3>
+                    <p class="text-justify">
+                        Bienvenidos a Las Palmeras, el restaurante donde cada bocado es una experiencia única de sabor y
+                        sofisticación. Situado en el corazón de nuestro exclusivo hotel, Las Palmeras te invita a
+                        disfrutar de una fusión excepcional entre la cocina internacional y los sabores locales más
+                        exquisitos.
+                    </p>
+                    <p class="text-center">
+                        Nuestro restaurante dispone de reservas con media pension o pension completa acorde a lo que
+                        guste el huésped. También se permiten reservas para gente no hospedada en el hotel.
+                    </p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <img src="{% static 'img/plato-2.png' %}" alt="Plato" class="e-img1 e-img-other img-fluid mb-3">
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

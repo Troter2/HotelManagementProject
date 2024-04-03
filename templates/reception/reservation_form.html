@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Reservar {% endblock %}
+{% block content %}
+<section class="h-100 gradient-form">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-3 mx-md-4">
+                                <div>
+                                    <a href="{% url 'rooms_view' %}" class="btn btn-secondary"
+                                       style="text-decoration: none">
+                                        <i class="bi bi-arrow-left"></i> Volver
+                                    </a>
+                                </div>
+                                <div class="text-center">
+                                    <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1">Reservar</h4>
+                                </div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3 mx-4 form-floating">
+                                        <input type="text" name="DNI" class="form-control" id="DNI" placeholder="DNI"
+                                               required>
+                                        <label for="DNI">DNI</label>
+                                    </div>
+                                    <div class="mb-4 mx-4 form-floating">
+                                        <input type="text" name="guests_name" class="form-control" id="guests_name"
+                                               placeholder="Nombre" required>
+                                        <label for="guests_name">Nombre</label>
+                                    </div>
+                                    <div class="mb-4 mx-4 form-floating">
+                                        <input type="text" name="guests_surname" class="form-control"
+                                               id="guests_surname" placeholder="Apellidos" required>
+                                        <label for="guests_surname">Apellidos</label>
+                                    </div>
+                                    <div class="mb-4 mx-4 form-floating">
+                                        <input type="email" name="guests_email" class="form-control" id="guests_email"
+                                               placeholder="Correo Electrónico" required>
+                                        <label for="guests_email">Correo Electrónico</label>
+                                    </div>
+                                    <div class="mb-4 mx-4 form-floating">
+                                        <input type="text" name="guests_phone" class="form-control" id="guests_phone"
+                                               placeholder="Teléfono" required>
+                                        <label for="guests_phone">Teléfono</label>
+                                    </div>
+                                    <div class="mb-4 mx-4">
+                                        <label for="room_type">Tipo de habitación</label>
+                                        <select name="room_type" id="room_type" class="form-control">
+                                            {% for roomType in roomTypes %}
+                                            <option value="{{ roomType.pk }}">{{ roomType.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="mb-4 mx-4 form-floating">
+                                        <input type="date" name="guest_checkin" class="form-control" id="guest_checkin"
+                                               placeholder="Fecha de Entrada">
+                                        <label for="guest_checkin">Fecha de Entrada</label>
+                                    </div>
+                                    <div class="mb-4 mx-4 form-floating">
+                                        <input type="date" name="guest_checkout" class="form-control"
+                                               id="guest_checkout" placeholder="Fecha de Salida">
+                                        <label for="guest_checkout">Fecha de Salida</label>
+                                    </div>
+                                    <div class="mb-4 mx-4 form-floating">
+                                        <input type="number" name="guests_number" class="form-control"
+                                               id="guests_number" placeholder="Número de Huéspedes" required>
+                                        <label for="guests_number">Número de Huéspedes</label>
+                                    </div>
+                                    <div class="text-center mx-4 mt-2 mb-5 pb-1">
+                                        <button class="mx-auto login_button" type="submit">Reservar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
+                            <div class="text-black px-3 py-4 p-md-5 h-100"
+                                 style="background-image: url({% static 'img/gradient-reserve.webp' %});background-repeat: no-repeat;background-size: cover;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

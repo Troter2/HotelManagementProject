@@ -1,61 +1,66 @@
 {% extends "base.html" %}
-{% block title %} Recepcio {% endblock %}
-
+{% load static %}
+{% block title %} Inicio {% endblock %}
 {% block content %}
-    <h2 class="text-primary">TEXTO DE HOME.HTML<br/> Descargar node js 20.11.1 LTS</h2>
-    <div class="container-fluid m-0 mb-2 bg-light ">
-        <div class="row">
-            <div class=" col-sm-3 col-md-6 h-100">
-                <div class="card bg-primary">
-                    <div class="card-body">
-                        One 2 of three columns
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 container">
-                <div class="card bg-warning h-100">
-
-                    <div class="card-body">
-                        One 2 of three columns
-                    </div>
-                </div>
-            </div>
-            <div class=" col-sm-6 col-md-3 h-100">
-                <div class="card bg-info">
-
-                    <div class="card-body">
-                        One 2 of three columns
-                    </div>
-                </div>
-            </div>
+    <div class=" w-100 min-vh-100 room-bg col-12 text-center d-flex "
+         style="background-image: url({% static 'img/home-img.jpg' %}); background-repeat:no-repeat">
+        <div class="text-center endark align-items-center d-flex">
+            <p class="text-white h1  w-100 main-text-over-img">HOTEL<br>LAS PALMERAS</p>
         </div>
     </div>
-    <div class="container-fluid">
-        <table class="table table-striped table-dark col-sm-11">
+    <section class="text-center py-4 mb-5">
+        <div class="my-4">
+            <p class=" fw-bold  home-title">Las palmeras, un lujoso refugio<br> urbano, situado sobre las <br>extraordinarias
+                vistas
+                del<br>mar Mediterraneo</p>
+        </div>
+        <div class="text-center px-5 ">
+            <p class="h4 w-75 mx-auto my-4 text-start">Una joya con forma de hotel. Esta extraordinaria propiedad
+                combina el ocio costero con la
+                intimidad y el confort de un hogar lejos de casa. Entre los muros de esta fortaleza, encontrará toda
+                la delicadeza y atención al detalle que celebran la elegancia y la exclusividad.</p>
 
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Room number</th>
-                <th scope="col">Is clean</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for Room in rooms %}
-                <tr>
-                    <th scope="row">{{ Room.number }}</th>
-                    <td>
-                        {% if Room.is_clean %}
-                            esta lliure per a entrar
-                        {% else %}
-                            esta pendent de fer
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
+            <p class="h4 w-75 mx-auto my-4 text-start">Nuestras ochenta habitaciones proporcionan el descanso y la
+                tranquilidad necesarios tras un día
+                bien aprovechado posor la capital.</p>
 
-            </tbody>
-        </table>
-    </div>
-    <button class="btn btn-primary">test</button>
+            <p class="h4 w-75 mx-auto my-4 text-start">En la 1ª planta le espera el Restaurante Las Palmeras. Un surtido de
+                sabores emblemáticos y contrastes atrevidos
+                para disfrutar de la vida con cada nuevo bocado.</p>
+        </div>
+        <div class="container pb-3">
+            <div class="row">
+                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'rooms_view' %}">
+                    <div class="home-image-container">
+                        <img class="img-fluid home-image" src="{% static 'img/rooms-img.jpg' %}">
+                    </div>
+                    <p class="home-card-title">Habitaciones</p>
+                    <p class="home-card-content">
+                        ochenta habitaciones y suites reúnen el confort del estilo de
+                        vida de una residencia exclusiva. Elevando la experiencia de una habitación de hotel de 5
+                        estrellas a un nuevo nivel.
+                    </p>
+                </a>
+                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'restaurant_page' %}">
+                    <div class="home-image-container">
+                        <img class="img-fluid home-image" src="{% static 'img/restaurant-img.jpg' %}">
+                    </div>
+                    <p class="home-card-title">Gastronomia</p>
+                    <p class="home-card-content"><strong>Restaurant Las palmeras </strong>, nuestro restaurante en
+                        primera planta, incluye tanto las espléndidas vistas como&nbsp;una cocina honesta y atemporal
+                        basada en el producto.</p>
+                </a>
+                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'what_todo' %}">
+                    <div class="home-image-container">
+                        <img class="img-fluid home-image" src="{% static 'img/que-hacer-home.jpg' %}">
+                    </div>
+                    <p class="home-card-title">Experiencias</p>
+                    <p class="home-card-content">Disfruta de todas las experiancias maritimas que se ofrecen por la
+                        zona, o si prefieres una experiencia mas rural a escasos quinze minutos podra disfrutar de todo
+                        tipo de deportes de montaña.</p>
+                </a>
+            </div>
+        </div>
+    </section>
 
 {% endblock %}

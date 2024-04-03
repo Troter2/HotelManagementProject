@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Que hacer {% endblock %}
+{% block content %}
+    <div class=" w-100 min-vh-100 room-bg col-12 text-center d-flex "
+         style="background-image: url({% static 'img/experiencie1.webp' %}); background-repeat:no-repeat">
+        <div class="text-center endark align-items-center d-flex">
+            <p class="text-white h1  w-100 main-text-over-img">EXPERIENCIAS</p>
+        </div>
+    </div>
+    <section class="text-center py-4 mb-5">
+        <div class="my-4">
+            <p class=" fw-bold  home-title">Vive una experiencia de<br> ensueño rodeado de tus<br> seres más queridos cerca
+                del<br>mar Mediterraneo</p>
+        </div>
+        <div class="text-center px-5 ">
+            <p class="h4 w-75 mx-auto my-4 text-start">Explora los encantos locales y eventos emocionantes que hacen de nuestra ubicación un destino único para tu estadía</p>
+
+            <p class="h4 w-75 mx-auto my-4 text-start">Aventurate con tus seres mas queridos a explorar los encantos mas cercanos al mar Mediterraneo
+                y disfruta de sus eventos más refrescantes y para disfrutar con tus seres mas queridos.</p>
+        </div>
+       <section>
+    <div class="container pb-3">
+        <h2 class="section-title">EVENTOS</h2>
+
+        <div class="row">
+            <a class="col-12 col-xl-4 mt-3 text-black" style="text-decoration: none;" href="#">
+                <div class="home-image-container">
+                    <img class="img-fluid home-image" src="{% static 'img/ship.avif' %}">
+                </div>
+                <p class="home-card-title">Ruta por el mediterraneo</p>
+                <p class="home-card-content">
+                    Aventúrate en las entrañas del grandioso y magnífico mar mediterraneo. Disponibilidad de distintas
+                    rutas en barco en el puerto marítimo, además de diferentes actividades.
+
+                </p>
+            </a>
+            <a class="col-12 col-xl-4 mt-3  text-black" style="text-decoration: none;" href="#">
+                <div class="home-image-container">
+                    <img class="img-fluid home-image" src="{% static 'img/sunlife.jfif' %}">
+                </div>
+                <p class="home-card-title"> Sunlife</p>
+                <p class="home-card-content">Disfruta de una experiencia de 9 horas de la música techno más escuchada y vive una noche inigualable.</p>
+            </a>
+            <a class="col-12 col-xl-4 mt-3 text-black" style="text-decoration: none;" href="#">
+                <div class="home-image-container">
+                    <img class="img-fluid home-image" src="{% static 'img/teatro.jpg' %}">
+                </div>
+                <p class="home-card-title">La capital del Pecado</p>
+                <p class="home-card-content">Vive de primera mano uno de los shows de uno de los comediantes más famosos de España, Juan Dávila. </p>
+            </a>
+        </div>
+    </div>
+</section>
+
+        <div class="container pb-3">
+        <h2 class="section-title">SITIOS DE INTERÉS</h2>
+
+        <div class="row">
+            <a class="col-12 col-xl-4 mt-3 text-black" style="text-decoration: none;" href="#">
+                <div class="home-image-container">
+                    <img class="img-fluid home-image" src="{% static 'img/costa.jpg' %}">
+                </div>
+                <p class="home-card-title">Costa Firma</p>
+                <p class="home-card-content">
+                    Relajate disfrutando de Cost Firma en su màximo esplendor bañandote en la playa de 200 metros junto al hotel.
+                </p>
+            </a>
+            <a class="col-12 col-xl-4 mt-3 text-black" style="text-decoration: none;" href="#">
+                <div class="home-image-container">
+                    <img class="img-fluid home-image" src="{% static 'img/que-hacer-home.jpg' %}">
+                </div>
+                <p class="home-card-title">La Foradada</p>
+                <p class="home-card-content">Contrasta la cálida y relajante experiencia de la playa con la intrigante y divertida vida de la montaña.</p>
+            </a>
+            <a class="col-12 col-xl-4 mt-3 text-black" style="text-decoration: none;" href="#">
+                <div class="home-image-container">
+                    <img class="img-fluid home-image" src="{% static 'img/snorkel.jpg' %}">
+                </div>
+                <p class="home-card-title">Snorkel</p>
+                <p class="home-card-content">Descubre la fauna marina y adentrate en el mar, una experiencia ideal para deportistas y aventureros.</p>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
