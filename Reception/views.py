@@ -102,7 +102,7 @@ def reserve_room(request):
             if len(free_rooms) < 1:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
-            room = RoomReservation.objects.create(reservation_number=uuid, DNI=request.POST['DNI'],
+            room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
                                                   guests_name=request.POST['guests_name'],
                                                   guests_surname=request.POST['guests_surname'],
                                                   guests_email=request.POST['guests_email'],
@@ -240,10 +240,10 @@ def generate_reservation_pdf(request):
     titleObject.textLine(text)
     c.drawText(titleObject)
 
-    text = "Localizado en C/Ejemplo"
+    text = "Localizado en C/Ejemplo nº 12"
     titleObject = c.beginText(30, 770)
     titleObject.setFont("Helvetica", 12)
-    titleObject.setTextOrigin(50, 495)
+    titleObject.setTextOrigin(50, 420)
     titleObject.textLine(text)
     c.drawText(titleObject)
 
