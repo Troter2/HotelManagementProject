@@ -10,6 +10,7 @@ from Reception.forms import ReservationForm, CheckIn
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+import uuid
 
 
 def reception_ini(request):
@@ -87,7 +88,8 @@ def reserve_room(request):
                 form.add_error('DNI', 'El DNI no es válido.')
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
             form.instance.price = 60
-            uuid = 1
+            uid = uuid.uuid4()
+            uid_str = str(uid)
             nights = (datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d') - datetime.strptime(
                 request.POST['guest_checkin'], '%Y-%m-%d')).days
             free_rooms = habitaciones_libres(datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d'),
@@ -95,7 +97,7 @@ def reserve_room(request):
             if len(free_rooms) < 1:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
-            room = RoomReservation.objects.create(reservation_number=uuid, DNI=request.POST['DNI'],
+            room = RoomReservation.objects.create(reservation_number=uid_str, DNI=request.POST['DNI'],
                                            guests_name=request.POST['guests_name'],
                                            guests_surname=request.POST['guests_surname'],
                                            guests_email=request.POST['guests_email'],
