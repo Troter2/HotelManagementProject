@@ -74,7 +74,7 @@
     </div>
 </div>
 
-<h1>Lista de habitaciones reservadas</h1>
+<h1 class="mx-3 my-3">Lista de habitaciones reservadas</h1>
 <!-- Botón de filtrado -->
 <div class="container-fluid">
     <div class="row mt-3">
@@ -140,6 +140,10 @@
     }
     document.getElementById("filtroForm").addEventListener("submit", function (event) {
         event.preventDefault();
+
+        var nombreHabitacion = document.getElementById("nombre_habitacion").value;
+        var fecha = document.getElementById("fecha").value;
+
         // Construir la URL absoluta
         var baseUrl = window.location.protocol + "//" + window.location.host;
         var url = `${baseUrl}/reception/checkout/filter/?nombre_habitacion=${nombreHabitacion}&fecha=${fecha}`;
