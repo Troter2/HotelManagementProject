@@ -38,9 +38,12 @@ Considering the proposed distribution in the model Kanban, the overall activitie
 | Adrià Creus          | Create reservation filter                         |  
 | Adrià Creus          | Create booking form                               | 
 | Adrià Creus          | Create what to do page                            |
-| Adrià Creus          | Create contact page                               |
-| Joan Carles Turegano | Check out filter from                             | 
-| Marc Ferreres        | Generate pdf with reservation data                 |  
-| Marc Ferreres        | Create list to visualize restaurant reserves       |  
-| Marc Ferreres        | Create form to send host data to autorities        |  
+| Adrià Creus          | Create contact page                               | 
+| Marc Ferreres        | Generate pdf with reservation data                |  
+| Marc Ferreres        | Create list to visualize restaurant reserves      |  
+| Marc Ferreres        | Create form to send host data to autorities       |  
+| Joan Carles Turegano | Check out filter                                  |
+| Joan Carles Turegano | Price generator from the booking                  |
+| Joan Carles Turegano | Added Page title and web icon                     |
+
 
