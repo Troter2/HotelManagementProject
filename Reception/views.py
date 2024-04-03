@@ -10,6 +10,7 @@ from Reception.forms import ReservationForm, CheckIn
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+import uuid
 
 
 def reception_ini(request):
@@ -79,6 +80,7 @@ def habitaciones_libres(guest_entry, guest_leave):
 
 def reserve_room(request):
     roomTypes = RoomType.objects.all()
+    roomPrice = RoomType.price
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -87,7 +89,8 @@ def reserve_room(request):
                 form.add_error('DNI', 'El DNI no es válido.')
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
             form.instance.price = 60
-            uuid = 1
+            uid = uuid.uuid4()
+            uid_str = str(uid)
             nights = (datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d') - datetime.strptime(
                 request.POST['guest_checkin'], '%Y-%m-%d')).days
             free_rooms = habitaciones_libres(datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d'),
@@ -95,23 +98,24 @@ def reserve_room(request):
             if len(free_rooms) < 1:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
-            room = RoomReservation.objects.create(reservation_number=uuid, DNI=request.POST['DNI'],
-                                           guests_name=request.POST['guests_name'],
-                                           guests_surname=request.POST['guests_surname'],
-                                           guests_email=request.POST['guests_email'],
-                                           guests_phone=request.POST['guests_phone'],
-                                           guest_checkin=request.POST['guest_checkin'],
-                                           guest_checkout=request.POST['guest_checkout'],
-                                           guests_number=request.POST['guests_number'],
-                                           price=(RoomType.objects.filter(id=request.POST['room_type'])[
-                                                      0].price + int(request.POST['guests_number'])) * nights,
-                                           room_number=free_rooms[0]
+            room = RoomReservation.objects.create(reservation_number=uid_str, DNI=request.POST['DNI'],
+                                                  guests_name=request.POST['guests_name'],
+                                                  guests_surname=request.POST['guests_surname'],
+                                                  guests_email=request.POST['guests_email'],
+                                                  guests_phone=request.POST['guests_phone'],
+                                                  guest_checkin=request.POST['guest_checkin'],
+                                                  guest_checkout=request.POST['guest_checkout'],
+                                                  guests_number=request.POST['guests_number'],
+                                                  price=(RoomType.objects.filter(id=request.POST['room_type'])[
+                                                             0].price + int(request.POST['guests_number'])) * nights,
+                                                  room_number=free_rooms[0]
 
-                                           )
-            return render(request, 'reception/thank_you.html', {'id':room.id})
+                                                  )
+            return render(request, 'reception/thank_you.html', {'id': room.id})
     else:
         form = ReservationForm()
-    return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+    return render(request, 'reception/reservation_form.html',
+                  {'form': form, 'roomTypes': roomTypes, 'roomPrice': roomPrice})
 
 
 def validar_dni(dni):
@@ -122,7 +126,6 @@ def validar_dni(dni):
     if not dni[8].isalpha():
         return False
     return True
-
 
 
 def booking_filter(request):
@@ -141,9 +144,10 @@ def booking_filter(request):
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
 
 
-
 def what_todo(request):
     return render(request, 'generic/what_to_do.html')
+
+
 def contact(request):
     return render(request, 'generic/contact.html')
 
@@ -162,6 +166,7 @@ def booking_filter_check_out(request):
 
     # Renderizar la plantilla con las reservas filtradas
     return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+
 
 def generate_reservation_pdf(request):
     now = datetime.now()
@@ -200,6 +205,7 @@ def generate_reservation_pdf(request):
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="comprobante.pdf"'
     return response
+
 
 def thank_you(request):
     return render(request, 'reception/thank_you.html')

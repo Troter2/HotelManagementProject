@@ -49,30 +49,47 @@
                                     </div>
                                     <div class="mb-4 mx-4">
                                         <label for="room_type">Tipo de habitación</label>
-                                        <select name="room_type" id="room_type" class="form-control">
+                                        <select name="room_type" id="room_type" class="form-control"
+                                                onchange="CalculatePrice()">
                                             {% for roomType in roomTypes %}
-                                            <option value="{{ roomType.pk }}">{{ roomType.name }}</option>
+                                            <option data-price="{{ roomType.price }}" value="{{ roomType.id }}">
+                                                {{ roomType.name }}
+                                            </option>
                                             {% endfor %}
                                         </select>
+
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
                                         <input type="date" name="guest_checkin" class="form-control" id="guest_checkin"
-                                               placeholder="Fecha de Entrada">
+                                               placeholder="Fecha de Entrada" onchange="CalculatePrice()">
                                         <label for="guest_checkin">Fecha de Entrada</label>
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
                                         <input type="date" name="guest_checkout" class="form-control"
-                                               id="guest_checkout" placeholder="Fecha de Salida">
+                                               id="guest_checkout" placeholder="Fecha de Salida"
+                                               onchange="CalculatePrice()">
                                         <label for="guest_checkout">Fecha de Salida</label>
                                     </div>
-                                    <div class="mb-4 mx-4 form-floating">
+                                    <div class=" mb-4 mx-4 form-floating">
                                         <input type="number" name="guests_number" class="form-control"
-                                               id="guests_number" placeholder="Número de Huéspedes" required>
+                                               id="guests_number" placeholder="Número de Huéspedes" required
+                                               onchange="CalculatePrice()">
                                         <label for="guests_number">Número de Huéspedes</label>
+                                    </div>
+                                    <div class="mb-4 mx-4">
+                                        <div class="form-floating">
+                                            <p class="mb-2">Precio Habitación: <span id="precio_habitacion">0</span>
+                                            </p>
+                                            <p class="mb-2">Importe turístico: <span id="importe_turístico">0</span>
+                                            </p>
+                                            <p class="mb-2">Precio total: <span id="precio_total">0</span></p>
+                                        </div>
                                     </div>
                                     <div class="text-center mx-4 mt-2 mb-5 pb-1">
                                         <button class="mx-auto login_button" type="submit">Reservar</button>
                                     </div>
+
+
                                 </form>
                             </div>
                         </div>
@@ -87,4 +104,36 @@
         </div>
     </div>
 </section>
+<!-- script para obtener el precio de la habitacion-->
+<script>
+
+    // Actualizar los elementos <span> con los precios correspondientes
+
+    function CalculatePrice() {
+        var inputCheckIn = new Date(document.getElementById("guest_checkin").value);
+        var inputCheckOut = new Date(document.getElementById("guest_checkout").value);
+        var days = (inputCheckOut.getTime() - inputCheckIn.getTime()) / (1000 * 60 * 60 * 24);
+        var guestsNumber = parseInt(document.getElementById("guests_number").value);
+
+        if (inputCheckIn && inputCheckOut && !isNaN(days) && days && guestsNumber > 0) {
+            var roomTypeSelect = document.getElementById("room_type");
+            var roomPrice = parseFloat(roomTypeSelect.options[roomTypeSelect.selectedIndex].dataset.price);
+
+            var turisticImport = guestsNumber * days;
+            var totalImport = (roomPrice * days) + turisticImport;
+
+            document.getElementById("precio_habitacion").textContent = roomPrice;
+            document.getElementById("importe_turístico").textContent = turisticImport;
+            document.getElementById("precio_total").textContent = totalImport;
+        } else {
+            // Si los valores no son válidos, establecer los resultados como 0
+            document.getElementById("precio_habitacion").textContent = "0";
+            document.getElementById("importe_turístico").textContent = "0";
+            document.getElementById("precio_total").textContent = "0";
+        }
+    }
+
+
+</script>
+
 {% endblock %}
