@@ -34,19 +34,13 @@
         <div class="collapse navbar-collapse" id="menu">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'rooms_view' %}">
-                        Habitaciones
-                    </a>
+                    <a class="nav-link" href="{% url 'rooms_view' %}">Habitaciones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'contact' %}">
-                        Contacto
-                    </a>
+                    <a class="nav-link" href="{% url 'contact' %}">Contacto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'what_todo' %}">
-                        Que hacer
-                    </a>
+                    <a class="nav-link" href="{% url 'what_todo' %}">Que hacer</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'reserve_room' %}">
@@ -54,9 +48,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'restaurant_page'%}">
-                        Restaurante
-                    </a>
+                    <a class="nav-link" href="{% url 'restaurant_page'%}">Restaurante</a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
@@ -66,25 +58,13 @@
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
+                            <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
                         </div>
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'reserved_rooms_view' %}">
-                                    CheckIn
-                                </a>
-                            </li>
+                            <li class="dropdown-item"><a href="{% url 'reserved_rooms_view' %}">CheckIn</a>
                         </div>
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'ocuped_rooms_view' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'ocuped_rooms_view' %}">
-                                    CheckOut
-                                </a>
-                            </li>
+                            <li class="dropdown-item"><a href="{% url 'ocuped_rooms_view' %}">CheckOut</a>
                         </div>
                     </ul>
                 </li>
@@ -94,20 +74,15 @@
                         Limpieza
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarLimpieza">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'cleaner_page' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'cleaner_page' %}">
-                                    Habitaciones pendientes
-                                </a>
-                            </li>
-                        </div>
+                        <li class="dropdown-item">
+                            <a href="{% url 'shift' %}">
+                                Turno
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="{% url 'cleaner_page' %}">
+                                Habitaciones pendientes
+                            </a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -116,11 +91,7 @@
                         Camarero
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarCamarero">
-                        <li class="dropdown-item">
-                            <a href="#">
-                                Reservas
-                            </a>
-                        </li>
+                        <li class="dropdown-item"><a href="#">Reservas</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -129,16 +100,8 @@
                         Contable
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarContable">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">Turno</a>
-                            </li>
-                        </div>
-                            <li class="dropdown-item">
-                                <a href="#">
-                                    Facturacion
-                                </a>
-                            </li>
+                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="#">Facturacion</a>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -147,20 +110,8 @@
                         Administrativo
                     </a>
                     <ul class="dropdown-menu bg-light" aria-labelledby="navbarAdministratiu">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift_management_page' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift_management_page' %}">
-                                    Gestion de turnos
-                                </a>
-                            </li>
-                        </div>
+                        <li class="dropdown-item"><a href="{% url 'shift' %}">Turno</a></li>
+                        <li class="dropdown-item"><a href="{% url 'shift_management_page' %}">Gestion de turnos</a>
                     </ul>
                 </li>
                 {% endif %}
