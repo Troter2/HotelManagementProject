@@ -17,12 +17,13 @@ fechas = [fecha_inicio + datetime.timedelta(days=i) for i in range(dias_sprint)]
 
 # Calcular la línea de tendencia de burn-down (ideal) y burn-up (real)
 linea_burn_down = [20 - i for i in range(dias_sprint)]
-linea_burn_up = [sum(issues_cerradas_por_dia[:i+1]) for i in range(dias_sprint)]
+linea_burn_up = [sum(issues_cerradas_por_dia[:i + 1]) for i in range(dias_sprint)]
 
 # Graficar burn-down chart
 plt.figure(figsize=(10, 6))
 plt.plot(fechas, linea_burn_down, linestyle='--', color='red', label='Línea de tendencia de burn-down')
-plt.fill_between(fechas, linea_burn_down, color='red', alpha=0.1)  # Relleno para el área bajo la línea de tendencia de burn-down
+plt.fill_between(fechas, linea_burn_down, color='red',
+                 alpha=0.1)  # Relleno para el área bajo la línea de tendencia de burn-down
 plt.xlabel('Fecha')
 plt.ylabel('Cantidad de issues')
 plt.title('Gráfico de burn-down')
