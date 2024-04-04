@@ -66,12 +66,14 @@
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
                                         <input type="date" name="guest_checkout" class="form-control"
-                                               id="guest_checkout" placeholder="Fecha de Salida" onchange="CalculatePrice()">
+                                               id="guest_checkout" placeholder="Fecha de Salida"
+                                               onchange="CalculatePrice()">
                                         <label for="guest_checkout">Fecha de Salida</label>
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
                                         <input type="number" name="guests_number" class="form-control"
-                                               id="guests_number" placeholder="Número de Huéspedes" required onchange="CalculatePrice()">
+                                               id="guests_number" placeholder="Número de Huéspedes" required
+                                               onchange="CalculatePrice()">
                                         <label for="guests_number">Número de Huéspedes</label>
                                     </div>
                                     <div class="mb-4 mx-4 ">
@@ -109,7 +111,12 @@
         var days = (inputCheckOut.getTime() - inputCheckIn.getTime()) / (1000 * 60 * 60 * 24);
         var guestsNumber = parseInt(document.getElementById("guests_number").value);
 
-        if (inputCheckIn && inputCheckOut && !isNaN(days) && days && guestsNumber > 0) {
+        if (days < 0) {
+            // Si los valores no son válidos, establecer los resultados como vacíos o 0
+            document.getElementById("precio_habitacion").textContent = "0";
+            document.getElementById("importe_turístico").textContent = "0";
+            document.getElementById("precio_total").textContent = "0";
+        } else if (inputCheckIn && inputCheckOut && !isNaN(days) && days && guestsNumber > 0) {
             var roomTypeSelect = document.getElementById("room_type");
             var roomPrice = parseFloat(roomTypeSelect.options[roomTypeSelect.selectedIndex].dataset.price);
 
