@@ -9,3 +9,5 @@ Projecte d'aplicació web per l'Hotel Las Palmeras.
 * **Josep Prades** - [jus25](https://github.com/jus25)
 * **Marc Ferreres** - [Maarc89](https://github.com/Maarc89)
 * **Joan Carles Turégano** - [Juanca192001](https://github.com/Juanca192001)
+
+[Taiga.io](https://tree.taiga.io/project/jus25-hotelmanagementproject/timeline)
