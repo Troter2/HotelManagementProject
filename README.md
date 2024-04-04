@@ -1,4 +1,4 @@
-## Joint Project :computer: :hotel: Hotel Las Palmeras
+# Joint Project :computer: :hotel: Hotel Las Palmeras
 
 Projecte d'aplicació web per l'Hotel Las Palmeras.
 
