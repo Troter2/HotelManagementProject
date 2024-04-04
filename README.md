@@ -2,7 +2,7 @@
 
 Projecte d'aplicació web per l'Hotel Las Palmeras.
 
-## Project Team ✒️
+# Project Team ✒️
 
 * **Sergi Vila** - [Troter2](https://github.com/Troter2)
 * **Adrià Creus** - [AdriaCreus](https://github.com/AdriaCreus)
