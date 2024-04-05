@@ -1,15 +1,21 @@
 import datetime
+import barcode
 from datetime import datetime
 from datetime import date
+
+from barcode.writer import ImageWriter
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.template.loader import get_template
+from reportlab.graphics.barcode import code39
+
+
 from Reception.models import RoomReservation, RoomType, Room
-from Reception.forms import ReservationForm, CheckIn
+from Reception.forms import ReservationForm
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+import uuid
 
 
 def reception_ini(request):
@@ -87,7 +93,8 @@ def reserve_room(request):
                 form.add_error('DNI', 'El DNI no es válido.')
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
             form.instance.price = 60
-            uuid = 1
+            uid = uuid.uuid4()
+            uid_str = str(uid)
             nights = (datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d') - datetime.strptime(
                 request.POST['guest_checkin'], '%Y-%m-%d')).days
             free_rooms = habitaciones_libres(datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d'),
@@ -95,20 +102,21 @@ def reserve_room(request):
             if len(free_rooms) < 1:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
-            room = RoomReservation.objects.create(reservation_number=uuid, DNI=request.POST['DNI'],
-                                           guests_name=request.POST['guests_name'],
-                                           guests_surname=request.POST['guests_surname'],
-                                           guests_email=request.POST['guests_email'],
-                                           guests_phone=request.POST['guests_phone'],
-                                           guest_checkin=request.POST['guest_checkin'],
-                                           guest_checkout=request.POST['guest_checkout'],
-                                           guests_number=request.POST['guests_number'],
-                                           price=(RoomType.objects.filter(id=request.POST['room_type'])[
-                                                      0].price + int(request.POST['guests_number'])) * nights,
-                                           room_number=free_rooms[0]
+            room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
+                                                  guests_name=request.POST['guests_name'],
+                                                  guests_surname=request.POST['guests_surname'],
+                                                  guests_email=request.POST['guests_email'],
+                                                  guests_phone=request.POST['guests_phone'],
+                                                  guest_checkin=request.POST['guest_checkin'],
+                                                  guest_checkout=request.POST['guest_checkout'],
+                                                  guests_number=request.POST['guests_number'],
+                                                  price=(RoomType.objects.filter(id=request.POST['room_type'])[
+                                                             0].price + int(request.POST['guests_number'])) * nights,
+                                                  room_number=free_rooms[0]
 
-                                           )
-            return render(request, 'reception/thank_you.html', {'id':room.id})
+                                                  )
+            return render(request, 'reception/thank_you.html', {'id': room.id})
+
     else:
         form = ReservationForm()
     return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
@@ -122,7 +130,6 @@ def validar_dni(dni):
     if not dni[8].isalpha():
         return False
     return True
-
 
 
 def booking_filter(request):
@@ -141,9 +148,10 @@ def booking_filter(request):
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
 
 
-
 def what_todo(request):
     return render(request, 'generic/what_to_do.html')
+
+
 def contact(request):
     return render(request, 'generic/contact.html')
 
@@ -163,6 +171,7 @@ def booking_filter_check_out(request):
     # Renderizar la plantilla con las reservas filtradas
     return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
 
+
 def generate_reservation_pdf(request):
     now = datetime.now()
     # Recuperar el número de reserva de la solicitud POST
@@ -174,25 +183,80 @@ def generate_reservation_pdf(request):
     c = canvas.Canvas(buffer)
 
     # Agregar el logotipo al PDF
-    logo_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
-    logo = ImageReader(logo_path)
-    c.drawImage(logo, x=50, y=730, width=100, height=100, mask='auto')
+    img_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
+    img = ImageReader(img_path)
+    c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
 
-    texto_comprobante = f"\n\n\nComprobante emitido el {date.today()} a las {now.hour}:{now.minute}\n\nPara la reserva número {reservation.reservation_number} con DNI {reservation.DNI},\nde nombre {reservation.guests_name} y apellido {reservation.guests_surname} para {reservation.guests_number} persona/s con\nentrada el {reservation.guest_checkin} y salida el {reservation.guest_checkout}."
-
-    # Coordenadas iniciales para el texto
-    x = 100
-    y = 750
+    img_path = 'static/img/playa-pdf.jpg'  # Ruta al archivo de imagen del logo
+    img = ImageReader(img_path)
+    c.drawImage(img, x=0, y=550, width=600, height=220, mask='auto')
 
     # Dibujar el texto en diferentes líneas
-    textobject = c.beginText(x, y)
-    textobject.setFont("Helvetica", 12)
-    textobject.setTextOrigin(x, y)
+    titleObject = c.beginText(80, 770)
+    titleObject.setFont("Helvetica", 21)
+    titleObject.setTextOrigin(80, 795)
+    titleObject.textLine("Hotel las Palmeras")
+    c.drawText(titleObject)
 
-    for linea in texto_comprobante.split('\n'):
-        textobject.textLine(linea)
+    text = f"{date.today()} "
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(490, 795)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
 
-    c.drawText(textobject)
+    text = f"Nombre: {reservation.guests_name} {reservation.guests_surname}"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 470)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = f"Nº huespedes: {reservation.guests_number}"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 445)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = f"Entrada: {reservation.guest_checkin}"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(443, 495)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = f"Salida: {reservation.guest_checkout}"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(450, 470)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = f"DNI: {reservation.DNI} "
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 495)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = "Localizado en C/Ejemplo nº 12"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 420)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    titleObject = c.beginText(80, 770)
+    titleObject.setFont("Helvetica", 21)
+    titleObject.setTextOrigin(190, 520)
+    titleObject.textLine("Comprovante de reserva")
+    c.drawText(titleObject)
+
+
+
+    barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
+    barcode.drawOn(c, 60, 250 )
     c.save()
 
     # Preparar la respuesta HTTP con el PDF
@@ -200,6 +264,7 @@ def generate_reservation_pdf(request):
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="comprobante.pdf"'
     return response
+
 
 def thank_you(request):
     return render(request, 'reception/thank_you.html')

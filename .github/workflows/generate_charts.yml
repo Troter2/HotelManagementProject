@@ -1,0 +1,35 @@
+name: Generar y subir gráficos
+
+on:
+  push:
+    branches:
+      - dev  # Ejecutar el flujo de trabajo en push a la rama dev
+
+jobs:
+  generar_graficos:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del repositorio
+      uses: actions/checkout@v2
+
+    - name: Configurar Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install matplotlib
+
+    - name: Generar gráficos
+      run: python generate_charts.py
+
+    - name: Subir gráficos generados
+      uses: actions/upload-artifact@v2
+      with:
+        name: graficos-sprint  # Nombre del artefacto
+        path: |
+          burn_down_chart.png
+          burn_up_chart.png
