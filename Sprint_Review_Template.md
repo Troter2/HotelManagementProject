@@ -1,4 +1,4 @@
-# Sprint Review Title (DD-MM-YYYY)
+# Sprint Review Title (04-04-2000)
 
 ## Work Scheduled/Performed
 

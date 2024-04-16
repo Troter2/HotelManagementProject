@@ -1,2 +1,4 @@
 Django~=5.0.2
 Pillow
+reportlab
+python-barcode
