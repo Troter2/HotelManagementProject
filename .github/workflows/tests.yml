@@ -28,4 +28,4 @@ jobs:
 
     - name: Ejecutar pruebas específicas
       run: |
-        python -m pytest HotelManagementProject/Cleaning/tests.py
+        python manage.py test Cleaning
