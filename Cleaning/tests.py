@@ -24,5 +24,5 @@ class CleanerViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirección después de la actualización
         self.room1.refresh_from_db()  # Actualizamos el objeto desde la base de datos
         self.assertTrue(self.room1.is_clean)  # Verificamos que la habitación ahora esté limpia
-
+#run
 
