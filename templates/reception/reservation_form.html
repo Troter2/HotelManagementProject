@@ -20,7 +20,7 @@
                                     <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
                                     <h4 class="mt-1 mb-5 pb-1">Reservar</h4>
                                 </div>
-                                <form method="post">
+                                <form action="{% url 'reserve_room' %}" method="POST">
                                     {% csrf_token %}
                                     <div class="mb-3 mx-4 form-floating">
                                         <input type="text" name="DNI" class="form-control" id="DNI" placeholder="DNI"
