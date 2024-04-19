@@ -87,7 +87,8 @@
                                     </div>
 
                                     <div class="text-center mx-4 mt-2 mb-5 pb-1">
-                                        <button class="mx-auto login_button" type="submit">Reservar</button>
+                                        <button id="bugButton" class="mx-auto login_button" type="submit">Reservar
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -110,12 +111,15 @@
         var inputCheckOut = new Date(document.getElementById("guest_checkout").value);
         var days = (inputCheckOut.getTime() - inputCheckIn.getTime()) / (1000 * 60 * 60 * 24);
         var guestsNumber = parseInt(document.getElementById("guests_number").value);
+        var reserveButton = document.getElementById("bugButton");
 
         if (days < 0) {
             // Si los valores no son válidos, establecer los resultados como vacíos o 0
             document.getElementById("precio_habitacion").textContent = "0";
             document.getElementById("importe_turístico").textContent = "0";
             document.getElementById("precio_total").textContent = "0";
+            reserveButton.disabled = true;
+            reserveButton.classList.add("disabled");
         } else if (inputCheckIn && inputCheckOut && !isNaN(days) && days && guestsNumber > 0) {
             var roomTypeSelect = document.getElementById("room_type");
             var roomPrice = parseFloat(roomTypeSelect.options[roomTypeSelect.selectedIndex].dataset.price);
