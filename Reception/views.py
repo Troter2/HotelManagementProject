@@ -119,7 +119,7 @@ def reserve_room(request):
 
     else:
         form = ReservationForm()
-    return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+        return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
 
 def validar_dni(dni):
