@@ -1,56 +1,57 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %} Iniciar Sesion {% endblock %}
+{% block title %} Iniciar Sesión {% endblock %}
 {% block content %}
-    <section class="h-100 gradient-form ">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-xl-10">
-                    <div class="card rounded-3 text-black">
-                        <div class="row g-0">
-                            <div class="col-lg-6">
-                                <div class="card-body p-md-5 mx-md-4">
 
-                                    <div class="text-center">
-                                        <img src="{% static 'img/Logo.png' %}"
-                                             style="width: 185px;" alt="logo">
-                                        <h4 class="mt-1 mb-5 pb-1">Iniciar sesión</h4>
-                                    </div>
-                                    <form method="post" action="{% url 'login' %}">
-                                        {% csrf_token %}
-                                        <div class="mb-3 form-floating ">
-                                            <input type="text" name="username" required="" class="form-control" id="userInput"
-                                                   placeholder="name@example.com">
-                                            <label for="userInput">Usuario</label>
-                                        </div>
-
-                                        <div class="mb-4 form-floating ">
-                                            <input type="password" name="password" required="" class="form-control" id="passwordInput"
-                                                   placeholder="name@example.com">
-                                            <label for="passwordInput">Contraseña</label>
-                                        </div>
-                                        <div class="text-center mt-2 mb-5 pb-1">
-                                            <button class="mt-3 mx-auto login_button">
-                                                Log in
-                                            </button>
-                                        </div>
-                                        {% if error_message %}
-                                            <p>{{ error_message }}</p>
-                                        {% endif %}
-                                    </form>
+<section class="h-100 gradient-form ">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+                                <div class="text-center">
+                                    <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1">Iniciar sesión</h4>
                                 </div>
-                            </div>
-                            <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
-                                <div class="text-white px-3 py-4 p-md-5 h-100 "
-                                     style="background-image: url({% static 'img/login-img.jpg' %});background-repeat: no-repeat;background-size: cover;">
-                                    <div class="px-3 mt-5 py-5 mx-md-4 h-100 align-middle">
-                                        <h4 class="mb-4 fw-bolder">Tus vacaciones de ensueño</h4>
-                                        <p class="small mb-0 fw-bolder">¡Sumérgete en la experiencia definitiva de
-                                            vacaciones en
-                                            nuestro hotel! Descubre el paraíso en cada rincón y haz realidad tus sueños
-                                            de escape y relajación. ¡Bienvenido a tu hogar lejos de casa en nuestro
-                                            hotel!</p>
+                                <form method="post" action="{% url 'login' %}">
+                                    {% csrf_token %}
+                                    {% if error_message %}
+                                    <div class="mb-3 text-danger text-center">
+                                        {{ error_message }}
                                     </div>
+                                    {% endif %}
+                                    <div class="mb-3 form-floating {% if error_message %}has-danger{% endif %}">
+                                        <input type="text" name="username" required="" class="form-control {% if error_message %}is-invalid{% endif %}"
+                                               id="userInput"
+                                               placeholder="name@example.com">
+                                        <label for="userInput">Usuario</label>
+                                    </div>
+                                    <div class="mb-4 form-floating {% if error_message %}has-danger{% endif %}">
+                                        <input type="password" name="password" required="" class="form-control {% if error_message %}is-invalid{% endif %}"
+                                               id="passwordInput"
+                                               placeholder="name@example.com">
+                                        <label for="passwordInput">Contraseña</label>
+                                    </div>
+                                    <div class="text-center mt-2 mb-5 pb-1">
+                                        <button class="mt-3 mx-auto login_button">
+                                            Log in
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
+                            <div class="text-white px-3 py-4 p-md-5 h-100 "
+                                 style="background-image: url({% static 'img/login-img.jpg' %});background-repeat: no-repeat;background-size: cover;">
+                                <div class="px-3 mt-5 py-5 mx-md-4 h-100 align-middle">
+                                    <h4 class="mb-4 fw-bolder">Tus vacaciones de ensueño</h4>
+                                    <p class="small mb-0 fw-bolder">¡Sumérgete en la experiencia definitiva de
+                                        vacaciones en
+                                        nuestro hotel! Descubre el paraíso en cada rincón y haz realidad tus sueños
+                                        de escape y relajación. ¡Bienvenido a tu hogar lejos de casa en nuestro
+                                        hotel!</p>
                                 </div>
                             </div>
                         </div>
@@ -58,5 +59,6 @@
                 </div>
             </div>
         </div>
-    </section>
+</section>
+
 {% endblock %}

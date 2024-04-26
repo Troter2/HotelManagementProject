@@ -27,6 +27,8 @@ from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
 
+from register.views import login
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/register/", register.register, name="register"),
@@ -58,6 +60,7 @@ urlpatterns = [
     path('what_todo/', what_todo, name='what_todo'),
     path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
     path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),
+    path('login/', login, name='login'),
 
 ]
 
