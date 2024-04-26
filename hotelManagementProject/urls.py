@@ -23,6 +23,7 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
+from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -30,6 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/register/", register.register, name="register"),
     path("accounts/", include("django.contrib.auth.urls")),
+    path('accounts/login/', custom_login, name='login'),
     path('', reception_ini, name="home"),
     path('cleaner/', cleaner_page, name='cleaner_page'),
     path('shifts/', cleaner_shift, name="shift"),

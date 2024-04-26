@@ -18,7 +18,7 @@
                                     </div>
                                     <form method="post" action="{% url 'login' %}">
                                         {% csrf_token %}
-                                        <div class=" mb-3 form-floating ">
+                                        <div class="mb-3 form-floating ">
                                             <input type="text" name="username" required="" class="form-control" id="userInput"
                                                    placeholder="name@example.com">
                                             <label for="userInput">Usuario</label>
@@ -34,6 +34,9 @@
                                                 Log in
                                             </button>
                                         </div>
+                                        {% if error_message %}
+                                            <p>{{ error_message }}</p>
+                                        {% endif %}
                                     </form>
                                 </div>
                             </div>
