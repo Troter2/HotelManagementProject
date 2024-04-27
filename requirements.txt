@@ -1,13 +1,4 @@
-asgiref==3.7.2
-barcode==1.0.4
-chardet==5.2.0
-Django==5.0.2
-django-crontab==0.7.1
-Levenshtein==0.25.0
-pillow==10.2.0
-python-barcode==0.15.1
-python-Levenshtein==0.25.0
-rapidfuzz==3.7.0
-reportlab==4.1.0
-sqlparse==0.4.4
-tzdata==2024.1
+Django~=5.0.2
+Pillow
+reportlab
+python-barcode

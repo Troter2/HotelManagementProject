@@ -1,6 +1,4 @@
-from django.utils import timezone
-
-from Reception.models import Room, RoomReservation
+from Reception.models import Room
 from django.shortcuts import render, redirect
 
 
