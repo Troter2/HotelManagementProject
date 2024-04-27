@@ -9,7 +9,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from reportlab.graphics.barcode import code39
 
-
 from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm
 from io import BytesIO
@@ -71,16 +70,22 @@ def pay_reservation(request):
     return redirect('ocuped_rooms_view')
 
 
-def habitaciones_libres(guest_entry, guest_leave):
+def habitaciones_libres(guest_entry, guest_leave, room_type=None):
+    guest_entry_start = datetime.combine(guest_entry, datetime.min.time())
+    guest_entry_end = datetime.combine(guest_entry, datetime.max.time())
+    guest_leave_start = datetime.combine(guest_leave, datetime.min.time())
+    guest_leave_end = datetime.combine(guest_leave, datetime.max.time())
+
     reservas_ocupadas = RoomReservation.objects.filter(
-        Q(guest_checkin__lte=guest_entry, guest_checkout__gte=guest_entry) |
-        Q(guest_checkin__lte=guest_leave, guest_checkout__gte=guest_leave) |
-        Q(guest_checkin__gte=guest_entry, guest_checkout__lte=guest_leave)
+        Q(guest_checkin__lte=guest_entry_end, guest_checkout__gt=guest_entry_start) |
+        Q(guest_checkin__lt=guest_leave_end, guest_checkout__gte=guest_leave_start) |
+        Q(guest_checkin__gte=guest_entry_start, guest_checkout__lte=guest_leave_end)
     ).values_list('room_number_id', flat=True)
 
-    habitaciones_libres = Room.objects.exclude(id__in=reservas_ocupadas)
+    habitaciones_disponibles = Room.objects.exclude(id__in=reservas_ocupadas)
+    habitaciones_disponibles = habitaciones_disponibles.filter(room_type=room_type)
 
-    return habitaciones_libres
+    return habitaciones_disponibles
 
 
 def reserve_room(request):
@@ -97,8 +102,12 @@ def reserve_room(request):
             uid_str = str(uid)
             nights = (datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d') - datetime.strptime(
                 request.POST['guest_checkin'], '%Y-%m-%d')).days
+            room_type = request.POST.get('room_type')
             free_rooms = habitaciones_libres(datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d'),
-                                             datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d'))
+                                             datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d'),
+                                             room_type=room_type
+                                             )
+            print(free_rooms)
             if len(free_rooms) < 1:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
@@ -113,13 +122,11 @@ def reserve_room(request):
                                                   price=(RoomType.objects.filter(id=request.POST['room_type'])[
                                                              0].price + int(request.POST['guests_number'])) * nights,
                                                   room_number=free_rooms[0]
-
                                                   )
             return render(request, 'reception/thank_you.html', {'id': room.id})
-
     else:
         form = ReservationForm()
-    return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+        return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
 
 def validar_dni(dni):
@@ -253,10 +260,8 @@ def generate_reservation_pdf(request):
     titleObject.textLine("Comprovante de reserva")
     c.drawText(titleObject)
 
-
-
     barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
-    barcode.drawOn(c, 60, 250 )
+    barcode.drawOn(c, 60, 250)
     c.save()
 
     # Preparar la respuesta HTTP con el PDF
