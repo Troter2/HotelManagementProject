@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+
+from accounts.models import CustomUser
 from .forms import RegisterForm
 
 
@@ -25,7 +26,7 @@ def user_login(request):
         password = request.POST.get('password')
 
         # Verificar si el usuario existe en la base de datos y si está activo
-        user = User.objects.filter(username=username, is_active=True).first()
+        user = CustomUser.objects.filter(username=username, is_active=True).first()
         if user is not None:
             authenticated_user = authenticate(username=username, password=password)
             if authenticated_user is not None:
