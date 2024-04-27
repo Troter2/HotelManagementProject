@@ -47,8 +47,27 @@
                         Reservar
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'restaurant_page'%}">Restaurante</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarRestaurante" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Restaurante
+                    </a>
+                    <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRestaurante">
+                        <div class="nav-link-div" onclick="navigateToURL('{% url 'restaurant_page' %}')">
+                            <li class="dropdown-item">
+                                <a href="{% url 'restaurant_page' %}">
+                                    Inicio
+                                </a>
+                            </li>
+                        </div>
+                        <div class="nav-link-div" onclick="navigateToURL('{% url 'reservation_page' %}')">
+                            <li class="dropdown-item">
+                                <a href="{% url 'reservation_page' %}">
+                                    Reservar
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
