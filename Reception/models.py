@@ -37,3 +37,10 @@ class RoomReservation(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     room_number = models.ForeignKey(Room, on_delete=models.CASCADE)
     room_is_payed = models.BooleanField(default=False)
+
+
+class LostItem(models.Model):
+    item_name = models.CharField(max_length=100)
+    encounter_hour = models.TimeField()
+    encounter_date = models.DateTimeField()
+    in_possesion = models.BooleanField(default=True)
