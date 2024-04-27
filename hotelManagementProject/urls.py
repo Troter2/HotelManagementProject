@@ -59,7 +59,6 @@ urlpatterns = [
     path('what_todo/', what_todo, name='what_todo'),
     path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
     path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),
-
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
