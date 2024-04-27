@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.utils import timezone
 
 
 class RoomType(models.Model):
@@ -45,6 +46,6 @@ class RoomReservation(models.Model):
 
 class LostItem(models.Model):
     item_name = models.CharField(max_length=100)
-    encounter_hour = models.TimeField()
-    encounter_date = models.DateTimeField()
+    encounter_hour = models.TimeField(default=timezone.now().time())
+    encounter_date = models.DateTimeField(default=timezone.now)
     in_possesion = models.BooleanField(default=True)
