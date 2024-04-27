@@ -24,8 +24,11 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page
+from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
+
+from register.views import login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,7 +41,7 @@ urlpatterns = [
     path('shifts/', cleaner_shift, name="shift"),
     path('update_room_status/', update_room_status, name='update_room_status'),
     path('update_book_status', update_book_arrive, name='update_book_arrive'),
-    path('restaurant/reservations/', restaurant_reservation_page, name='restaurant_reservation_page'),
+    path('restaurant/reservations/', restaurant_reservation_page, name='reservation_page'),
     path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
     path('reception/reservations/filter/', booking_filter, name='booking_filter'),
     path('reception/checkout/', ocuped_rooms_view, name='ocuped_rooms_view'),
@@ -59,6 +62,7 @@ urlpatterns = [
     path('what_todo/', what_todo, name='what_todo'),
     path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
     path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
