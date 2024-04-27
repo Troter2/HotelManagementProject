@@ -18,7 +18,8 @@ def register(response):
     return render(response, "registration/signup.html", {"form": form})
 
 
-def login(request):
+
+def user_login(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')

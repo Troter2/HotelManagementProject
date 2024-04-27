@@ -15,7 +15,7 @@
                                     <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
                                     <h4 class="mt-1 mb-5 pb-1">Iniciar sesión</h4>
                                 </div>
-                                <form method="post" action="{% url 'login' %}">
+                                <form method="post" action="{% url 'register.user_login' %}">
                                     {% csrf_token %}
                                     {% if error_message %}
                                     <div class="mb-3 text-danger text-center">
@@ -60,5 +60,5 @@
             </div>
         </div>
 </section>
-
 {% endblock %}
+
