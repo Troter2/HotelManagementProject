@@ -46,6 +46,6 @@ class RoomReservation(models.Model):
 
 class LostItem(models.Model):
     item_name = models.CharField(max_length=100)
-    encounter_hour = models.TimeField(default=timezone.now().time())
+    encounter_hour = models.TimeField(default=timezone.now().time)
     encounter_date = models.DateTimeField(default=timezone.now)
     in_possesion = models.BooleanField(default=True)

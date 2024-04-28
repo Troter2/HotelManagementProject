@@ -3,6 +3,7 @@ import barcode
 from datetime import datetime
 from datetime import date
 
+import qrcode
 from barcode.writer import ImageWriter
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -261,10 +262,23 @@ def generate_reservation_pdf(request):
     c.drawText(titleObject)
 
     barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
-    barcode.drawOn(c, 60, 250)
+    barcode.drawOn(c, 60, 100)
+
+    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+    qr.add_data("https://stackoverflow.com/questions/78186946/scan-qr-code-and-redirect-on-successful-scan-opencv-flask-python")
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+    c.drawInlineImage(qr_img, 250, 250, 100, 100)
+
+    titleObject = c.beginText(80, 770)
+    titleObject.setFont("Helvetica", 14)
+    titleObject.setTextOrigin(150, 350)
+    titleObject.textLine("Escanea el QR para reservar en el restaurante")
+    c.drawText(titleObject)
+
+
     c.save()
 
-    # Preparar la respuesta HTTP con el PDF
     buffer.seek(0)
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="comprobante.pdf"'
