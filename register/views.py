@@ -11,13 +11,19 @@ def register(response):
         form = RegisterForm(response.POST)
         if form.is_valid():
             form.save()
-
+        username = response.POST.get('username')
+        password = response.POST.get('password1')
+        user = CustomUser.objects.filter(username=username, is_active=True).first()
+        if user is not None:
+            authenticated_user = authenticate(username=username, password=password)
+            if authenticated_user is not None:
+                login(response, authenticated_user)
+                return redirect("/home")
         return redirect("/home")
     else:
         form = RegisterForm()
 
     return render(response, "registration/signup.html", {"form": form})
-
 
 
 def user_login(request):

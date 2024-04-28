@@ -68,13 +68,6 @@
                         Recepcion
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
                             <li class="dropdown-item">
                                 <a href="{% url 'reserved_rooms_view' %}">
@@ -97,13 +90,6 @@
                         Limpieza
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'cleaner_page' %}')">
                             <li class="dropdown-item">
                                 <a href="{% url 'cleaner_page' %}">
@@ -120,7 +106,7 @@
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
                         <li class="dropdown-item">
-                            <a href="#">
+                            <a href="{% url 'reserved_tables' %}">
                                 Reservas
                             </a>
                         </li>
@@ -132,40 +118,11 @@
                         Contable
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
                         <li class="dropdown-item">
                             <a href="#">
                                 Facturacion
                             </a>
                         </li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarAdministratiu" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Administrativo
-                    </a>
-                    <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift_management_page' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift_management_page' %}">
-                                    Gestion de turnos
-                                </a>
-                            </li>
-                        </div>
                     </ul>
                 </li>
                 {% endif %}
@@ -179,6 +136,15 @@
                     <a class="nav-link" href="{% url 'login' %}" id="navbarLogout" role="button"
                        aria-expanded="false">
                         Log in
+                    </a>
+                    {% endif %}
+                </li>
+                <li class="nav-item ">
+                    {% if user.is_authenticated %}
+                    {% else %}
+                    <a class="nav-link" href="{% url 'register' %}" id="navbarLogout" role="button"
+                       aria-expanded="false">
+                        Sign in
                     </a>
                     {% endif %}
                 </li>

@@ -3,6 +3,7 @@ import barcode
 from datetime import datetime
 from datetime import date
 
+import qrcode
 from barcode.writer import ImageWriter
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -35,7 +36,6 @@ def update_book_arrive(request):
         reservation.guest_is_here = True
         reservation.save()
     return redirect('reserved_rooms_view')
-
 
 def update_book_gone(request):
     if request.method == 'POST':
@@ -90,6 +90,13 @@ def habitaciones_libres(guest_entry, guest_leave, room_type=None):
 
 def reserve_room(request):
     roomTypes = RoomType.objects.all()
+
+    usuario_logueado = request.user
+
+    datos_reserva_anteriores = None
+    if usuario_logueado.is_authenticated:
+        datos_reserva_anteriores = RoomReservation.objects.filter(DNI=usuario_logueado.DNI).last()
+
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -111,22 +118,37 @@ def reserve_room(request):
             if len(free_rooms) < 1:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
-            room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
-                                                  guests_name=request.POST['guests_name'],
-                                                  guests_surname=request.POST['guests_surname'],
-                                                  guests_email=request.POST['guests_email'],
-                                                  guests_phone=request.POST['guests_phone'],
-                                                  guest_checkin=request.POST['guest_checkin'],
-                                                  guest_checkout=request.POST['guest_checkout'],
-                                                  guests_number=request.POST['guests_number'],
-                                                  price=(RoomType.objects.filter(id=request.POST['room_type'])[
-                                                             0].price + int(request.POST['guests_number'])) * nights,
-                                                  room_number=free_rooms[0]
-                                                  )
+            if request.user.is_authenticated:
+                if 'save_data' in request.POST and request.POST['save_data'] == 'on':
+                    room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
+                                                          guests_name=request.POST['guests_name'],
+                                                          guests_surname=request.POST['guests_surname'],
+                                                          guests_email=request.POST['guests_email'],
+                                                          guests_phone=request.POST['guests_phone'],
+                                                          guest_checkin=request.POST['guest_checkin'],
+                                                          guest_checkout=request.POST['guest_checkout'],
+                                                          guests_number=request.POST['guests_number'],
+                                                          price=(RoomType.objects.filter(id=request.POST['room_type'])[
+                                                                     0].price + int(request.POST['guests_number'])) * nights,
+                                                          room_number=free_rooms[0],
+                                                          )
+
             return render(request, 'reception/thank_you.html', {'id': room.id})
     else:
-        form = ReservationForm()
-        return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+        if datos_reserva_anteriores:
+            initial_data = {
+                'DNI': datos_reserva_anteriores.DNI,
+                'guests_name': datos_reserva_anteriores.guests_name,
+                'guests_surname': datos_reserva_anteriores.guests_surname,
+                'guests_email': datos_reserva_anteriores.guests_email,
+                'guests_phone': datos_reserva_anteriores.guests_phone,
+                # Puedes agregar más campos aquí si es necesario
+            }
+            form = ReservationForm(initial=initial_data)
+        else:
+            form = ReservationForm()
+
+    return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
 
 def validar_dni(dni):
@@ -261,10 +283,23 @@ def generate_reservation_pdf(request):
     c.drawText(titleObject)
 
     barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
-    barcode.drawOn(c, 60, 250)
+    barcode.drawOn(c, 60, 100)
+
+    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+    qr.add_data("https://stackoverflow.com/questions/78186946/scan-qr-code-and-redirect-on-successful-scan-opencv-flask-python")
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+    c.drawInlineImage(qr_img, 250, 250, 100, 100)
+
+    titleObject = c.beginText(80, 770)
+    titleObject.setFont("Helvetica", 14)
+    titleObject.setTextOrigin(150, 350)
+    titleObject.textLine("Escanea el QR para reservar en el restaurante")
+    c.drawText(titleObject)
+
+
     c.save()
 
-    # Preparar la respuesta HTTP con el PDF
     buffer.seek(0)
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="comprobante.pdf"'

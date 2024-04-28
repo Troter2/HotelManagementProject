@@ -6,9 +6,6 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 
-def cleaner_shift(request):
-    room = Room.objects.all()
-    return render(request, 'shifts/shift.html', {'room': room})
 
 
 def cleaner_page(request):
