@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Reservar Restaurante {% endblock %}
+{% block content %}
+<section class="h-100 gradient-form">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-3 mx-md-4">
+                                <div>
+                                    <a href="{% url 'restaurant_page' %}" class="btn btn-secondary"
+                                       style="text-decoration: none">
+                                        <i class="bi bi-arrow-left"></i> Volver
+                                    </a>
+                                </div>
+                                <div class="text-center">
+                                    <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1">Reservar en el Restaurante</h4>
+                                </div>
+                                <form action="{% url 'restaurant_reservation_page_uuid' uuid=data.room_reservation.reservation_number %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3 mx-4 form-floating">
+                                        <input type="text" name="client_name" class="form-control" id="client_name"
+                                               placeholder="Name" readonly value="{{ data.client_name }}">
+                                        <label for="client_name">Nombre y apellidos</label>
+                                    </div>
+                                    <div class="mb-3 mx-4 form-floating">
+                                        <input type="number" name="costumers_number" class="form-control"
+                                               id="costumers_number" placeholder="Name">
+                                        <label for="costumers_number">Numero de comensales</label>
+                                    </div>
+                                    <div class="mb-3 mx-4 form-floating">
+                                        <input type="date" name="date_entrance" class="form-control"
+                                               id="date_entrance" placeholder="Name">
+                                        <label for="date_entrance">Fecha de reserva</label>
+                                    </div>
+                                    <div class="mb-3 mx-4 form-floating">
+                                        <input type="time" name="entrance_hours" class="form-control"
+                                               id="entrance_hours" placeholder="Name">
+                                        <label for="entrance_hours">Hora de reserva</label>
+                                    </div>
+                                    <div class="text-center mx-4 mt-2 mb-5 pb-1">
+                                        <button id="bugButton" class="mx-auto login_button" type="submit">
+                                            Reservar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
+                            <div class="text-black px-3 py-4 p-md-5 h-100"
+                                 style="background-image: url({% static 'img/reservar_restaurante.jpg' %});background-repeat: no-repeat;background-size: cover;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

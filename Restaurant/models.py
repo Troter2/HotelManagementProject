@@ -1,16 +1,8 @@
-
 from django.db import models
 from Reception.models import Room, RoomReservation
 
 
 # Create your models here.
-class RestaurantReservation(models.Model):
-    customers_names = models.CharField(max_length=100)
-    room_number = models.ForeignKey(Room, on_delete=models.CASCADE)
-    customer_contact = models.CharField(max_length=100)
-    number_guests = models.IntegerField(default=0)
-    date_reservation = models.DateField()
-
 
 class Dish(models.Model):
     PRIMER_PLATO_CHOICES = [
@@ -55,14 +47,33 @@ class Dish(models.Model):
     ]
 
     tipus = models.CharField(max_length=20, choices=TIPO_CHOICES)
-    nom = models.CharField(max_length=100,choices=PRIMER_PLATO_CHOICES + SEGUNDO_PLATO_CHOICES + POSTRE_CHOICES + REFRESCO_CHOICES)
+    nom = models.CharField(max_length=100,
+                           choices=PRIMER_PLATO_CHOICES + SEGUNDO_PLATO_CHOICES + POSTRE_CHOICES + REFRESCO_CHOICES)
     descripcio = models.TextField()
     preu = models.DecimalField(max_digits=10, decimal_places=2)
 
-class RestaurantReservation_v2(models.Model):
+
+
+
+
+
+class Item(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    level = models.IntegerField(default=0)
+
+
+class ItemAmount(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    #order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+
+class RestaurantReservation(models.Model):
     client_name = models.CharField(max_length=100)
-    room_reservation = models.ForeignKey(RoomReservation, on_delete=models.CASCADE)
+    room_reservation = models.ForeignKey(RoomReservation, on_delete=models.CASCADE, blank=True, null=True)
     entrance_hours = models.TimeField()
     date_entrance = models.DateField()
     costumers_number = models.IntegerField(default=0)
-
+    validated = models.BooleanField(default=False)
+    #order_num = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)

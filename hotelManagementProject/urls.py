@@ -23,7 +23,7 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out
 from register import views as register
-from Restaurant.views import restaurant_reservation_page, restaurant_page
+from Restaurant.views import restaurant_reservation_page, restaurant_page, restaurant_reservation_page_uuid
 from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
@@ -62,7 +62,7 @@ urlpatterns = [
     path('what_todo/', what_todo, name='what_todo'),
     path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
     path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),
-
+    path('restaurant/reservations/<str:uuid>/', restaurant_reservation_page_uuid, name='restaurant_reservation_page_uuid'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
