@@ -85,7 +85,12 @@
                                             <p class="mb-2">Precio total: <span id="precio_total">0</span></p>
                                         </div>
                                     </div>
-
+                                    {% if request.user.is_authenticated %}
+                                    <div class="mb-4 mx-4 form-check">
+                                        <input type="checkbox" class="form-check-input" id="save_data" name="save_data">
+                                        <label class="form-check-label" for="save_data">Guardar los datos para una futura reserva</label>
+                                    </div>
+                                    {% endif %}
                                     <div class="text-center mx-4 mt-2 mb-5 pb-1">
                                         <button id="bugButton" class="mx-auto login_button" type="submit">Reservar
                                         </button>
