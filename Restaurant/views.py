@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from Restaurant.models import RestaurantReservation, RoomReservation
 from Restaurant.forms import RestaurantReservationForm
