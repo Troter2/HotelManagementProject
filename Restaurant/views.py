@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount
 from Restaurant.forms import RestaurantReservationForm
 
+
 # Create your views here.
 
 
@@ -34,7 +35,7 @@ def restaurant_reservation_page_uuid(request, uuid):
             'room_reservation': room_reservation,
         }
     except RoomReservation.DoesNotExist:
-        return HttpResponse("Reserva no encontrada")
+        return render(request, "restaurant/reservation_failure.html")
 
     if request.method == 'POST':
         form = RestaurantReservationForm(request.POST)
@@ -68,7 +69,7 @@ def update_validation(request):
         reservation.save()
     return redirect('reserved_tables')
 
-
+  
 def calculate_total(order):
     total = 0
     items = ItemAmount.objects.filter(order=order)
