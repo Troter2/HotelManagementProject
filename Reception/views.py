@@ -46,7 +46,7 @@ def update_book_gone(request):
 
 
 def reserved_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False)
+    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkin=datetime.today())
     context = {
         'reserves': reserves
     }
@@ -54,7 +54,7 @@ def reserved_rooms_view(request):
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False)
+    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkout=datetime.today())
     context = {
         'reserves': reserves
     }
@@ -94,59 +94,59 @@ def reserve_room(request):
     usuario_logueado = request.user
 
     datos_reserva_anteriores = None
+
     if usuario_logueado.is_authenticated:
         datos_reserva_anteriores = RoomReservation.objects.filter(DNI=usuario_logueado.DNI).last()
 
-    if request.method == 'POST':
-        form = ReservationForm(request.POST)
-        if form.is_valid():
-            dni = request.POST.get('DNI')
-            fecha_entrada = datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d')
-            fecha_salida = datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d')
-            room_type = request.POST.get('room_type')
-            free_rooms = habitaciones_libres(fecha_entrada,fecha_salida,room_type=room_type)
-            guests_phone = request.POST.get('guests_phone')
-            if not validar_dni(dni):
-                form.add_error('DNI', 'El DNI no es válido.')
-            if len(free_rooms) < 1:
-                form.add_error('guest_checkin', 'No existe habitacion disponible para las fechas elegidas')
-            if not validate_guests_phone(guests_phone):
-                form.add_error('guests_phone', 'El telefono introducido no es válido.')
-            if len(form.errors) > 0:
-                return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
-            form.instance.price = 60
-            uid = uuid.uuid4()
-            nights = (fecha_salida - fecha_entrada).days
-            if 'save_data' in request.POST and request.POST['save_data'] == 'on':
-                room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
-                                                      guests_name=request.POST['guests_name'],
-                                                      guests_surname=request.POST['guests_surname'],
-                                                      guests_email=request.POST['guests_email'],
-                                                      guests_phone=request.POST['guests_phone'],
-                                                      guest_checkin=request.POST['guest_checkin'],
-                                                      guest_checkout=request.POST['guest_checkout'],
-                                                      guests_number=request.POST['guests_number'],
-                                                      price=(RoomType.objects.filter(id=request.POST['room_type'])[
-                                                                 0].price + int(
-                                                          request.POST['guests_number'])) * nights,
-                                                      room_number=free_rooms[0],
-                                                      )
-                return render(request, 'reception/thank_you.html', {'id': room.id})
-    else:
-        if datos_reserva_anteriores:
-            initial_data = {
-                'DNI': datos_reserva_anteriores.DNI,
-                'guests_name': datos_reserva_anteriores.guests_name,
-                'guests_surname': datos_reserva_anteriores.guests_surname,
-                'guests_email': datos_reserva_anteriores.guests_email,
-                'guests_phone': datos_reserva_anteriores.guests_phone,
-                # Puedes agregar más campos aquí si es necesario
-            }
-            form = ReservationForm(initial=initial_data)
+        if request.method == 'POST':
+            form = ReservationForm(request.POST)
+            if form.is_valid():
+                dni = request.POST.get('DNI')
+                fecha_entrada = datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d')
+                fecha_salida = datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d')
+                room_type = request.POST.get('room_type')
+                free_rooms = habitaciones_libres(fecha_entrada,fecha_salida,room_type=room_type)
+                guests_phone = request.POST.get('guests_phone')
+                if not validar_dni(dni):
+                    form.add_error('DNI', 'El DNI no es válido.')
+                if len(free_rooms) < 1:
+                    form.add_error('guest_checkin', 'No existe habitacion disponible para las fechas elegidas')
+                if not validate_guests_phone(guests_phone):
+                    form.add_error('guests_phone', 'El telefono introducido no es válido.')
+                if len(form.errors) > 0:
+                    return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+                form.instance.price = 60
+                uid = uuid.uuid4()
+                nights = (fecha_salida - fecha_entrada).days
+                if 'save_data' in request.POST and request.POST['save_data'] == 'on':
+                    room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
+                                                          guests_name=request.POST['guests_name'],
+                                                          guests_surname=request.POST['guests_surname'],
+                                                          guests_email=request.POST['guests_email'],
+                                                          guests_phone=request.POST['guests_phone'],
+                                                          guest_checkin=request.POST['guest_checkin'],
+                                                          guest_checkout=request.POST['guest_checkout'],
+                                                          guests_number=request.POST['guests_number'],
+                                                          price=(RoomType.objects.filter(id=request.POST['room_type'])[
+                                                                     0].price + int(
+                                                              request.POST['guests_number'])) * nights,
+                                                          room_number=free_rooms[0],
+                                                          )
+                    return render(request, 'reception/thank_you.html', {'id': room.id})
         else:
-            form = ReservationForm()
-
-    return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+            if datos_reserva_anteriores:
+                initial_data = {
+                    'DNI': datos_reserva_anteriores.DNI,
+                    'guests_name': datos_reserva_anteriores.guests_name,
+                    'guests_surname': datos_reserva_anteriores.guests_surname,
+                    'guests_email': datos_reserva_anteriores.guests_email,
+                    'guests_phone': datos_reserva_anteriores.guests_phone,
+                    # Puedes agregar más campos aquí si es necesario
+                }
+                form = ReservationForm(initial=initial_data)
+            else:
+                form = ReservationForm()
+        return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
 
 def validar_dni(dni):
