@@ -59,3 +59,10 @@ class RestaurantReservation(models.Model):
     entrance_hours = models.TimeField()
     date_entrance = models.DateField()
     costumers_number = models.IntegerField(default=0)
+
+class Menu(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    level = models.IntegerField(default=0)
+
+
