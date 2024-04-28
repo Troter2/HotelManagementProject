@@ -24,7 +24,7 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
     filtrar_por_numero_reserva
 from register import views as register
-from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, restaurant_reservation_page_uuid
+from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, restaurant_reservation_page_uuid, restaurant_validation_page
 from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
@@ -65,6 +65,7 @@ urlpatterns = [
     path('camarero/', reserved_tables, name='reserved_tables'),
     path('validar_reserva/', update_validation, name='update_validation'),
     path('filtrar_por_numero_reserva/', filtrar_por_numero_reserva, name='filtrar_por_numero_reserva'),
+    path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

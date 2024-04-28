@@ -2,146 +2,165 @@
 {% load static %}
 {% block title %} Reservar {% endblock %}
 {% block content %}
-<section class="h-100 gradient-form">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-10">
-                <div class="card rounded-3 text-black">
-                    <div class="row g-0">
-                        <div class="col-lg-6">
-                            <div class="card-body p-md-3 mx-md-4">
-                                <div>
-                                    <a href="{% url 'rooms_view' %}" class="btn btn-secondary"
-                                       style="text-decoration: none">
-                                        <i class="bi bi-arrow-left"></i> Volver
-                                    </a>
-                                </div>
-                                <div class="text-center">
-                                    <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
-                                    <h4 class="mt-1 mb-5 pb-1">Reservar</h4>
-                                </div>
-                                <form action="{% url 'reserve_room' %}" method="POST">
-                                    {% csrf_token %}
-                                    <div class="mb-3 mx-4 form-floating">
-                                        <input type="text" name="DNI" class="form-control" id="DNI" placeholder="DNI"
-                                               required>
-                                        <label for="DNI">DNI</label>
+    <section class="h-100 gradient-form">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-10">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-3 mx-md-4">
+                                    <div>
+                                        <a href="{% url 'rooms_view' %}" class="btn btn-secondary"
+                                           style="text-decoration: none">
+                                            <i class="bi bi-arrow-left"></i> Volver
+                                        </a>
                                     </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="text" name="guests_name" class="form-control" id="guests_name"
-                                               placeholder="Nombre" required>
-                                        <label for="guests_name">Nombre</label>
+                                    <div class="text-center">
+                                        <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
+                                        <h4 class="mt-1 mb-5 pb-1">Reservar</h4>
                                     </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="text" name="guests_surname" class="form-control"
-                                               id="guests_surname" placeholder="Apellidos" required>
-                                        <label for="guests_surname">Apellidos</label>
-                                    </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="email" name="guests_email" class="form-control" id="guests_email"
-                                               placeholder="Correo Electrónico" required>
-                                        <label for="guests_email">Correo Electrónico</label>
-                                    </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="text" name="guests_phone" class="form-control" id="guests_phone"
-                                               placeholder="Teléfono" required>
-                                        <label for="guests_phone">Teléfono</label>
-                                    </div>
-                                    <div class="mb-4 mx-4">
-                                        <label for="room_type">Tipo de habitación</label>
-                                        <select name="room_type" id="room_type" class="form-control"
-                                                onchange="CalculatePrice()">
-                                            {% for roomType in roomTypes %}
-                                            <option data-price="{{ roomType.price }}" value="{{ roomType.id }}">
-                                                {{roomType.name }}
-                                            </option>
-                                            {% endfor %}
-                                        </select>
-
-                                    </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="date" name="guest_checkin" class="form-control" id="guest_checkin"
-                                               placeholder="Fecha de Entrada " onchange="CalculatePrice()">
-                                        <label for="guest_checkin">Fecha de Entrada</label>
-                                    </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="date" name="guest_checkout" class="form-control"
-                                               id="guest_checkout" placeholder="Fecha de Salida"
-                                               onchange="CalculatePrice()">
-                                        <label for="guest_checkout">Fecha de Salida</label>
-                                    </div>
-                                    <div class="mb-4 mx-4 form-floating">
-                                        <input type="number" name="guests_number" class="form-control"
-                                               id="guests_number" placeholder="Número de Huéspedes" required
-                                               onchange="CalculatePrice()">
-                                        <label for="guests_number">Número de Huéspedes</label>
-                                    </div>
-                                    <div class="mb-4 mx-4 ">
-                                        <div class="form-floating">
-                                            <p class="mb-2">Precio Habitación: <span id="precio_habitacion">0</span>
-                                            </p>
-                                            <p class="mb-2">Importe turístico: <span id="importe_turístico">0</span>
-                                            </p>
-                                            <p class="mb-2">Precio total: <span id="precio_total">0</span></p>
+                                    {% if form.errors %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+                                            <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+                                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                            </symbol>
+                                        </svg>
+                                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                            <div>
+                                                Error en los siguientes campos:
+                                                {{ form.errors }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    {% if request.user.is_authenticated %}
-                                    <div class="mb-4 mx-4 form-check">
-                                        <input type="checkbox" class="form-check-input" id="save_data" name="save_data">
-                                        <label class="form-check-label" for="save_data">Guardar los datos para una futura reserva</label>
-                                    </div>
                                     {% endif %}
-                                    <div class="text-center mx-4 mt-2 mb-5 pb-1">
-                                        <button id="bugButton" class="mx-auto login_button" type="submit">Reservar
-                                        </button>
-                                    </div>
-                                </form>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="mb-3 mx-4 form-floating">
+                                            <input type="text" name="DNI" class="form-control" id="DNI"
+                                                   placeholder="DNI"
+                                                   required>
+                                            <label for="DNI">DNI</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="guests_name" class="form-control" id="guests_name"
+                                                   placeholder="Nombre" required>
+                                            <label for="guests_name">Nombre</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="guests_surname" class="form-control"
+                                                   id="guests_surname" placeholder="Apellidos" required>
+                                            <label for="guests_surname">Apellidos</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="email" name="guests_email" class="form-control"
+                                                   id="guests_email"
+                                                   placeholder="Correo Electrónico" required>
+                                            <label for="guests_email">Correo Electrónico</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="guests_phone" class="form-control"
+                                                   id="guests_phone"
+                                                   placeholder="Teléfono" required>
+                                            <label for="guests_phone">Teléfono</label>
+                                        </div>
+                                        <div class="mb-4 mx-4">
+                                            <label for="room_type">Tipo de habitación</label>
+                                            <select name="room_type" id="room_type" class="form-control"
+                                                    onchange="CalculatePrice()">
+                                                {% for roomType in roomTypes %}
+                                                    <option data-price="{{ roomType.price }}" value="{{ roomType.id }}">
+                                                        {{ roomType.name }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="date" name="guest_checkin" class="form-control"
+                                                   id="guest_checkin"
+                                                   placeholder="Fecha de Entrada " onchange="CalculatePrice()">
+                                            <label for="guest_checkin">Fecha de Entrada</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="date" name="guest_checkout" class="form-control"
+                                                   id="guest_checkout" placeholder="Fecha de Salida"
+                                                   onchange="CalculatePrice()">
+                                            <label for="guest_checkout">Fecha de Salida</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="number" name="guests_number" class="form-control"
+                                                   id="guests_number" placeholder="Número de Huéspedes" required
+                                                   onchange="CalculatePrice()">
+                                            <label for="guests_number">Número de Huéspedes</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 ">
+                                            <div class="form-floating">
+                                                <p class="mb-2">Precio Habitación: <span id="precio_habitacion">0</span>
+                                                </p>
+                                                <p class="mb-2">Importe turístico: <span id="importe_turístico">0</span>
+                                                </p>
+                                                <p class="mb-2">Precio total: <span id="precio_total">0</span></p>
+                                            </div>
+                                        </div>
+                                        {% if request.user.is_authenticated %}
+                                            <div class="mb-4 mx-4 form-check">
+                                                <input type="checkbox" class="form-check-input" id="save_data"
+                                                       name="save_data">
+                                                <label class="form-check-label" for="save_data">Guardar los datos para
+                                                    una
+                                                    futura reserva</label>
+                                            </div>
+                                        {% endif %}
+                                        <div class="text-center mx-4 mt-2 mb-5 pb-1">
+                                            <button id="bugButton" class="mx-auto login_button" type="submit">Reservar
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
-                            <div class="text-black px-3 py-4 p-md-5 h-100"
-                                 style="background-image: url({% static 'img/gradient-reserve.webp' %});background-repeat: no-repeat;background-size: cover;">
+                            <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
+                                <div class="text-black px-3 py-4 p-md-5 h-100"
+                                     style="background-image: url({% static 'img/gradient-reserve.webp' %});background-repeat: no-repeat;background-size: cover;">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<script>
-    function CalculatePrice() {
-        var inputCheckIn = new Date(document.getElementById("guest_checkin").value);
-        var inputCheckOut = new Date(document.getElementById("guest_checkout").value);
-        var days = (inputCheckOut.getTime() - inputCheckIn.getTime()) / (1000 * 60 * 60 * 24);
-        var guestsNumber = parseInt(document.getElementById("guests_number").value);
-        var reserveButton = document.getElementById("bugButton");
+    <script>
+        function CalculatePrice() {
+            var inputCheckIn = new Date(document.getElementById("guest_checkin").value);
+            var inputCheckOut = new Date(document.getElementById("guest_checkout").value);
+            var days = (inputCheckOut.getTime() - inputCheckIn.getTime()) / (1000 * 60 * 60 * 24);
+            var guestsNumber = parseInt(document.getElementById("guests_number").value);
+            var reserveButton = document.getElementById("bugButton");
 
-        if (days < 0) {
-            // Si los valores no son válidos, establecer los resultados como vacíos o 0
-            document.getElementById("precio_habitacion").textContent = "0";
-            document.getElementById("importe_turístico").textContent = "0";
-            document.getElementById("precio_total").textContent = "0";
-            reserveButton.disabled = true;
-            reserveButton.classList.add("disabled");
-        } else if (inputCheckIn && inputCheckOut && !isNaN(days) && days && guestsNumber > 0) {
-            var roomTypeSelect = document.getElementById("room_type");
-            var roomPrice = parseFloat(roomTypeSelect.options[roomTypeSelect.selectedIndex].dataset.price);
+            if (days < 0) {
+                // Si los valores no son válidos, establecer los resultados como 0
+                document.getElementById("precio_habitacion").textContent = "0";
+                document.getElementById("importe_turístico").textContent = "0";
+                document.getElementById("precio_total").textContent = "0";
+                reserveButton.disabled = true;
+                reserveButton.classList.add("disabled");
+            } else if (inputCheckIn && inputCheckOut && !isNaN(days) && days && guestsNumber > 0) {
+                var roomTypeSelect = document.getElementById("room_type");
+                var roomPrice = parseFloat(roomTypeSelect.options[roomTypeSelect.selectedIndex].dataset.price);
 
-            var turisticImport = guestsNumber * days;
-            var totalImport = (roomPrice * days) + turisticImport;
+                var turisticImport = guestsNumber * days;
+                var totalImport = (roomPrice * days) + turisticImport;
 
-            document.getElementById("precio_habitacion").textContent = roomPrice;
-            document.getElementById("importe_turístico").textContent = turisticImport;
-            document.getElementById("precio_total").textContent = totalImport;
-        } else {
-            // Si los valores no son válidos, establecer los resultados como vacíos o 0
-            document.getElementById("precio_habitacion").textContent = "0";
-            document.getElementById("importe_turístico").textContent = "0";
-            document.getElementById("precio_total").textContent = "0";
+                document.getElementById("precio_habitacion").textContent = roomPrice;
+                document.getElementById("importe_turístico").textContent = turisticImport;
+                document.getElementById("precio_total").textContent = totalImport;
+            } else {
+                // Si los valores no son válidos, establecer los resultados como 0
+                document.getElementById("precio_habitacion").textContent = "0";
+                document.getElementById("importe_turístico").textContent = "0";
+                document.getElementById("precio_total").textContent = "0";
+            }
         }
-    }
-
-</script>
+    </script>
 {% endblock %}
