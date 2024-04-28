@@ -12,6 +12,8 @@ def restaurant_page(request):
 def restaurant_reservation_page(request):
     return render(request, 'restaurant/reservation_page.html')
 
+def restaurant_validation_page(request):
+    return render(request, 'restaurant/validated_list.html')
 
 def reserved_tables(request):
     date_ = date.today()
