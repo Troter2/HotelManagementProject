@@ -1,6 +1,6 @@
 from datetime import date
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from Restaurant.models import RestaurantReservation
 
 
@@ -19,3 +19,10 @@ def reserved_tables(request):
         date_ = request.POST.get('fecha')
     booking = RestaurantReservation.objects.filter(date_entrance=date_)
     return render(request, 'restaurant/reserved_tables.html', {'reservas': booking})
+
+def update_validation(request):
+    if request.method == 'POST':
+        reservation = RestaurantReservation.objects.get(id=request.POST.get('reserva_id'))
+        reservation.validated = True
+        reservation.save()
+    return redirect('reserved_tables')

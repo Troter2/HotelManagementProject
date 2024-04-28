@@ -59,6 +59,7 @@ class RestaurantReservation(models.Model):
     entrance_hours = models.TimeField()
     date_entrance = models.DateField()
     costumers_number = models.IntegerField(default=0)
+    validated = models.BooleanField(default=False)
 
 class Menu(models.Model):
     name = models.CharField(max_length=100)
