@@ -16,21 +16,13 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <!-- icono o nombre -->
-
         <a class="navbar-brand" href="{% url 'home' %} ">
             <img class="menu-logo" style="max-height: 50px" src="{% static 'img/Logo.png' %}"/>
         </a>
-
-        <!-- boton del menu -->
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <!-- elementos del menu colapsable -->
-
         <div class="collapse navbar-collapse" id="menu">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
@@ -47,8 +39,27 @@
                         Reservar
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'restaurant_page'%}">Restaurante</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarRestaurante" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Restaurante
+                    </a>
+                    <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRestaurante">
+                        <div class="nav-link-div" onclick="navigateToURL('{% url 'restaurant_page' %}')">
+                            <li class="dropdown-item">
+                                <a href="{% url 'restaurant_page' %}">
+                                    Inicio
+                                </a>
+                            </li>
+                        </div>
+                        <div class="nav-link-div" onclick="navigateToURL('{% url 'reservation_page' %}')">
+                            <li class="dropdown-item">
+                                <a href="{% url 'reservation_page' %}">
+                                    Reservar
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
@@ -57,13 +68,6 @@
                         Recepcion
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
                             <li class="dropdown-item">
                                 <a href="{% url 'reserved_rooms_view' %}">
@@ -86,13 +90,6 @@
                         Limpieza
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'cleaner_page' %}')">
                             <li class="dropdown-item">
                                 <a href="{% url 'cleaner_page' %}">
@@ -109,7 +106,7 @@
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
                         <li class="dropdown-item">
-                            <a href="#">
+                            <a href="{% url 'reserved_tables' %}">
                                 Reservas
                             </a>
                         </li>
@@ -121,40 +118,11 @@
                         Contable
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
                         <li class="dropdown-item">
                             <a href="#">
                                 Facturacion
                             </a>
                         </li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarAdministratiu" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Administrativo
-                    </a>
-                    <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift' %}">
-                                    Turno
-                                </a>
-                            </li>
-                        </div>
-                        <div class="nav-link-div" onclick="navigateToURL('{% url 'shift_management_page' %}')">
-                            <li class="dropdown-item">
-                                <a href="{% url 'shift_management_page' %}">
-                                    Gestion de turnos
-                                </a>
-                            </li>
-                        </div>
                     </ul>
                 </li>
                 {% endif %}
@@ -168,6 +136,15 @@
                     <a class="nav-link" href="{% url 'login' %}" id="navbarLogout" role="button"
                        aria-expanded="false">
                         Log in
+                    </a>
+                    {% endif %}
+                </li>
+                <li class="nav-item ">
+                    {% if user.is_authenticated %}
+                    {% else %}
+                    <a class="nav-link" href="{% url 'register' %}" id="navbarLogout" role="button"
+                       aria-expanded="false">
+                        Sign in
                     </a>
                     {% endif %}
                 </li>

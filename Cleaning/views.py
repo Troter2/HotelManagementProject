@@ -1,12 +1,11 @@
-from Reception.models import Room
+from django.utils import timezone
+
+from Reception.models import Room, RoomReservation
 from django.shortcuts import render, redirect
 
 
 # Create your views here.
 
-def cleaner_shift(request):
-    room = Room.objects.all()
-    return render(request, 'shifts/shift.html', {'room': room})
 
 
 def cleaner_page(request):

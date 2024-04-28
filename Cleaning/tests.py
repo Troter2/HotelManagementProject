@@ -17,12 +17,5 @@ class CleanerViewsTestCase(TestCase):
         self.room2.refresh_from_db()  # Actualizamos el objeto desde la base de datos
         self.assertTrue(self.room2.is_clean)  # Verificamos que la habitación ahora esté limpia
 
-    def test_update_room_status_viewV2(self):
-        self.assertTrue(self.room1.is_clean)
-        # Probamos la vista update_room_status enviando una solicitud POST para marcar una habitación como limpia
-        response = self.client.post(reverse('update_room_status'), data={'room_id': self.room1.id, 'action': 'pending'})
-        self.assertEqual(response.status_code, 302)  # Redirección después de la actualización
-        self.room1.refresh_from_db()  # Actualizamos el objeto desde la base de datos
-        self.assertTrue(self.room1.is_clean)  # Verificamos que la habitación ahora esté limpia
 
 

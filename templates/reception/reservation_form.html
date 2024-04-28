@@ -2,19 +2,30 @@
 {% load static %}
 {% block title %} Reservar {% endblock %}
 {% block content %}
-    <section class="h-100 gradient-form">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-xl-10">
-                    <div class="card rounded-3 text-black">
-                        <div class="row g-0">
-                            <div class="col-lg-6">
-                                <div class="card-body p-md-3 mx-md-4">
-                                    <div>
-                                        <a href="{% url 'rooms_view' %}" class="btn btn-secondary"
-                                           style="text-decoration: none">
-                                            <i class="bi bi-arrow-left"></i> Volver
-                                        </a>
+<section class="h-100 gradient-form">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-3 mx-md-4">
+                                <div>
+                                    <a href="{% url 'rooms_view' %}" class="btn btn-secondary"
+                                       style="text-decoration: none">
+                                        <i class="bi bi-arrow-left"></i> Volver
+                                    </a>
+                                </div>
+                                <div class="text-center">
+                                    <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1">Reservar</h4>
+                                </div>
+                                <form action="{% url 'reserve_room' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="mb-3 mx-4 form-floating">
+                                        <input type="text" name="DNI" class="form-control" id="DNI" placeholder="DNI"
+                                               required>
+                                        <label for="DNI">DNI</label>
                                     </div>
                                     <div class="text-center">
                                         <img src="{% static 'img/Logo.png' %}" style="width: 185px;" alt="logo">
@@ -110,6 +121,17 @@
                                         </div>
                                     </form>
                                 </div>
+                                    {% if request.user.is_authenticated %}
+                                    <div class="mb-4 mx-4 form-check">
+                                        <input type="checkbox" class="form-check-input" id="save_data" name="save_data">
+                                        <label class="form-check-label" for="save_data">Guardar los datos para una futura reserva</label>
+                                    </div>
+                                    {% endif %}
+                                    <div class="text-center mx-4 mt-2 mb-5 pb-1">
+                                        <button id="bugButton" class="mx-auto login_button" type="submit">Reservar
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                             <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
                                 <div class="text-black px-3 py-4 p-md-5 h-100"
