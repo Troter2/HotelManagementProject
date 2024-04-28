@@ -91,10 +91,11 @@ def reserve_room(request):
             dni = form.cleaned_data['DNI']
             if not validar_dni(dni):
                 form.add_error('DNI', 'El DNI no es válido.')
+                form.has_error('DNI', None)
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
             form.instance.price = 60
             uid = uuid.uuid4()
-            uid_str = str(uid)
+            #uid_str = str(uid)
             nights = (datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d') - datetime.strptime(
                 request.POST['guest_checkin'], '%Y-%m-%d')).days
             free_rooms = habitaciones_libres(datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d'),
@@ -113,7 +114,6 @@ def reserve_room(request):
                                                   price=(RoomType.objects.filter(id=request.POST['room_type'])[
                                                              0].price + int(request.POST['guests_number'])) * nights,
                                                   room_number=free_rooms[0]
-
                                                   )
             return render(request, 'reception/thank_you.html', {'id': room.id})
 
@@ -130,6 +130,7 @@ def validar_dni(dni):
     if not dni[8].isalpha():
         return False
     return True
+
 
 
 def booking_filter(request):
