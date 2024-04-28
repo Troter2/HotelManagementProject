@@ -47,7 +47,7 @@ def update_book_gone(request):
 
 
 def reserved_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False)
+    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkin=datetime.today())
     context = {
         'reserves': reserves
     }
@@ -55,7 +55,7 @@ def reserved_rooms_view(request):
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False)
+    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkout=datetime.today())
     context = {
         'reserves': reserves
     }
@@ -94,6 +94,7 @@ def reserve_room(request):
 
     # Buscar si hay datos almacenados del usuario con el mismo DNI
     datos_reserva_anteriores = None
+
     if usuario_logueado.is_authenticated:
         datos_reserva_anteriores = RoomReservation.objects.filter(DNI=usuario_logueado.DNI).last()
 
@@ -163,8 +164,6 @@ def reserve_room(request):
 
     return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
-
-
 def validar_dni(dni):
     if len(dni) != 9:
         return False
@@ -174,6 +173,8 @@ def validar_dni(dni):
         return False
     return True
 
+def validate_guests_phone(guests_phone):
+    return len(guests_phone) == 9 or len(guests_phone) == 11
 
 def booking_filter(request):
     # Obtener los parámetros de filtrado desde la URL
@@ -300,7 +301,8 @@ def generate_reservation_pdf(request):
     barcode.drawOn(c, 60, 100)
 
     qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
-    qr.add_data("https://stackoverflow.com/questions/78186946/scan-qr-code-and-redirect-on-successful-scan-opencv-flask-python")
+    qr.add_data(
+        "https://stackoverflow.com/questions/78186946/scan-qr-code-and-redirect-on-successful-scan-opencv-flask-python")
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="black", back_color="white")
     c.drawInlineImage(qr_img, 250, 250, 100, 100)
@@ -310,7 +312,6 @@ def generate_reservation_pdf(request):
     titleObject.setTextOrigin(150, 350)
     titleObject.textLine("Escanea el QR para reservar en el restaurante")
     c.drawText(titleObject)
-
 
     c.save()
 
@@ -322,3 +323,20 @@ def generate_reservation_pdf(request):
 
 def thank_you(request):
     return render(request, 'reception/thank_you.html')
+
+
+def filtrar_por_numero_reserva(request):
+    if request.method == 'POST':
+        numero_reserva = request.POST.get('numero_reserva')  # Obtener el número de reserva del formulario
+
+        if numero_reserva:
+            reservas_filtradas = RoomReservation.objects.filter(reservation_number=numero_reserva)
+        else:
+            # Si no se proporciona ningún número de reserva, obtener todas las reservas
+            reservas_filtradas = RoomReservation.objects.all()
+
+        # Pasar las reservas filtradas al template
+        return render(request, 'reception/reservedRooms.html', {'reserves': reservas_filtradas})
+    else:
+        # Si la solicitud no es POST, renderizar el formulario para filtrar
+        return render(request, 'reception/reservedRooms.html')
