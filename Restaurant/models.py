@@ -65,4 +65,9 @@ class Menu(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     level = models.IntegerField(default=0)
 
+class Order(models.Model):
+    basic_menu = models.IntegerField()
+    delux_menu = models.IntegerField()
+    unique_menu = models.IntegerField()
+    num_reservation = models.ForeignKey(RestaurantReservation, on_delete=models.CASCADE)
 
