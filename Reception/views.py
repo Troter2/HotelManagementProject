@@ -37,7 +37,6 @@ def update_book_arrive(request):
         reservation.save()
     return redirect('reserved_rooms_view')
 
-
 def update_book_gone(request):
     if request.method == 'POST':
         reservation = RoomReservation.objects.get(id=request.POST.get('id'))
