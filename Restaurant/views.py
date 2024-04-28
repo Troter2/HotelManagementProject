@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from Restaurant.models import RestaurantReservation, RoomReservation
 from Restaurant.forms import RestaurantReservationForm
 
+
 # Create your views here.
 
 
@@ -25,7 +26,7 @@ def restaurant_reservation_page_uuid(request, uuid):
             'room_reservation': room_reservation,
         }
     except RoomReservation.DoesNotExist:
-        return HttpResponse("Reserva no encontrada")
+        return render(request, "restaurant/reservation_failure.html")
 
     if request.method == 'POST':
         form = RestaurantReservationForm(request.POST)
@@ -47,10 +48,10 @@ def reserved_tables(request):
     booking = RestaurantReservation.objects.filter(date_entrance=date_)
     return render(request, 'restaurant/reserved_tables.html', {'reservas': booking})
 
+
 def update_validation(request):
     if request.method == 'POST':
         reservation = RestaurantReservation.objects.get(id=request.POST.get('reserva_id'))
         reservation.validated = True
         reservation.save()
     return redirect('reserved_tables')
-

@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
 
+
 class RoomType(models.Model):
     name = models.CharField(max_length=255)
     capacity = models.IntegerField()
@@ -46,10 +47,14 @@ class RoomReservation(models.Model):
     room_number = models.ForeignKey(Room, on_delete=models.CASCADE)
     room_is_payed = models.BooleanField(default=False)
 
+
 def get_current_date():
     return timezone.now().date()
+
+
 def get_current_hour():
     return timezone.now
+
 
 class LostItem(models.Model):
     item_name = models.CharField(max_length=100)
