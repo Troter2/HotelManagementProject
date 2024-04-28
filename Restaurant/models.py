@@ -1,4 +1,8 @@
+import uuid
+
 from django.db import models
+from django.db.models.functions import datetime
+
 from Reception.models import Room, RoomReservation
 
 
@@ -53,6 +57,23 @@ class Dish(models.Model):
     preu = models.DecimalField(max_digits=10, decimal_places=2)
 
 
+class Order(models.Model):
+    date = models.DateField(default=datetime.datetime.now)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class Item(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    level = models.IntegerField(default=0)
+
+
+class ItemAmount(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+
 class RestaurantReservation(models.Model):
     client_name = models.CharField(max_length=100)
     room_reservation = models.ForeignKey(RoomReservation, on_delete=models.CASCADE, blank=True, null=True)
@@ -60,15 +81,4 @@ class RestaurantReservation(models.Model):
     date_entrance = models.DateField()
     costumers_number = models.IntegerField(default=0)
     validated = models.BooleanField(default=False)
-
-class Menu(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    level = models.IntegerField(default=0)
-
-class Order(models.Model):
-    basic_menu = models.IntegerField()
-    delux_menu = models.IntegerField()
-    unique_menu = models.IntegerField()
-    num_reservation = models.ForeignKey(RestaurantReservation, on_delete=models.CASCADE)
-
+    order_num = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
