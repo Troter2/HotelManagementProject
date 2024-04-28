@@ -2,7 +2,9 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
+CustomUser = get_user_model()
 
 class RoomType(models.Model):
     name = models.CharField(max_length=255)
@@ -27,6 +29,7 @@ class Room(models.Model):
 
 # Create your models here.
 class RoomReservation(models.Model):
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     reservation_number = models.CharField(max_length=100)
     DNI = models.CharField(max_length=9)
     guests_name = models.CharField(max_length=100)
