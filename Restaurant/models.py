@@ -55,7 +55,7 @@ class Dish(models.Model):
 
 class RestaurantReservation(models.Model):
     client_name = models.CharField(max_length=100)
-    room_reservation = models.ForeignKey(RoomReservation, on_delete=models.CASCADE)
+    room_reservation = models.ForeignKey(RoomReservation, on_delete=models.CASCADE, blank=True, null=True)
     entrance_hours = models.TimeField()
     date_entrance = models.DateField()
     costumers_number = models.IntegerField(default=0)

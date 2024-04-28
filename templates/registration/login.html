@@ -77,8 +77,10 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-        myModal.show();
+        {% if error_message %}
+            var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+            myModal.show();
+        {% endif %}
     });
 </script>
 
