@@ -192,32 +192,41 @@ def contact(request):
 
 
 def booking_filter_check_out(request):
-    # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)
 
-    # Filtrar las reservas basadas en los parámetros recibidos
     reserves_filtradas = RoomReservation.objects.all()
     if nombre_habitacion:
         reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
     if fecha:
         reserves_filtradas = reserves_filtradas.filter(guest_checkout=fecha)
 
-    # Renderizar la plantilla con las reservas filtradas
     return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+
+
+def lost_item_list(request):
+    items = LostItem.objects.all().filter(in_possesion=True)
+
+    return render(request, 'reception/lost_items_list.html', {'items': items})
+
+
+def update_item_reception(request):
+    if request.method == 'POST':
+        id = request.POST.get("id")
+        item = LostItem.objects.get(id=id)
+        item.in_possesion = False
+        item.save()
+    return redirect('lost_item_list')
 
 
 def generate_reservation_pdf(request):
     now = datetime.now()
-    # Recuperar el número de reserva de la solicitud POST
     id = request.POST.get('id', '')
     reservation = RoomReservation.objects.get(pk=id)
 
-    # Generar el contenido del PDF
     buffer = BytesIO()
     c = canvas.Canvas(buffer)
 
-    # Agregar el logotipo al PDF
     img_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
     img = ImageReader(img_path)
     c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
