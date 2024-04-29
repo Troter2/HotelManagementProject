@@ -104,16 +104,19 @@
                         <th>{{ product.name }}</th>
                         <td>{{ product.price }}</td>
                         <td>
-                            {% if product.active %}
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                        data-bs-target="#Pop-up-{{ product.id }}">Activar
-                                </button>
-                            {% else %}
-
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#validarModal-{{ product.id }}">Desactivar
-                                </button>
-                            {% endif %}
+                            <form action="{% url 'restaurant_update_item' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ product.id }}">
+                                {% if product.active %}
+                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" name="action" value="deactivate"
+                                            data-bs-target="#validarModal-{{ product.id }}">Desactivar
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-success" data-bs-toggle="modal"  name="action" value="active"
+                                            data-bs-target="#Pop-up-{{ product.id }}">Activar
+                                    </button>
+                                {% endif %}
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

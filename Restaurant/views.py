@@ -19,8 +19,19 @@ def restaurant_reservation_page(request):
 
 
 def restaurant_list_items(request):
-    items = Item.objects.all().filter(active=True)
+    items = Item.objects.all()
     return render(request, 'restaurant/list_items.html', {"products": items})
+
+
+def restaurant_update_item(request):
+    if request.method == 'POST':
+        item = Item.objects.get(pk=request.POST.get('id'))
+        if request.POST.get('action') == "active":
+            item.active = True
+        else:
+            item.active = False
+        item.save()
+        return redirect("restaurant_list_items")
 
 
 def restaurant_validation_page(request):
