@@ -62,11 +62,12 @@ urlpatterns = [
     path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
     path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),
     path('restaurant/reservations/<str:uuid>/', restaurant_reservation_page_uuid, name='restaurant_reservation_page_uuid'),
-    path('camarero/', reserved_tables, name='reserved_tables'),
+    path('camarero/reserved', reserved_tables, name='reserved_tables'),
     path('validar_reserva/', update_validation, name='update_validation'),
     path('filtrar_por_numero_reserva/', filtrar_por_numero_reserva, name='filtrar_por_numero_reserva'),
     path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
     path('cleaner/lost_item/', add_lost_item, name='add_lost_item'),
+    path('camarero/validate', restaurant_validation_page, name='restaurant_validation_page'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
