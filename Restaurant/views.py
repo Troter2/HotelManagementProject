@@ -3,8 +3,8 @@ from datetime import date
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount
-from Restaurant.forms import RestaurantReservationForm
+from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount, Item
+from Restaurant.forms import RestaurantReservationForm, ItemForm
 
 
 # Create your views here.
@@ -18,15 +18,36 @@ def restaurant_reservation_page(request):
     return render(request, 'restaurant/reservation_page.html')
 
 
+def restaurant_list_items(request):
+    items = Item.objects.all()
+    return render(request, 'restaurant/list_items.html', {"products": items})
+
+
+def create_product(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return redirect("restaurant_list_items")
+
+def create_item_form(request):
+    if request.method == 'POST':
+        item = Item.objects.get(pk=request.POST.get('id'))
+        if request.POST.get('action') == "active":
+            item.active = True
+        else:
+            item.active = False
+        item.save()
+        return redirect("restaurant_list_items")
+
+
 def restaurant_validation_page(request):
     booking = RestaurantReservation.objects.filter(validated=True)
     return render(request, 'restaurant/validated_list.html', {'reservas': booking})
 
 
 def restaurant_reservation_page_uuid(request, uuid):
-    initial_data = {}
     try:
-        # Obtener la reserva de habitación asociada con el UUID
         room_reservation = RoomReservation.objects.get(reservation_number=uuid)
         initial_data = {
             'client_name': room_reservation.guests_name + ' ' + room_reservation.guests_surname,
@@ -87,7 +108,7 @@ def set_order(request):
             order.save()
             reservation.save()
     return redirect("restaurant_validation_page")
-
-
+  
+  
 def thanks(request):
     return render(request, 'restaurant/thanks.html')

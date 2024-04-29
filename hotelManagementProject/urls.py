@@ -22,10 +22,11 @@ from User.views import add_guest_view, save_more_guest, save_guest, previous_wee
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
-    filtrar_por_numero_reserva, order_detail, update_order
+    filtrar_por_numero_reserva, order_detail, update_order, add_lost_item, lost_item_list, update_item_reception
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
-    restaurant_reservation_page_uuid, restaurant_validation_page, thanks
+    restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
+    create_item_form
 from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
@@ -63,13 +64,20 @@ urlpatterns = [
     path('reception/reservations/filter/', booking_filter, name='filtrar_reservas'),
     path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),
     path('restaurant/reservations/<str:uuid>/', restaurant_reservation_page_uuid, name='restaurant_reservation_page_uuid'),
+    path('restaurant/items/', restaurant_list_items, name='restaurant_list_items'),
+    path('restaurant/create_item_form/', create_item_form, name='restaurant_update_item'),
+    path('restaurant/create_product/', create_product, name='create_product'),
     path('camarero/reserved', reserved_tables, name='reserved_tables'),
     path('validar_reserva/', update_validation, name='update_validation'),
     path('filtrar_por_numero_reserva/', filtrar_por_numero_reserva, name='filtrar_por_numero_reserva'),
+    path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
+    path('cleaner/lost_item/', add_lost_item, name='add_lost_item'),
     path('camarero/validate', restaurant_validation_page, name='restaurant_validation_page'),
     path('order/', order_detail, name='order_detail'),
     path('order/update_order/', update_order, name='update_order'),
     path('order/thanks/', thanks, name='thanks'),
+    path('reception/lost_items', lost_item_list, name='lost_item_list'),
+    path('update_item_reception', update_item_reception, name='update_item_reception'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

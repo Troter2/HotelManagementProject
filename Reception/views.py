@@ -17,6 +17,7 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 import uuid
+from Reception.models import LostItem
 
 from Restaurant.models import Order, Item, ItemAmount
 from Restaurant.views import calculate_total
@@ -95,62 +96,64 @@ def habitaciones_libres(guest_entry, guest_leave, room_type=None):
 
 def reserve_room(request):
     roomTypes = RoomType.objects.all()
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            dni = request.POST.get('DNI')
+            fecha_entrada = datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d')
+            fecha_salida = datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d')
+            room_type = request.POST.get('room_type')
+            free_rooms = habitaciones_libres(fecha_entrada, fecha_salida, room_type=room_type)
+            guests_phone = request.POST.get('guests_phone')
+            if not validar_dni(dni):
+                form.add_error('DNI', 'El DNI no es válido.')
+            if len(free_rooms) < 1:
+                form.add_error('guest_checkin', 'No existe habitacion disponible para las fechas elegidas')
+            if not validate_guests_phone(guests_phone):
+                form.add_error('guests_phone', 'El telefono introducido no es válido.')
+            if len(form.errors) > 0:
+                return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+            form.instance.price = 60
+            uid = uuid.uuid4()
+            nights = (fecha_salida - fecha_entrada).days
+            room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
+                                                  guests_name=request.POST['guests_name'],
+                                                  guests_surname=request.POST['guests_surname'],
+                                                  guests_email=request.POST['guests_email'],
+                                                  guests_phone=request.POST['guests_phone'],
+                                                  guest_checkin=request.POST['guest_checkin'],
+                                                  guest_checkout=request.POST['guest_checkout'],
+                                                  guests_number=request.POST['guests_number'],
+                                                  price=(RoomType.objects.filter(id=request.POST['room_type'])[
+                                                             0].price + int(
+                                                      request.POST['guests_number'])) * nights,
+                                                  room_number=free_rooms[0]
+                                                  )
+            if 'save_data' in request.POST and request.POST['save_data'] == 'on':
+                if request.user.is_authenticated:
+                    user = request.user
+                    user.DNI = request.POST['DNI']
+                    user.telefono = request.POST['guests_phone']
+                    user.first_name = request.POST['guests_name']
+                    user.last_name = request.POST['guests_surname']
+                    if user.email == "":
+                        user.email = request.POST['guests_email']
+                    user.save()
 
-    usuario_logueado = request.user
-
-    datos_reserva_anteriores = None
-
-    if usuario_logueado.is_authenticated:
-        datos_reserva_anteriores = RoomReservation.objects.filter(DNI=usuario_logueado.DNI).last()
-
-        if request.method == 'POST':
-            form = ReservationForm(request.POST)
-            if form.is_valid():
-                dni = request.POST.get('DNI')
-                fecha_entrada = datetime.strptime(request.POST['guest_checkin'], '%Y-%m-%d')
-                fecha_salida = datetime.strptime(request.POST['guest_checkout'], '%Y-%m-%d')
-                room_type = request.POST.get('room_type')
-                free_rooms = habitaciones_libres(fecha_entrada, fecha_salida, room_type=room_type)
-                guests_phone = request.POST.get('guests_phone')
-                if not validar_dni(dni):
-                    form.add_error('DNI', 'El DNI no es válido.')
-                if len(free_rooms) < 1:
-                    form.add_error('guest_checkin', 'No existe habitacion disponible para las fechas elegidas')
-                if not validate_guests_phone(guests_phone):
-                    form.add_error('guests_phone', 'El telefono introducido no es válido.')
-                if len(form.errors) > 0:
-                    return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
-                form.instance.price = 60
-                uid = uuid.uuid4()
-                nights = (fecha_salida - fecha_entrada).days
-                if 'save_data' in request.POST and request.POST['save_data'] == 'on':
-                    room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
-                                                          guests_name=request.POST['guests_name'],
-                                                          guests_surname=request.POST['guests_surname'],
-                                                          guests_email=request.POST['guests_email'],
-                                                          guests_phone=request.POST['guests_phone'],
-                                                          guest_checkin=request.POST['guest_checkin'],
-                                                          guest_checkout=request.POST['guest_checkout'],
-                                                          guests_number=request.POST['guests_number'],
-                                                          price=(RoomType.objects.filter(id=request.POST['room_type'])[
-                                                                     0].price + int(
-                                                              request.POST['guests_number'])) * nights,
-                                                          room_number=free_rooms[0],
-                                                          )
-                    return render(request, 'reception/thank_you.html', {'id': room.id})
-        else:
-            if datos_reserva_anteriores:
-                initial_data = {
-                    'DNI': datos_reserva_anteriores.DNI,
-                    'guests_name': datos_reserva_anteriores.guests_name,
-                    'guests_surname': datos_reserva_anteriores.guests_surname,
-                    'guests_email': datos_reserva_anteriores.guests_email,
-                    'guests_phone': datos_reserva_anteriores.guests_phone,
-                    # Puedes agregar más campos aquí si es necesario
-                }
-                form = ReservationForm(initial=initial_data)
-            else:
-                form = ReservationForm()
+            return render(request, 'reception/thank_you.html', {'id': room.id})
+    else:
+        form = ReservationForm()
+        if request.user.is_authenticated:
+            user = request.user
+            user_data = {
+                'dni': user.DNI,
+                'name': user.first_name,
+                'lastname': user.last_name,
+                'mail': user.email,
+                'phone': user.telefono,
+            }
+            return render(request, 'reception/reservation_form.html',
+                          {'form': form, 'roomTypes': roomTypes, 'user_data': user_data})
         return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
 
 
@@ -193,32 +196,41 @@ def contact(request):
 
 
 def booking_filter_check_out(request):
-    # Obtener los parámetros de filtrado desde la URL
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)
 
-    # Filtrar las reservas basadas en los parámetros recibidos
     reserves_filtradas = RoomReservation.objects.all()
     if nombre_habitacion:
         reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
     if fecha:
         reserves_filtradas = reserves_filtradas.filter(guest_checkout=fecha)
 
-    # Renderizar la plantilla con las reservas filtradas
     return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+
+
+def lost_item_list(request):
+    items = LostItem.objects.all().filter(in_possesion=True)
+
+    return render(request, 'reception/lost_items_list.html', {'items': items})
+
+
+def update_item_reception(request):
+    if request.method == 'POST':
+        id = request.POST.get("id")
+        item = LostItem.objects.get(id=id)
+        item.in_possesion = False
+        item.save()
+    return redirect('lost_item_list')
 
 
 def generate_reservation_pdf(request):
     now = datetime.now()
-    # Recuperar el número de reserva de la solicitud POST
     id = request.POST.get('id', '')
     reservation = RoomReservation.objects.get(pk=id)
 
-    # Generar el contenido del PDF
     buffer = BytesIO()
     c = canvas.Canvas(buffer)
 
-    # Agregar el logotipo al PDF
     img_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
     img = ImageReader(img_path)
     c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
@@ -294,7 +306,7 @@ def generate_reservation_pdf(request):
 
     qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
     qr.add_data(
-        "https://stackoverflow.com/questions/78186946/scan-qr-code-and-redirect-on-successful-scan-opencv-flask-python")
+        "http://localhost:8000/restaurant/reservations/" + str(reservation.reservation_number))
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="black", back_color="white")
     c.drawInlineImage(qr_img, 250, 250, 100, 100)
@@ -358,3 +370,20 @@ def update_order(request):
         order_total.save()
 
         return redirect(request, 'restaurant/thank_you.html')
+
+def add_lost_item(request):
+    if request.method == 'POST':
+        item_name = request.POST.get('objectName')
+        encounter_hour = datetime.now().time()  # Obtener la hora actual
+        encounter_date = datetime.now().date()  # Obtener la fecha actual
+
+        # Crear un nuevo objeto LostItem y guardarlo en la base de datos
+        LostItem.objects.create(
+            item_name=item_name,
+            encounter_hour=encounter_hour,
+            encounter_date=encounter_date,
+        )
+
+        return redirect('cleaner_page')  # Redirigir a la página principal después de guardar el objeto perdido
+
+    return render(request, 'cleaner_page')  # Si no es una solicitud POST, simplemente renderiza el template HTML
