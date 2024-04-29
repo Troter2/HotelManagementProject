@@ -1,5 +1,5 @@
 from django import forms
-from .models import RestaurantReservation
+from .models import RestaurantReservation, Item
 
 
 class RestaurantReservationForm(forms.ModelForm):
@@ -11,3 +11,9 @@ class RestaurantReservationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RestaurantReservationForm, self).__init__(*args, **kwargs)
         self.fields['client_name'].widget.attrs['readonly'] = True
+
+
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'price', 'img']

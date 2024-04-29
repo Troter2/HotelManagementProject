@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount, Item
-from Restaurant.forms import RestaurantReservationForm
+from Restaurant.forms import RestaurantReservationForm, ItemForm
 
 
 # Create your views here.
@@ -23,7 +23,14 @@ def restaurant_list_items(request):
     return render(request, 'restaurant/list_items.html', {"products": items})
 
 
-def restaurant_update_item(request):
+def create_product(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return redirect("restaurant_list_items")
+
+def create_item_form(request):
     if request.method == 'POST':
         item = Item.objects.get(pk=request.POST.get('id'))
         if request.POST.get('action') == "active":
