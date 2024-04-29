@@ -18,13 +18,11 @@ def restaurant_reservation_page(request):
     return render(request, 'restaurant/reservation_page.html')
 
 
-
-  
 def restaurant_validation_page(request):
     booking = RestaurantReservation.objects.filter(validated=True)
     return render(request, 'restaurant/validated_list.html', {'reservas': booking})
 
-  
+
 def restaurant_reservation_page_uuid(request, uuid):
     initial_data = {}
     try:
@@ -50,7 +48,6 @@ def restaurant_reservation_page_uuid(request, uuid):
     return render(request, 'restaurant/autoreservation_page.html', {'data': initial_data})
 
 
-
 def reserved_tables(request):
     date_ = date.today()
     if request.method == 'POST':
@@ -69,7 +66,7 @@ def update_validation(request):
         reservation.save()
     return redirect('reserved_tables')
 
-  
+
 def calculate_total(order):
     total = 0
     items = ItemAmount.objects.filter(order=order)
@@ -91,3 +88,6 @@ def set_order(request):
             reservation.save()
     return redirect("restaurant_validation_page")
 
+
+def thanks(request):
+    return render(request, 'restaurant/thanks.html')

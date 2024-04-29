@@ -22,9 +22,10 @@ from User.views import add_guest_view, save_more_guest, save_guest, previous_wee
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
-    filtrar_por_numero_reserva
+    filtrar_por_numero_reserva, order_detail, update_order
 from register import views as register
-from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, restaurant_reservation_page_uuid, restaurant_validation_page
+from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
+    restaurant_reservation_page_uuid, restaurant_validation_page, thanks
 from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
@@ -66,6 +67,9 @@ urlpatterns = [
     path('validar_reserva/', update_validation, name='update_validation'),
     path('filtrar_por_numero_reserva/', filtrar_por_numero_reserva, name='filtrar_por_numero_reserva'),
     path('camarero/validate', restaurant_validation_page, name='restaurant_validation_page'),
+    path('order/', order_detail, name='order_detail'),
+    path('order/update_order/', update_order, name='update_order'),
+    path('order/thanks/', thanks, name='thanks'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
