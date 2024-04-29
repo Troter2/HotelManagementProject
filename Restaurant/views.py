@@ -108,3 +108,7 @@ def set_order(request):
             order.save()
             reservation.save()
     return redirect("restaurant_validation_page")
+  
+  
+def thanks(request):
+    return render(request, 'restaurant/thanks.html')

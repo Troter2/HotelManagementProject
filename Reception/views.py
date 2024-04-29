@@ -4,10 +4,11 @@ from datetime import datetime
 from datetime import date
 
 import qrcode
+import json
 from barcode.writer import ImageWriter
-from django.db.models import Q
+from django.db.models import Q, F, Sum
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from reportlab.graphics.barcode import code39
 
 from Reception.models import RoomReservation, RoomType, Room
@@ -17,6 +18,9 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 import uuid
 from Reception.models import LostItem
+
+from Restaurant.models import Order, Item, ItemAmount
+from Restaurant.views import calculate_total
 
 
 def reception_ini(request):
@@ -341,6 +345,31 @@ def filtrar_por_numero_reserva(request):
         # Si la solicitud no es POST, renderizar el formulario para filtrar
         return render(request, 'reception/reservedRooms.html')
 
+
+def order_detail(request):
+    order = Order.objects.create(total=0)
+    items = Item.objects.all()
+    return render(request, 'restaurant/order_page.html', {'order': order, 'items': items})
+
+
+def update_order(request):
+    if request.method == 'POST':
+        order_data = json.loads(request.body.decode("utf-8"))
+        order_id = order_data['order_id']
+        order_total = Order.objects.get(id=order_id)
+        items_data = order_data['items']
+
+        for item_data in items_data:
+            item_id = item_data['item_id']
+            amount = item_data['amount']
+            if int(amount) > 0:
+                item = Item.objects.get(pk=item_id)
+                ItemAmount.objects.get_or_create(item=item, amount=amount, order_id=order_id)
+
+        order_total.total = calculate_total(order_total)
+        order_total.save()
+
+        return redirect(request, 'restaurant/thank_you.html')
 
 def add_lost_item(request):
     if request.method == 'POST':

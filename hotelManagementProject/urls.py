@@ -22,10 +22,10 @@ from User.views import add_guest_view, save_more_guest, save_guest, previous_wee
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
-    filtrar_por_numero_reserva, add_lost_item, lost_item_list, update_item_reception
+    filtrar_por_numero_reserva, order_detail, update_order, add_lost_item, lost_item_list, update_item_reception
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
-    restaurant_reservation_page_uuid, restaurant_validation_page, restaurant_list_items, create_product, \
+    restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
     create_item_form
 from accounts.views import custom_login
 from django.conf import settings
@@ -73,6 +73,9 @@ urlpatterns = [
     path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
     path('cleaner/lost_item/', add_lost_item, name='add_lost_item'),
     path('camarero/validate', restaurant_validation_page, name='restaurant_validation_page'),
+    path('order/', order_detail, name='order_detail'),
+    path('order/update_order/', update_order, name='update_order'),
+    path('order/thanks/', thanks, name='thanks'),
     path('reception/lost_items', lost_item_list, name='lost_item_list'),
     path('update_item_reception', update_item_reception, name='update_item_reception'),
 ]
