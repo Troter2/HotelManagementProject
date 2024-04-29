@@ -288,7 +288,7 @@ def generate_reservation_pdf(request):
 
     qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
     qr.add_data(
-        "https://stackoverflow.com/questions/78186946/scan-qr-code-and-redirect-on-successful-scan-opencv-flask-python")
+        "http://localhost:8000/restaurant/reservations/"+str(reservation.reservation_number))
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="black", back_color="white")
     c.drawInlineImage(qr_img, 250, 250, 100, 100)
