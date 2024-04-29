@@ -16,6 +16,7 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 import uuid
+from Reception.models import LostItem
 
 
 def reception_ini(request):
@@ -340,3 +341,20 @@ def filtrar_por_numero_reserva(request):
     else:
         # Si la solicitud no es POST, renderizar el formulario para filtrar
         return render(request, 'reception/reservedRooms.html')
+
+def add_lost_item(request):
+    if request.method == 'POST':
+        item_name = request.POST.get('objectName')
+        encounter_hour = datetime.now().time()  # Obtener la hora actual
+        encounter_date = datetime.now().date()  # Obtener la fecha actual
+
+        # Crear un nuevo objeto LostItem y guardarlo en la base de datos
+        LostItem.objects.create(
+            item_name=item_name,
+            encounter_hour=encounter_hour,
+            encounter_date=encounter_date,
+        )
+
+        return redirect('cleaner_page')  # Redirigir a la página principal después de guardar el objeto perdido
+
+    return render(request, 'cleaner_page')  # Si no es una solicitud POST, simplemente renderiza el template HTML

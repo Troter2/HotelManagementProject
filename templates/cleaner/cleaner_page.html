@@ -60,6 +60,33 @@
                                 <img src="{% static 'img/broom.svg' %}" alt="Your Image"
                                      style="width: 20px; height: 20px;">
                             </button>
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addLostItemModal">
+                                Añadir Objeto Perdido
+                            </button>
+                            <!-- Modal para añadir objeto perdido -->
+                            <div class="modal fade" id="addLostItemModal" tabindex="-1" aria-labelledby="addLostItemModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addLostItemModalLabel">Añadir Objeto Perdido</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="lostItemForm" method="post" action="{% url 'add_lost_item' %}">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <label for="objectName" class="form-label">Nombre del Objeto</label>
+                                                    <input type="text" class="form-control" id="objectName" name="objectName" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>
