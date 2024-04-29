@@ -38,29 +38,31 @@
                                         <div class="mb-3 mx-4 form-floating">
                                             <input type="text" name="DNI" class="form-control" id="DNI"
                                                    placeholder="DNI"
-                                                   required>
+                                                   required value="{% if user_data.dni %}{{user_data.dni}}{% endif %}">
                                             <label for="DNI">DNI</label>
                                         </div>
+
+
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="text" name="guests_name" class="form-control" id="guests_name"
-                                                   placeholder="Nombre" required>
+                                                   placeholder="Nombre" required value="{% if user_data.name %}{{user_data.name}}{% endif %}">
                                             <label for="guests_name">Nombre</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="text" name="guests_surname" class="form-control"
-                                                   id="guests_surname" placeholder="Apellidos" required>
+                                                   id="guests_surname" placeholder="Apellidos" required  value="{% if user_data.lastname %}{{user_data.lastname}}{% endif %}">
                                             <label for="guests_surname">Apellidos</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="email" name="guests_email" class="form-control"
                                                    id="guests_email"
-                                                   placeholder="Correo Electrónico" required>
+                                                   placeholder="Correo Electrónico" required value="{% if user_data.mail %}{{user_data.mail}}{% endif %}">
                                             <label for="guests_email">Correo Electrónico</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="text" name="guests_phone" class="form-control"
                                                    id="guests_phone"
-                                                   placeholder="Teléfono" required>
+                                                   placeholder="Teléfono" required value="{% if user_data.phone %}{{user_data.phone}}{% endif %}">
                                             <label for="guests_phone">Teléfono</label>
                                         </div>
                                         <div class="mb-4 mx-4">
@@ -93,15 +95,6 @@
                                                    onchange="CalculatePrice()">
                                             <label for="guests_number">Número de Huéspedes</label>
                                         </div>
-                                        <div class="mb-4 mx-4 ">
-                                            <div class="form-floating">
-                                                <p class="mb-2">Precio Habitación: <span id="precio_habitacion">0</span>
-                                                </p>
-                                                <p class="mb-2">Importe turístico: <span id="importe_turístico">0</span>
-                                                </p>
-                                                <p class="mb-2">Precio total: <span id="precio_total">0</span></p>
-                                            </div>
-                                        </div>
                                         {% if request.user.is_authenticated %}
                                             <div class="mb-4 mx-4 form-check">
                                                 <input type="checkbox" class="form-check-input" id="save_data"
@@ -111,6 +104,15 @@
                                                     futura reserva</label>
                                             </div>
                                         {% endif %}
+                                        <div class="mb-4 mx-4 ">
+                                            <div class="form-floating">
+                                                <p class="mb-2">Precio Habitación: <span id="precio_habitacion">0</span>
+                                                </p>
+                                                <p class="mb-2">Importe turístico: <span id="importe_turístico">0</span>
+                                                </p>
+                                                <p class="mb-2">Precio total: <span id="precio_total">0</span></p>
+                                            </div>
+                                        </div>
                                         <div class="text-center mx-4 mt-2 mb-5 pb-1">
                                             <button id="bugButton" class="mx-auto login_button" type="submit">Reservar
                                             </button>
