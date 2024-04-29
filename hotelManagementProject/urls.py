@@ -22,7 +22,7 @@ from User.views import add_guest_view, save_more_guest, save_guest, previous_wee
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
-    filtrar_por_numero_reserva
+    filtrar_por_numero_reserva, add_lost_item
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, restaurant_reservation_page_uuid, restaurant_validation_page
 from accounts.views import custom_login
@@ -65,6 +65,8 @@ urlpatterns = [
     path('camarero/reserved', reserved_tables, name='reserved_tables'),
     path('validar_reserva/', update_validation, name='update_validation'),
     path('filtrar_por_numero_reserva/', filtrar_por_numero_reserva, name='filtrar_por_numero_reserva'),
+    path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
+    path('cleaner/lost_item/', add_lost_item, name='add_lost_item'),
     path('camarero/validate', restaurant_validation_page, name='restaurant_validation_page'),
 ]
 
