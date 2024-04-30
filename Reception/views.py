@@ -60,7 +60,7 @@ def reserved_rooms_view(request):
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkout=datetime.today())
+    reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_checkout=datetime.today())
     context = {
         'reserves': reserves
     }
