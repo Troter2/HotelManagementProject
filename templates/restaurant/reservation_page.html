@@ -23,24 +23,24 @@
                                 <form method="post">
                                     {% csrf_token %}
                                     <div class="mb-4 mx-4 form-floating">
-                                        <input type="text" name="guests_name" class="form-control" id="guests_name"
+                                        <input type="text" name="client_name" class="form-control" id="client_name"
                                                placeholder="Nombre" required>
-                                        <label for="guests_name">Nombre</label>
+                                        <label for="client_name">Nombre</label>
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
-                                        <input type="text" name="guests_surname" class="form-control"
-                                               id="guests_surname" placeholder="Apellidos" required>
-                                        <label for="guests_surname">Apellidos</label>
+                                        <input type="number" name="costumers_number" class="form-control"
+                                               id="costumers_number" placeholder="Número de Comensales" required min="1">
+                                        <label for="costumers_number">Número de Comensales</label>
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
-                                        <input type="number" name="guests_number" class="form-control"
-                                               id="guests_number" placeholder="Número de Comensales" required min="1">
-                                        <label for="guests_number">Número de Comensales</label>
+                                        <input type="date" name="date_entrance" class="form-control"
+                                               id="date_entrance" required>
+                                        <label for="date_entrance">Fecha Reserva</label>
                                     </div>
                                     <div class="mb-4 mx-4 form-floating">
-                                        <input type="datetime-local" name="reservation_datetime" class="form-control"
-                                               id="reservation_datetime" required>
-                                        <label for="reservation_datetime">Fecha y Hora de Reserva</label>
+                                        <input type="time" name="entrance_hours" class="form-control"
+                                               id="entrance_hours" required>
+                                        <label for="entrance_hours"> Hora de Reserva</label>
                                     </div>
                                     <div class="text-center mx-4 mt-2 mb-5 pb-1">
                                         <button id="bugButton" class="mx-auto login_button" type="submit">Reservar
