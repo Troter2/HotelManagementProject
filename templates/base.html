@@ -134,6 +134,13 @@
                                     </a>
                                 </li>
                             </div>
+                            <div class="nav-link-div" onclick="navigateToURL('{% url 'orders_without_page' %}')">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
+                                    <a href="{% url 'orders_without_page' %}">
+                                        Ordenes no assignadas
+                                    </a>
+                                </li>
+                            </div>
                             <div class="nav-link-div"
                                  onclick="navigateToURL('{% url 'restaurant_list_items' %}')">
                                 <li class="dropdown-item mt-2 mb-2 no-blue">
