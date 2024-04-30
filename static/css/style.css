@@ -219,3 +219,7 @@ body {
     text-decoration: none; /* Sin subrayado */
 }
 
+.no-blue:active {
+    background-color: transparent !important;
+}
+

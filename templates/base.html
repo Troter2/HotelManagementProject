@@ -46,14 +46,14 @@
                     </a>
                     <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRestaurante">
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'restaurant_page' %}')">
-                            <li class="dropdown-item">
+                            <li class="dropdown-item mt-2 mb-2 no-blue">
                                 <a href="{% url 'restaurant_page' %}">
                                     Inicio
                                 </a>
                             </li>
                         </div>
                         <div class="nav-link-div" onclick="navigateToURL('{% url 'reservation_page' %}')">
-                            <li class="dropdown-item">
+                            <li class="dropdown-item mt-2 mb-2 no-blue">
                                 <a href="{% url 'reservation_page' %}">
                                     Reservar
                                 </a>
@@ -69,21 +69,21 @@
                         </a>
                         <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
-                                <li class="dropdown-item">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'reserved_rooms_view' %}">
                                         CheckIn
                                     </a>
                                 </li>
                             </div>
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'ocuped_rooms_view' %}')">
-                                <li class="dropdown-item">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'ocuped_rooms_view' %}">
                                         CheckOut
                                     </a>
                                 </li>
                             </div>
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'lost_item_list' %}')">
-                                <li class="dropdown-item">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'lost_item_list' %}">
                                         Objectes perduts
                                     </a>
@@ -98,7 +98,7 @@
                         </a>
                         <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'cleaner_page' %}')">
-                                <li class="dropdown-item">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'cleaner_page' %}">
                                         Habitaciones pendientes
                                     </a>
@@ -113,7 +113,7 @@
                         </a>
                         <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarCamarero">
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_tables' %}')">
-                                <li class="dropdown-item">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'reserved_tables' %}">
                                         Reservas
                                     </a>
@@ -121,18 +121,22 @@
                             </div>
 
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'restaurant_validation_page' %}')">
-                                <li class="dropdown-item">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'restaurant_validation_page' %}">
                                         Validaciones
                                     </a>
                                 </li>
                             </div>
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'order_detail' %}')">
-                                <li class="dropdown-item">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'order_detail' %}">
                                         Orden
-                            <div class="nav-link-div" onclick="navigateToURL('{% url 'restaurant_list_items' %}')">
-                                <li class="dropdown-item">
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="nav-link-div"
+                                 onclick="navigateToURL('{% url 'restaurant_list_items' %}')">
+                                <li class="dropdown-item mt-2 mb-2 no-blue">
                                     <a href="{% url 'restaurant_list_items' %}">
                                         Productos
                                     </a>
@@ -146,7 +150,7 @@
                             Contable
                         </a>
                         <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                            <li class="dropdown-item">
+                            <li class="dropdown-item rounded no-blue">
                                 <a href="#">
                                     Facturacion
                                 </a>
@@ -161,7 +165,7 @@
                             <button type="submit" class="nav-link bg-dark border-0">Log Out</button>
                         </form>
                     {% else %}
-                        <a class="nav-link" href="{% url 'login' %}" id="navbarLogout" role="button"
+                        <a class="nav-link no-blue" href="{% url 'login' %}" id="navbarLogout" role="button"
                            aria-expanded="false">
                             Log in
                         </a>
@@ -170,7 +174,7 @@
                 <li class="nav-item ">
                     {% if user.is_authenticated %}
                     {% else %}
-                        <a class="nav-link" href="{% url 'register' %}" id="navbarLogout" role="button"
+                        <a class="nav-link no-blue" href="{% url 'register' %}" id="navbarLogout" role="button"
                            aria-expanded="false">
                             Sign in
                         </a>
