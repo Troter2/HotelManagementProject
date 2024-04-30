@@ -13,6 +13,13 @@ class RestaurantReservationForm(forms.ModelForm):
         self.fields['client_name'].widget.attrs['readonly'] = True
 
 
+class RestaurantBookingForm(forms.ModelForm):
+    class Meta:
+        model = RestaurantReservation
+        fields = ['client_name', 'entrance_hours', 'date_entrance', 'costumers_number']
+
+
+
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
