@@ -61,3 +61,4 @@ class LostItem(models.Model):
     encounter_hour = models.TimeField(default=get_current_date)
     encounter_date = models.DateField(default=get_current_date)
     in_possesion = models.BooleanField(default=True)
+    room_number = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
