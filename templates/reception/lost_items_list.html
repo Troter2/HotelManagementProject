@@ -87,6 +87,7 @@
                 <tr>
                     <th scope="col">Objeto</th>
                     <th scope="col">Dia encuentro</th>
+                    <th scope="col">Número Habitación</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -95,6 +96,7 @@
                     <tr>
                         <th>{{ item.item_name }}</th>
                         <td>{{ item.encounter_date }}</td>
+                        <td>{{ item.room_number.room_number }}</td>
                         <td>
                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-{{ item.id }}">Devolver
