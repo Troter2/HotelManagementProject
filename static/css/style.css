@@ -223,3 +223,25 @@ body {
     background-color: transparent !important;
 }
 
+.number-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.number-input-group button {
+    min-width: 40px;
+    border: none;
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.number-input-group input {
+    border: none;
+    width: 50px;
+    text-align: center;
+}
+
