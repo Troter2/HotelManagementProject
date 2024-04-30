@@ -146,7 +146,7 @@
                     </button>
                 </td>
                 <td>
-                    <a href="{% url 'reservation_page' %}" class="btn btn-primary">Reservar en restaurante</a>
+                    <a href="{% url 'restaurant_reservation_page_uuid' uuid=reserva.reservation_number%}" class="btn btn-primary">Reservar en restaurante</a>
                 </td>
             </tr>
             {% endfor %}
