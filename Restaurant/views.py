@@ -14,7 +14,8 @@ from reportlab.lib.utils import ImageReader
 from reportlab.platypus.tables import TableStyle, Table
 
 from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount, Item
-from Restaurant.forms import RestaurantReservationForm, ItemForm, RestaurantReservationForm, RestaurantBookingForm
+from Restaurant.forms import RestaurantReservationForm, ItemForm, RestaurantReservationForm, RestaurantBookingForm, \
+    ItemFormWithoutImg
 from django.db.models import Q
 
 
@@ -46,6 +47,17 @@ def create_product(request):
         form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+        return redirect("restaurant_list_items")
+
+
+def edit_product(request,id):
+    if request.method == 'POST':
+        form = ItemFormWithoutImg(request.POST)
+        if form.is_valid():
+            item = Item.objects.all().get(id=id)
+            item.name = request.POST['name']
+            item.price = request.POST['price']
+            item.save()
         return redirect("restaurant_list_items")
 
 
@@ -183,7 +195,6 @@ def generate_order_pdf(request):
     titleObject.setTextOrigin(30, 745)
     titleObject.textLine("Factura nº" + str(order.id))
     c.drawText(titleObject)
-
     starting_y = 420
     titleObject = c.beginText(30, starting_y)
     titleObject.setFont("Helvetica", 12)
@@ -214,7 +225,6 @@ def generate_order_pdf(request):
     t.wrapOn(c, 0, 0)
     t.drawOn(c, 30, 600)
 
-
     c.save()
 
     buffer.seek(0)
@@ -229,8 +239,6 @@ def view_orders_without_reservation(request):
     orders_without_reservation = Order.objects.exclude(id__in=orders_with_reservation)
     return render(request, 'restaurant/OrdersWithoutRes.html',
                   {'orders_without_reservation': orders_without_reservation})
-
-
 
 def is_adquired(adquired, item):
     for adquired_item in adquired:
