@@ -60,7 +60,7 @@ def reserved_rooms_view(request):
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkout=datetime.today())
+    reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_checkout=datetime.today())
     context = {
         'reserves': reserves
     }
@@ -298,7 +298,7 @@ def generate_reservation_pdf(request):
     titleObject = c.beginText(80, 770)
     titleObject.setFont("Helvetica", 21)
     titleObject.setTextOrigin(190, 520)
-    titleObject.textLine("Comprovante de reserva")
+    titleObject.textLine("Comprobante de reserva")
     c.drawText(titleObject)
 
     barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)

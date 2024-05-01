@@ -1,7 +1,13 @@
 from datetime import date
+from datetime import datetime
+import qrcode
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from reportlab.graphics.barcode import code39
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
 
 from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount, Item
 from Restaurant.forms import RestaurantReservationForm, ItemForm, RestaurantReservationForm, RestaurantBookingForm
@@ -122,6 +128,85 @@ def set_order(request):
 def thanks(request):
     return render(request, 'restaurant/thanks.html')
 
+def generate_order_pdf(request):
+    now = datetime.now()
+    id = request.POST.get('id', '')
+    reservation = RestaurantReservation.objects.get(pk=id)
+    if reservation.order_num:
+        order = reservation.order_num  # Obtén la orden asociada a esa reserva
+        # Ahora puedes acceder a los datos de la orden, como el total y la fecha
+
+        # Ejemplo de acceso a los datos de la orden
+        order_total = order.total
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer)
+
+    img_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
+    img = ImageReader(img_path)
+    c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
+
+    img_path = 'static/img/playa-pdf.jpg'  # Ruta al archivo de imagen del logo
+    img = ImageReader(img_path)
+    c.drawImage(img, x=0, y=550, width=600, height=220, mask='auto')
+
+    # Dibujar el texto en diferentes líneas
+    titleObject = c.beginText(80, 770)
+    titleObject.setFont("Helvetica", 21)
+    titleObject.setTextOrigin(80, 795)
+    titleObject.textLine("Hotel las Palmeras")
+    c.drawText(titleObject)
+
+    text = f"{date.today()} "
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(490, 795)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = f"Nombre: {reservation.client_name}"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 470)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = f"Nº comensales: {reservation.costumers_number}"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 445)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = f"Total: {order.total}"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 420)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    text = "Localizado en C/Ejemplo nº 12"
+    titleObject = c.beginText(30, 770)
+    titleObject.setFont("Helvetica", 12)
+    titleObject.setTextOrigin(50, 395)
+    titleObject.textLine(text)
+    c.drawText(titleObject)
+
+    titleObject = c.beginText(80, 770)
+    titleObject.setFont("Helvetica", 21)
+    titleObject.setTextOrigin(190, 520)
+    titleObject.textLine("Comprovante de reserva")
+    c.drawText(titleObject)
+
+    #barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
+    #barcode.drawOn(c, 60, 100)
+
+    c.save()
+
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
+    return response
 
 def view_orders_without_reservation(request):
     orders_with_reservation = RestaurantReservation.objects.values_list('order_num_id', flat=True)

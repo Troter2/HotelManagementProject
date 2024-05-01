@@ -144,7 +144,11 @@ body {
 }
 
 .home-title {
-    font: 500 5rem/6rem 'Spectral', serif
+    font: 500 4rem/5rem 'Spectral', serif
+}
+
+.custom_font {
+    font-family: 'Spectral', serif
 }
 
 .main-text-over-img {
@@ -174,7 +178,7 @@ body {
 }
 
 .home-card-title {
-    font: 2.6rem/3.2rem 'Spectral', serif;
+    font: 2rem/2.6rem 'Spectral', serif;
 }
 
 .home-card-content {
