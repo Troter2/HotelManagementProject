@@ -11,6 +11,7 @@
                     <th scope="col">ID de Orden</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Precio Total</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -19,6 +20,13 @@
                         <th>{{ order.id }}</th>
                         <td>{{ order.date }}</td>
                         <td>{{ order.total }}</td>
+                        <td>
+                            <a href="{% url 'modify_order' order_id=order.id %}">
+                                <button class="btn-primary rounded">
+                                    Modificar Orden
+                                </button>
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
