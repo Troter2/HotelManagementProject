@@ -72,14 +72,14 @@
                             <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
                                 <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
                                     <li class="dropdown-item mt-2 mb-2 no-blue">
-                                        <a href="{% url 'reserved_rooms_view' %}">
+                                        <a href="{% url 'reserved_rooms_view' %}" id="checkin">
                                             CheckIn
                                         </a>
                                     </li>
                                 </div>
                                 <div class="nav-link-div" onclick="navigateToURL('{% url 'ocuped_rooms_view' %}')">
                                     <li class="dropdown-item mt-2 mb-2 no-blue">
-                                        <a href="{% url 'ocuped_rooms_view' %}">
+                                        <a href="{% url 'ocuped_rooms_view' %}" id="checkout">
                                             CheckOut
                                         </a>
                                     </li>
