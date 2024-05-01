@@ -128,6 +128,7 @@ def set_order(request):
 def thanks(request):
     return render(request, 'restaurant/thanks.html')
 
+
 def generate_order_pdf(request):
     now = datetime.now()
     id = request.POST.get('id', '')
@@ -198,8 +199,8 @@ def generate_order_pdf(request):
     titleObject.textLine("Comprovante de reserva")
     c.drawText(titleObject)
 
-    #barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
-    #barcode.drawOn(c, 60, 100)
+    # barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
+    # barcode.drawOn(c, 60, 100)
 
     c.save()
 
@@ -208,6 +209,7 @@ def generate_order_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
     return response
 
+
 def view_orders_without_reservation(request):
     orders_with_reservation = RestaurantReservation.objects.exclude(order_num_id=None).values_list('order_num_id',flat=True)
     orders_without_reservation = Order.objects.exclude(id__in=orders_with_reservation)
@@ -215,3 +217,27 @@ def view_orders_without_reservation(request):
                   {'orders_without_reservation': orders_without_reservation})
 
 
+def is_adquired(adquired, item):
+    for adquired_item in adquired:
+        if item == adquired_item.item:
+            return adquired_item.amount
+    return None
+
+
+def modify_order(request, order_id):
+    order = Order.objects.get(id=order_id)
+    items = Item.objects.all()
+    item_quantities = {}
+    items_adquired = ItemAmount.objects.all().filter(order=order)
+    items_amount = ItemAmount.objects.all().filter(order=order)
+    data = []
+
+    for item in items:
+        amount = is_adquired(items_adquired, item)
+        if amount is None:
+            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": 0})
+        else:
+            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": amount})
+
+    return render(request, 'restaurant/modify_order_page.html',
+                  {'order': order, 'items': items, 'data': data})
