@@ -6,8 +6,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from reportlab.graphics.barcode import code39
 from io import BytesIO
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+from reportlab.platypus.tables import TableStyle, Table
 
 from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount, Item
 from Restaurant.forms import RestaurantReservationForm, ItemForm, RestaurantReservationForm, RestaurantBookingForm
@@ -128,33 +132,28 @@ def set_order(request):
 def thanks(request):
     return render(request, 'restaurant/thanks.html')
 
+
 def generate_order_pdf(request):
     now = datetime.now()
     id = request.POST.get('id', '')
     reservation = RestaurantReservation.objects.get(pk=id)
+    items_amounts = []
     if reservation.order_num:
-        order = reservation.order_num  # Obtén la orden asociada a esa reserva
-        # Ahora puedes acceder a los datos de la orden, como el total y la fecha
-
-        # Ejemplo de acceso a los datos de la orden
-        order_total = order.total
+        order = reservation.order_num
+        items_amounts = ItemAmount.objects.filter(order=order)
 
     buffer = BytesIO()
     c = canvas.Canvas(buffer)
 
-    img_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
+    img_path = 'static/img/Logo.png'
     img = ImageReader(img_path)
     c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
 
-    img_path = 'static/img/playa-pdf.jpg'  # Ruta al archivo de imagen del logo
-    img = ImageReader(img_path)
-    c.drawImage(img, x=0, y=550, width=600, height=220, mask='auto')
 
-    # Dibujar el texto en diferentes líneas
     titleObject = c.beginText(80, 770)
     titleObject.setFont("Helvetica", 21)
     titleObject.setTextOrigin(80, 795)
-    titleObject.textLine("Hotel las Palmeras")
+    titleObject.textLine("Restaurante las Palmeras")
     c.drawText(titleObject)
 
     text = f"{date.today()} "
@@ -167,39 +166,53 @@ def generate_order_pdf(request):
     text = f"Nombre: {reservation.client_name}"
     titleObject = c.beginText(30, 770)
     titleObject.setFont("Helvetica", 12)
-    titleObject.setTextOrigin(50, 470)
+    titleObject.setTextOrigin(30, 720)
     titleObject.textLine(text)
     c.drawText(titleObject)
 
     text = f"Nº comensales: {reservation.costumers_number}"
     titleObject = c.beginText(30, 770)
     titleObject.setFont("Helvetica", 12)
-    titleObject.setTextOrigin(50, 445)
+    titleObject.setTextOrigin(450, 720)
     titleObject.textLine(text)
     c.drawText(titleObject)
 
-    text = f"Total: {order.total}"
-    titleObject = c.beginText(30, 770)
-    titleObject.setFont("Helvetica", 12)
-    titleObject.setTextOrigin(50, 420)
-    titleObject.textLine(text)
-    c.drawText(titleObject)
-
-    text = "Localizado en C/Ejemplo nº 12"
-    titleObject = c.beginText(30, 770)
-    titleObject.setFont("Helvetica", 12)
-    titleObject.setTextOrigin(50, 395)
-    titleObject.textLine(text)
-    c.drawText(titleObject)
 
     titleObject = c.beginText(80, 770)
     titleObject.setFont("Helvetica", 21)
-    titleObject.setTextOrigin(190, 520)
-    titleObject.textLine("Comprovante de reserva")
+    titleObject.setTextOrigin(30, 745)
+    titleObject.textLine("Factura nº" + str(order.id))
     c.drawText(titleObject)
 
-    #barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
-    #barcode.drawOn(c, 60, 100)
+    starting_y = 420
+    titleObject = c.beginText(30, starting_y)
+    titleObject.setFont("Helvetica", 12)
+
+    data=[]
+
+
+    data.append(["Producto", 'Cantidad', 'Precio', 'Precio total'])
+    for item in items_amounts:
+        data.append([item.item.name,item.amount,item.item.price, item.amount*item.item.price])
+    data.append(["Total","","",order.total])
+
+    num_columns = len(data[0])
+    width, height = letter
+    column_width = (width-20) / num_columns
+
+    t = Table(data, colWidths=[column_width] * num_columns)
+
+    style = TableStyle([
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 12),
+    ])
+
+    # Aplicamos el estilo a la tabla
+    t.setStyle(style)
+    t.setStyle(style)
+    t.wrapOn(c, 0, 0)
+    t.drawOn(c, 30, 600)
 
     c.save()
 
@@ -208,10 +221,10 @@ def generate_order_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
     return response
 
+
 def view_orders_without_reservation(request):
-    orders_with_reservation = RestaurantReservation.objects.exclude(order_num_id=None).values_list('order_num_id',flat=True)
+    orders_with_reservation = RestaurantReservation.objects.exclude(order_num_id=None).values_list('order_num_id',
+                                                                                                   flat=True)
     orders_without_reservation = Order.objects.exclude(id__in=orders_with_reservation)
     return render(request, 'restaurant/OrdersWithoutRes.html',
                   {'orders_without_reservation': orders_without_reservation})
-
-
