@@ -10,7 +10,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 
 from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount, Item
-from Restaurant.forms import RestaurantReservationForm, ItemForm, RestaurantReservationForm, RestaurantBookingForm
+from Restaurant.forms import RestaurantReservationForm, ItemForm, RestaurantReservationForm, RestaurantBookingForm, \
+    ItemFormWithoutImg
 from django.db.models import Q
 
 
@@ -42,6 +43,17 @@ def create_product(request):
         form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+        return redirect("restaurant_list_items")
+
+
+def edit_product(request,id):
+    if request.method == 'POST':
+        form = ItemFormWithoutImg(request.POST)
+        if form.is_valid():
+            item = Item.objects.all().get(id=id)
+            item.name = request.POST['name']
+            item.price = request.POST['price']
+            item.save()
         return redirect("restaurant_list_items")
 
 
@@ -128,6 +140,7 @@ def set_order(request):
 def thanks(request):
     return render(request, 'restaurant/thanks.html')
 
+
 def generate_order_pdf(request):
     now = datetime.now()
     id = request.POST.get('id', '')
@@ -198,8 +211,8 @@ def generate_order_pdf(request):
     titleObject.textLine("Comprovante de reserva")
     c.drawText(titleObject)
 
-    #barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
-    #barcode.drawOn(c, 60, 100)
+    # barcode = code39.Standard39(reservation.reservation_number, barWidth=0.8, barHeight=50, humanReadable=True)
+    # barcode.drawOn(c, 60, 100)
 
     c.save()
 
@@ -208,10 +221,10 @@ def generate_order_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
     return response
 
+
 def view_orders_without_reservation(request):
-    orders_with_reservation = RestaurantReservation.objects.exclude(order_num_id=None).values_list('order_num_id',flat=True)
+    orders_with_reservation = RestaurantReservation.objects.exclude(order_num_id=None).values_list('order_num_id',
+                                                                                                   flat=True)
     orders_without_reservation = Order.objects.exclude(id__in=orders_with_reservation)
     return render(request, 'restaurant/OrdersWithoutRes.html',
                   {'orders_without_reservation': orders_without_reservation})
-
-

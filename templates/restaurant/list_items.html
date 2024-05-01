@@ -29,89 +29,10 @@
             </div>
         </div>
     </div>
-    {% for reserva in reservas %}
-        <!-- Modal -->
-        <div class="modal fade" id="Pop-up-{{ reserva.id }}" tabindex="-1" role="dialog"
-             aria-labelledby="ModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            Reserva Nº{{ reserva.id }} para el restaurante
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Nombre del cliente: {{ reserva.client_name }}</p>
-                        <p>Número de clientes: {{ reserva.costumers_number }}</p>
-                        <p>Fecha de reserva: {{ reserva.date_entrance }}</p>
-                        <p>Hora de entrada: {{ reserva.entrance_hours }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de Validar -->
-        <div class="modal fade" id="validarModal-{{ reserva.id }}" tabindex="-1" role="dialog"
-             aria-labelledby="validarModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="validarModalLabel">Validar Reserva</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="{% url 'update_validation' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
-                        <div class="modal-body">
-                            <p>¿Está seguro de validar esta reserva?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Validar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-    {% endfor %}
-
-    <!-- Modal para el filtro -->
-    <div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="filterModalLabel">Filtro de Reservas del Restaurante</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="filtroForm" action="{% url 'reserved_tables' %}" method="POST">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-6 px-4">
-                                <label for="fecha">Fecha:</label>
-                                <input class="form-control" type="date" id="fecha" name="fecha">
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col text-end">
-                                <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <h1 class="mx-3 my-3">Productos del restaurante</h1>
     <div class="container-fluid">
         <div class="row mt-3">
             <div class="col">
-                <button id="filtrarReservasBtn" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#Modal_filter">Filtrar Reservas
-                </button>
                 <button type="button"
                         class="btn btn-success"
                         data-bs-toggle="modal"
@@ -127,6 +48,7 @@
                 <tr>
                     <th scope="col">Producto</th>
                     <th scope="col">Precio</th>
+                    <th scope="col"></th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -152,12 +74,48 @@
                                 {% endif %}
                             </form>
                         </td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-success"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#Pop-up-modify-{{ product.id }}">Editar producto
+                            </button>
+                        </td>
                     </tr>
+                    <div class="modal fade" id="Pop-up-modify-{{ product.id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="addModal" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="nodifyModal">
+                                        Editar producto
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{% url 'edit_product' id=product.id %}" method="POST" >
+                                        {% csrf_token %}
+                                        <label for="add_name" class="form-label">Cambiar nombre:</label>
+                                        <input type="text" class="form-control" id="modify-name-{{ product.id }}"
+                                               name="name" value="{{ product.name }}">
+                                        <label for="add_price" class="form-label">Cambiar precio:</label>
+                                        <input type="number" class="form-control" id="modify-price-{{ product.id }}"
+                                               name="price" value="{{ product.price }}">
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Guardar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
 {% endblock %}
 
 

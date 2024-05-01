@@ -24,3 +24,8 @@ class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ['name', 'price', 'img']
+
+class ItemFormWithoutImg(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ['name', 'price']
