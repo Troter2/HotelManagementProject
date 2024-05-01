@@ -209,7 +209,7 @@ def generate_order_pdf(request):
     return response
 
 def view_orders_without_reservation(request):
-    orders_with_reservation = RestaurantReservation.objects.values_list('order_num_id', flat=True)
+    orders_with_reservation = RestaurantReservation.objects.exclude(order_num_id=None).values_list('order_num_id',flat=True)
     orders_without_reservation = Order.objects.exclude(id__in=orders_with_reservation)
     return render(request, 'restaurant/OrdersWithoutRes.html',
                   {'orders_without_reservation': orders_without_reservation})
