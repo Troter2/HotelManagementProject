@@ -369,16 +369,16 @@ def update_order(request):
         order_total.total = calculate_total(order_total)
         order_total.save()
 
-        return redirect(request, 'restaurant/thank_you.html')
+        return redirect('orders_without_page')
+
 
 def add_lost_item(request):
     if request.method == 'POST':
         room_number = Room.objects.get(id=request.POST.get('room'))
         item_name = request.POST.get('objectName')
-        encounter_hour = datetime.now().time()  # Obtener la hora actual
-        encounter_date = datetime.now().date()  # Obtener la fecha actual
+        encounter_hour = datetime.now().time()
+        encounter_date = datetime.now().date()
 
-        # Crear un nuevo objeto LostItem y guardarlo en la base de datos
         LostItem.objects.create(
             item_name=item_name,
             encounter_hour=encounter_hour,
@@ -386,6 +386,6 @@ def add_lost_item(request):
             room_number=room_number
         )
 
-        return redirect('cleaner_page')  # Redirigir a la página principal después de guardar el objeto perdido
+        return redirect('cleaner_page')
 
-    return render(request, 'cleaner_page')  # Si no es una solicitud POST, simplemente renderiza el template HTML
+    return render(request, 'cleaner_page')
