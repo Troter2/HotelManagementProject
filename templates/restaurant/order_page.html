@@ -4,13 +4,12 @@
 {% block content %}
     {% csrf_token %}
     <div class="container text-center mt-3">
-        <h1>Order Detail</h1>
+        <h1 class="mb-5">Numero de Orden: {{ order.id }}</h1>
     </div>
-    <h5>Order ID: {{ order.id }}</h5>
-    <div class="d-flex row m-0 p-0">
+    <div class="d-flex row m-0 p-0 mx-auto justify-content-center align-items-center">
         {% for item in items %}
-            <div class="col-md-3 mb-3">
-                <div class="card rounded">
+            <div class="col-md-auto mb-3">
+                <div class="card rounded" style="width: 21rem;">
                     <div class="d-flex align-items-center justify-content-center overflow-hidden">
                         <img src="{{ item.img.url }}" alt="{{ item.name }}" class="img-fluid card-img-top"
                              style="max-width: 100%; max-height: 200px; object-fit: cover;">
@@ -34,8 +33,9 @@
             <h5 class="ml3">Total: $<span id="total-price">0</span></h5>
         </div>
         <div class="d-flex justify-content-end">
-            <button id="save-order-btn" class="btn btn-primary ml-2" onclick="window.location.href='thanks'">Guardar
-                Pedido
+            <button id="save-order-btn" class="btn btn-primary ml-2"
+                    >
+                Guardar Pedido
             </button>
         </div>
     </div>
@@ -105,6 +105,10 @@
                     'Content-Type': 'application/json',
                     "X-CSRFToken": csrftoken
                 },
+            }).then(function (response){
+                if(response.ok){
+                    navigateToURL('{% url 'orders_without_page' %}')
+                }
             })
         }
     </script>
