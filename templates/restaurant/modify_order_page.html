@@ -7,7 +7,7 @@
         <h1 class="mb-5">Numero de Orden: {{ order.id }}</h1>
     </div>
     <div class="d-flex row m-0 p-0 mx-auto justify-content-center align-items-center">
-        {% for item in items %}
+        {% for item in data %}
             <div class="col-md-auto mb-3">
                 <div class="card rounded" style="width: 21rem;">
                     <div class="d-flex align-items-center justify-content-center overflow-hidden">
@@ -19,7 +19,7 @@
                         <p class="card-text">Precio: ${{ item.price }}</p>
                         <div class="number-input-group">
                             <button class="btn btn-transparent text-white" onclick="decreaseQuantity(this)">-</button>
-                            <input type="number" value="{{ item_quantities|default:0 }}" min="0" data-item_id="{{ item.id }}"
+                            <input type="number" value="{{ item.amount|default:0 }}" min="0" data-item_id="{{ item.id }}"
                                    class="form-control text-center item-quantity">
                             <button class="btn btn-transparent text-white" onclick="increaseQuantity(this)">+</button>
                         </div>
@@ -30,7 +30,7 @@
     </div>
     <div class="container bottom-0 end-0 mb-3">
         <div class="d-flex justify-content-end">
-            <h5 class="ml3">Total: $<span id="total-price">0</span></h5>
+            <h5 class="ml3">Total: $<span id="total-price">{{ order.total }}</span></h5>
         </div>
         <div class="d-flex justify-content-end">
             <button id="save-order-btn" class="btn btn-primary ml-2">

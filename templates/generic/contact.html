@@ -2,14 +2,7 @@
 {% load static %}
 {% block title %} Contacto {% endblock %}
 {% block content %}
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+
 <header class="bg-white text-dark full-width">
     <div class="container text-center">
         <p class="text-dark h1 main-text-over-img mt-3">Contacto</p>
@@ -28,10 +21,10 @@
                         <div class="card">
                             <div class="card-header" id="headingOne">
                                 <h3 class="mb-0">
-                                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                    <span class="btn"  data-toggle="collapse" data-target="#collapseOne"
                                             aria-expanded="true" aria-controls="collapseOne">
                                         ¿A partir de qué hora puedo tomar posesión de mi habitación?
-                                    </button>
+                                    </span>
                                 </h3>
                             </div>
                             <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
@@ -46,10 +39,10 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h3 class="mb-0">
-                                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                                    <span class="btn" data-toggle="collapse" data-target="#collapseTwo"
                                             aria-expanded="false" aria-controls="collapseTwo">
                                         ¿Se puede fumar en las habitaciones?
-                                    </button>
+                                    </span>
                                 </h3>
                             </div>
                             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
@@ -63,11 +56,11 @@
                         <div class="card">
                             <div class="card-header" id="headingThree">
                                 <h3 class="mb-0">
-                                    <button class="btn" type="button" data-toggle="collapse"
+                                    <span class="btn"  data-toggle="collapse"
                                             data-target="#collapseThree" aria-expanded="true"
                                             aria-controls="collapseThree">
                                         ¿Hay acceso Wi-Fi en el hotel? ¿Es gratuito?
-                                    </button>
+                                    </span>
                                 </h3>
                             </div>
                             <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
@@ -80,10 +73,10 @@
                         <div class="card">
                             <div class="card-header" id="headingFour">
                                 <h3 class="mb-0">
-                                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseFour"
+                                    <span class="btn" data-toggle="collapse" data-target="#collapseFour"
                                             aria-expanded="true" aria-controls="collapseFour">
                                         ¿A qué hora tengo que dejar la habitación?
-                                    </button>
+                                    </span>
                                 </h3>
                             </div>
                             <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
@@ -98,10 +91,10 @@
                         <div class="card">
                             <div class="card-header" id="headingFive">
                                 <h3 class="mb-0">
-                                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseFive"
+                                    <span class="btn"  data-toggle="collapse" data-target="#collapseFive"
                                             aria-expanded="true" aria-controls="collapseFive">
                                         ¿Hay parking en el hotel?
-                                    </button>
+                                    </span>
                                 </h3>
                             </div>
                             <div id="collapseFive" class="collapse" aria-labelledby="headingFive"
@@ -114,10 +107,10 @@
                         <div class="card">
                             <div class="card-header" id="headingSix">
                                 <h3 class="mb-0">
-                                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseSix"
+                                    <span class="btn"  data-toggle="collapse" data-target="#collapseSix"
                                             aria-expanded="true" aria-controls="collapseSix">
                                         Vamos a viajar en avión. ¿Cuentan con servicio de traslado desde el aeropuerto?
-                                    </button>
+                                    </span>
                                 </h3>
                             </div>
                             <div id="collapseSix" class="collapse" aria-labelledby="headingSix"
@@ -130,11 +123,11 @@
                         <div class="card">
                             <div class="card-header" id="headingSeven">
                                 <h3 class="mb-0">
-                                    <button class="btn" type="button" data-toggle="collapse"
+                                    <span class="btn"  data-toggle="collapse"
                                             data-target="#collapseSeven" aria-expanded="true"
                                             aria-controls="collapseSeven">
                                         ¿Aceptan animales?
-                                    </button>
+                                    </span>
                                 </h3>
                             </div>
                             <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven"
@@ -164,9 +157,9 @@
     </div>
 </div>
 
-<div class="col-12">
+<div class="col-11">
     <div class="row">
-        <div class="card bg-light mb-4">
+        <div class="card bg-light mb-0">
             <div class="card-header">
                 <h2>Información de Contacto</h2>
             </div>
@@ -190,8 +183,23 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+
+    <script>
+    $(document).ready(function() {
+        $('.card').click(function() {
+            var $collapse = $(this).find('.collapse');
+            if ($collapse.hasClass('show')) {
+                $collapse.collapse('hide');
+            } else {
+                $('.collapse.show').collapse('hide');
+                $collapse.collapse('show');
+            }
+        });
+        $('.card .card-body').click(function(event) {
+            event.stopPropagation();
+        });
+    });
+</script>
 
 {% endblock %}
 

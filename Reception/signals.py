@@ -2,7 +2,7 @@ from django.core.files.images import ImageFile
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 
-from .models import RoomType
+from .models import RoomType, Room
 
 
 @receiver(post_migrate)
@@ -32,13 +32,39 @@ def crear_tipos_habitaciones(sender, **kwargs):
              "square_meter": 25, "capacity": 2, "price": 120.00,
              "photo": ImageFile(open("static/img/Hab-DELUXE.jpg", "rb"))},
 
-             {"name": "Suite", "description": "Vive el máximo confort en nuestra lujosa suite. Amplia y elegante, "
-                                              "combina espacio y estilo para una experiencia exclusiva. Disfruta de "
-                                              "zonas separadas para dormir y relajarte, junto con servicios de "
-                                              "primera clase para una estancia inigualable.", "square_meter": 30,
-              "capacity": 2,
-              "price": 200.00, "photo": ImageFile(open("static/img/SUIT.jpg", "rb"))}
+            {"name": "Suite", "description": "Vive el máximo confort en nuestra lujosa suite. Amplia y elegante, "
+                                             "combina espacio y estilo para una experiencia exclusiva. Disfruta de "
+                                             "zonas separadas para dormir y relajarte, junto con servicios de "
+                                             "primera clase para una estancia inigualable.", "square_meter": 30,
+             "capacity": 2,
+             "price": 200.00, "photo": ImageFile(open("static/img/SUIT.jpg", "rb"))}
         ]
 
         for type in room_types:
             RoomType.objects.get_or_create(name=type["name"], defaults=type)
+
+
+@receiver(post_migrate)
+def generate_rooms(sender, **kwargs):
+    if sender.name == 'Reception':
+        individual = RoomType.objects.get(name='Individual')
+        doble = RoomType.objects.get(name='Doble')
+        delux = RoomType.objects.get(name='Deluxe')
+        suite = RoomType.objects.get(name='Suite')
+
+        individuales = list(range(101, 118)) + list(range(201, 219))
+        dobles = list(range(301, 313)) + list(range(401, 414))
+        deluxs = list(range(501, 516))
+        suites = list(range(601, 606))
+
+        for num in individuales:
+            Room.objects.get_or_create(room_type=individual, room_number=str(num))
+
+        for num in dobles:
+            Room.objects.get_or_create(room_type=doble, room_number=str(num))
+
+        for num in deluxs:
+            Room.objects.get_or_create(room_type=delux, room_number=str(num))
+
+        for num in suites:
+            Room.objects.get_or_create(room_type=suite, room_number=str(num))

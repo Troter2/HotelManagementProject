@@ -214,6 +214,7 @@ def generate_order_pdf(request):
     t.wrapOn(c, 0, 0)
     t.drawOn(c, 30, 600)
 
+
     c.save()
 
     buffer.seek(0)
@@ -228,3 +229,31 @@ def view_orders_without_reservation(request):
     orders_without_reservation = Order.objects.exclude(id__in=orders_with_reservation)
     return render(request, 'restaurant/OrdersWithoutRes.html',
                   {'orders_without_reservation': orders_without_reservation})
+
+
+
+def is_adquired(adquired, item):
+    for adquired_item in adquired:
+        if item == adquired_item.item:
+            return adquired_item.amount
+    return None
+
+
+def modify_order(request, order_id):
+    order = Order.objects.get(id=order_id)
+    items = Item.objects.all()
+    item_quantities = {}
+    items_adquired = ItemAmount.objects.all().filter(order=order)
+    items_amount = ItemAmount.objects.all().filter(order=order)
+    data = []
+
+    for item in items:
+        amount = is_adquired(items_adquired, item)
+        if amount is None:
+            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": 0})
+        else:
+            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": amount})
+
+    return render(request, 'restaurant/modify_order_page.html',
+                  {'order': order, 'items': items, 'data': data})
+
