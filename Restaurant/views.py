@@ -215,5 +215,3 @@ def view_orders_without_reservation(request):
                   {'orders_without_reservation': orders_without_reservation})
 
 
-def orders_without_page(request):
-    return render(request, 'restaurant/OrdersWithoutRes.html')
