@@ -19,7 +19,8 @@
                         <p class="card-text">Precio: ${{ item.price }}</p>
                         <div class="number-input-group">
                             <button class="btn btn-transparent text-white" onclick="decreaseQuantity(this)">-</button>
-                            <input type="number" value="{{ item.amount|default:0 }}" min="0" data-item_id="{{ item.id }}"
+                            <input type="number" value="{{ item.amount|default:0 }}" min="0"
+                                   data-item_id="{{ item.id }}"
                                    class="form-control text-center item-quantity">
                             <button class="btn btn-transparent text-white" onclick="increaseQuantity(this)">+</button>
                         </div>
@@ -104,8 +105,8 @@
                     'Content-Type': 'application/json',
                     "X-CSRFToken": csrftoken
                 },
-            }).then(function (response){
-                if(response.ok){
+            }).then(function (response) {
+                if (response.ok) {
                     navigateToURL('{% url 'orders_without_page' %}')
                 }
             })

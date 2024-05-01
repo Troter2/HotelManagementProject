@@ -2,38 +2,75 @@
 {% load static %}
 {% block title %} Restaurante {% endblock %}
 {% block content %}
-
-<div class="mm-page mm-slideout">
-    <div id="page">
-        <section>
-            <div class=" w-100 min-vh-100 room-bg col-12 text-center d-flex "
-                 style="background-image: url({% static 'img/restaurant-img.jpg' %}); background-repeat:no-repeat">
-                <div class="text-center endark align-items-center d-flex">
-                    <p class="text-white main-text-over-img  w-100">Restaurante</p>
+    <div class="d-flex m-0 p-0 ">
+        <div id="page" style="overflow-x: hidden;">
+            <section>
+                <div class="w-100 min-vh-100 room-bg col-12 text-center d-flex"
+                     style="background-image: url({% static 'img/restaurant-img.jpg' %}); background-repeat: no-repeat; background-size: cover; background-position: center;">
+                    <div class="text-center endark align-items-center d-flex">
+                        <p class="text-white main-text-over-img  w-100">Restaurante</p>
+                    </div>
                 </div>
-            </div>
-            <div class="row my-5">
-                <div class="col-md-4 text-center">
-                    <img src="{% static 'img/plato-1.png' %}" alt="Plato" class="e-img1 e-img-other img-fluid mb-3">
+                <div class="text-center justify-content-center mt-3">
+                    <h2>La pasión por la cocina</h2>
                 </div>
-                <div class="col-md-4 text-center">
-                    <h3>La pasión por la cocina</h3>
-                    <p class="text-justify">
-                        Bienvenidos a Las Palmeras, el restaurante donde cada bocado es una experiencia única de sabor y
-                        sofisticación. Situado en el corazón de nuestro exclusivo hotel, Las Palmeras te invita a
-                        disfrutar de una fusión excepcional entre la cocina internacional y los sabores locales más
-                        exquisitos.
-                    </p>
-                    <p class="text-center">
-                        Nuestro restaurante dispone de reservas con media pension o pension completa acorde a lo que
-                        guste el huésped. También se permiten reservas para gente no hospedada en el hotel.
-                    </p>
+                <div class="row my-5 align-items-center justify-content-center">
+                    <div class="col-md-3 text-center">
+                        <img src="{% static 'img/plato-2.png' %}" alt="Plato" class="e-img1 e-img-other img-fluid mb-3">
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <p class="text-justify h5">
+                            Bienvenidos a Las Palmeras, el restaurante donde cada bocado es una experiencia única de
+                            sabor y
+                            sofisticación. Situado en el corazón de nuestro exclusivo hotel, Las Palmeras te invita a
+                            disfrutar de una fusión excepcional entre la cocina internacional y los sabores locales más
+                            exquisitos.
+                        </p>
+                        <p class="text-center h5">
+                            Nuestro restaurante dispone de reservas completas acorde a lo que
+                            guste el huésped. También se permiten reservas para gente no hospedada en el hotel.
+                        </p>
+                    </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <img src="{% static 'img/plato-2.png' %}" alt="Plato" class="e-img1 e-img-other img-fluid mb-3">
+                <div class="row my-5 align-items-center justify-content-center">
+                    <div class="col-md-3 text-center">
+                        <p class="h5 text-justify">Sumérgete en una experiencia gastronómica única y descubre el
+                            verdadero placer de
+                            la buena comida en nuestro exclusivo restaurante. Con una fusión excepcional de sabores
+                            internacionales y delicias locales, cada bocado en Las Palmeras es una obra maestra
+                            culinaria que deleitará tus sentidos.</p>
+                        <p class="h5 text-justify">Nuestro compromiso con la excelencia culinaria se refleja en cada
+                            plato que
+                            servimos. Desde exquisitas entradas hasta tentadores postres, cada elemento de nuestro menú
+                            está diseñado para ofrecerte una experiencia gastronómica inolvidable.</p>
+                        <p class="h5 text-justify">Ya sea que estés planeando una cena romántica, una celebración
+                            especial o
+                            simplemente desees disfrutar de una comida excepcional con amigos y familiares, Las Palmeras
+                            es el lugar perfecto para hacer tus sueños culinarios realidad.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <img src="{% static 'img/plato-1.png' %}" alt="Plato"
+                             class="e-img1 e-img-other img-fluid mb-3">
+                    </div>
                 </div>
-            </div>
-        </section>
+                <div class="row my-5 align-items-center justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <p class="h5 text-justify">No esperes más para reservar tu mesa y descubrir todo lo que Las
+                            Palmeras tiene
+                            para ofrecer. ¡Nuestro equipo está listo para brindarte una experiencia gastronómica
+                            inolvidable que te dejará con ganas de volver por más!</p>
+                        <p class="h5 text-justify">Reserva ahora y déjate llevar por el encanto de Las Palmeras</p>
+                    </div>
+                </div>
+                <div class="mb-5 text-center mx-auto col-1">
+                    <button class="mb-5 room-button float-end"
+                            onclick="navigateToURL('{% url 'reservation_page' %}')">
+                        <a class="nav-link text-black">
+                            Reservar</a>
+                        <span></span>
+                    </button>
+                </div>
+            </section>
+        </div>
     </div>
-</div>
 {% endblock %}
