@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,35 +63,38 @@
                     </ul>
                 </li>
                 {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarRecepcio" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            Recepcion
-                        </a>
-                        <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                            <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
-                                <li class="dropdown-item mt-2 mb-2 no-blue">
-                                    <a href="{% url 'reserved_rooms_view' %}">
-                                        CheckIn
-                                    </a>
-                                </li>
-                            </div>
-                            <div class="nav-link-div" onclick="navigateToURL('{% url 'ocuped_rooms_view' %}')">
-                                <li class="dropdown-item mt-2 mb-2 no-blue">
-                                    <a href="{% url 'ocuped_rooms_view' %}">
-                                        CheckOut
-                                    </a>
-                                </li>
-                            </div>
-                            <div class="nav-link-div" onclick="navigateToURL('{% url 'lost_item_list' %}')">
-                                <li class="dropdown-item mt-2 mb-2 no-blue">
-                                    <a href="{% url 'lost_item_list' %}">
-                                        Objectes perduts
-                                    </a>
-                                </li>
-                            </div>
-                        </ul>
-                    </li>
+                    {% if request.user|has_group:"receptionist" %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarRecepcio" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Recepcion
+                            </a>
+                            <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
+                                <div class="nav-link-div" onclick="navigateToURL('{% url 'reserved_rooms_view' %}')">
+                                    <li class="dropdown-item mt-2 mb-2 no-blue">
+                                        <a href="{% url 'reserved_rooms_view' %}">
+                                            CheckIn
+                                        </a>
+                                    </li>
+                                </div>
+                                <div class="nav-link-div" onclick="navigateToURL('{% url 'ocuped_rooms_view' %}')">
+                                    <li class="dropdown-item mt-2 mb-2 no-blue">
+                                        <a href="{% url 'ocuped_rooms_view' %}">
+                                            CheckOut
+                                        </a>
+                                    </li>
+                                </div>
+                                <div class="nav-link-div" onclick="navigateToURL('{% url 'lost_item_list' %}')">
+                                    <li class="dropdown-item mt-2 mb-2 no-blue">
+                                        <a href="{% url 'lost_item_list' %}">
+                                            Objectes perduts
+                                        </a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    {% if request.user|has_group:"cleaner" %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarLimpieza" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -106,6 +110,8 @@
                             </div>
                         </ul>
                     </li>
+                    {% endif %}
+                    {% if request.user|has_group:"waiter" %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarCamarero" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -151,6 +157,8 @@
                             </div>
                         </ul>
                     </li>
+                    {% endif %}
+                    {% if request.user|has_group:"accountant" %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarContable" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -164,6 +172,7 @@
                             </li>
                         </ul>
                     </li>
+                    {% endif %}
                 {% endif %}
                 <li class="nav-item ">
                     {% if user.is_authenticated %}

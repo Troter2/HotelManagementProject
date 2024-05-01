@@ -26,7 +26,7 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
     restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
-    create_item_form, view_orders_without_reservation, set_order, generate_order_pdf, modify_order
+    create_item_form, set_order, generate_order_pdf, view_orders_without_reservation, modify_order
 from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
