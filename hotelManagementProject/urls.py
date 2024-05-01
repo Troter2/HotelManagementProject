@@ -26,6 +26,7 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
     restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
+    create_item_form, set_order, generate_order_pdf
     create_item_form, orders_without_page, view_orders_without_reservation
 from accounts.views import custom_login
 from django.conf import settings
@@ -76,8 +77,10 @@ urlpatterns = [
     path('order/', order_detail, name='order_detail'),
     path('order/update_order/', update_order, name='update_order'),
     path('order/thanks/', thanks, name='thanks'),
+    path('order/set_order/', set_order, name='set_order'),
     path('reception/lost_items', lost_item_list, name='lost_item_list'),
     path('update_item_reception', update_item_reception, name='update_item_reception'),
+    path('factura/', generate_order_pdf, name='factura'),
     path('order/order_page',view_orders_without_reservation, name='orders_without_page'),
 ]
 
