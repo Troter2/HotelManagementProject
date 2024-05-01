@@ -10,7 +10,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 
 from Restaurant.models import RestaurantReservation, RoomReservation, Order, ItemAmount, Item
-from Restaurant.forms import RestaurantReservationForm, ItemForm
+from Restaurant.forms import RestaurantReservationForm, ItemForm, RestaurantReservationForm, RestaurantBookingForm
+from django.db.models import Q
 
 
 # Create your views here.
@@ -21,7 +22,14 @@ def restaurant_page(request):
 
 
 def restaurant_reservation_page(request):
-    return render(request, 'restaurant/reservation_page.html')
+    if request.method == 'POST':
+        form = RestaurantBookingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('thanks')
+    else:
+        form = RestaurantBookingForm()
+    return render(request, 'restaurant/reservation_page.html', {'form': form})
 
 
 def restaurant_list_items(request):
@@ -35,6 +43,7 @@ def create_product(request):
         if form.is_valid():
             form.save()
         return redirect("restaurant_list_items")
+
 
 def create_item_form(request):
     if request.method == 'POST':
@@ -114,8 +123,8 @@ def set_order(request):
             order.save()
             reservation.save()
     return redirect("restaurant_validation_page")
-  
-  
+
+
 def thanks(request):
     return render(request, 'restaurant/thanks.html')
 
@@ -198,3 +207,13 @@ def generate_order_pdf(request):
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
     return response
+
+def view_orders_without_reservation(request):
+    orders_with_reservation = RestaurantReservation.objects.values_list('order_num_id', flat=True)
+    orders_without_reservation = Order.objects.exclude(id__in=orders_with_reservation)
+    return render(request, 'restaurant/OrdersWithoutRes.html',
+                  {'orders_without_reservation': orders_without_reservation})
+
+
+def orders_without_page(request):
+    return render(request, 'restaurant/OrdersWithoutRes.html')

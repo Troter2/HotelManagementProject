@@ -60,7 +60,7 @@ def reserved_rooms_view(request):
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkout=datetime.today())
+    reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_checkout=datetime.today())
     context = {
         'reserves': reserves
     }
@@ -373,6 +373,7 @@ def update_order(request):
 
 def add_lost_item(request):
     if request.method == 'POST':
+        room_number = Room.objects.get(id=request.POST.get('room'))
         item_name = request.POST.get('objectName')
         encounter_hour = datetime.now().time()  # Obtener la hora actual
         encounter_date = datetime.now().date()  # Obtener la fecha actual
@@ -382,6 +383,7 @@ def add_lost_item(request):
             item_name=item_name,
             encounter_hour=encounter_hour,
             encounter_date=encounter_date,
+            room_number=room_number
         )
 
         return redirect('cleaner_page')  # Redirigir a la página principal después de guardar el objeto perdido
