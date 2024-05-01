@@ -11,7 +11,6 @@ from django.shortcuts import render, redirect
 
 
 def cleaner_page(request):
-    rooms = Room.objects.all()
     reservations = RoomReservation.objects.filter(guest_checkout=datetime.date.today())
     last_rooms = []
     last_rooms_id=[]
