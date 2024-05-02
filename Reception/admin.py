@@ -9,3 +9,4 @@ from Reception.models import Room, RoomType
 admin.site.register(RoomReservation)
 admin.site.register(Room)
 admin.site.register(RoomType)
+admin.site.register(LostItem)
