@@ -46,6 +46,7 @@ def run_tests():
     driver.get("http://localhost:8000/")
     login_test(driver)
     check_reception_view(driver)
+    sleep(5)
     logout_test(driver)
     sleep(2)
     driver.close()
