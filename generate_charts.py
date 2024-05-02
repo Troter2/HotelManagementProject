@@ -2,15 +2,15 @@ import matplotlib.pyplot as plt
 import datetime
 
 # Fechas de inicio y finalización del sprint
-fecha_inicio = datetime.date(2024, 3, 12)
-fecha_fin = datetime.date(2024, 4, 4)
+fecha_inicio = datetime.date(2024, 4, 5)
+fecha_fin = datetime.date(2024, 5, 2)
 
 # Número de días del sprint
 dias_sprint = (fecha_fin - fecha_inicio).days
 
 # Datos de ejemplo para las issues cerradas por día (puedes obtener estos datos de tu sistema de seguimiento de problemas)
 # Aquí se muestran los datos proporcionados
-issues_cerradas_por_dia = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 20, 10, 12, 6, 0, 0, 0, 0]
+issues_cerradas_por_dia = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 6, 0, 0, 0, 0, 1, 1, 0, 0, 4, 14, 33]
 
 # Fechas para el eje x (por ejemplo, el período del sprint)
 fechas = [fecha_inicio + datetime.timedelta(days=i) for i in range(dias_sprint)]
