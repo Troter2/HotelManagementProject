@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Reservas Restaurante {% endblock %}
+{% block content %}
+
+<h1>Reservas del Restaurante</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombres del Cliente</th>
+                <th>Contacto del Cliente</th>
+                <th>Número de Invitados</th>
+                <th>Fecha de la Reserva</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservations %}
+            <tr>
+                <td>{{ reserva.customers_names }}</td>
+                <td>{{ reserva.customer_contact }}</td>
+                <td>{{ reserva.number_guests }}</td>
+                <td>{{ reserva.date_reservation }}</td>
+                <!-- Asegúrate de usar los nombres de campo correctos de tu modelo RestaurantReservation -->
+                <!-- Puedes agregar más columnas según los campos de tu modelo -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
