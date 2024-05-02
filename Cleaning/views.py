@@ -1,24 +1,16 @@
-import datetime
-
-from django.utils import timezone
-
-from Reception.models import Room, RoomReservation
+from Reception.models import Room
 from django.shortcuts import render, redirect
 
 
 # Create your views here.
 
+def cleaner_shift(request):
+    room = Room.objects.all()
+    return render(request, 'shifts/shift.html', {'room': room})
 
 
 def cleaner_page(request):
-    reservations = RoomReservation.objects.filter(guest_checkout=datetime.date.today())
-    last_rooms = []
-    last_rooms_id=[]
-    for reservation in reservations:
-        last_rooms.append(reservation.room_number)
-        last_rooms_id.append(reservation.room_number.id)
-    first_room = Room.objects.all().filter(is_clean=False).exclude(id__in=last_rooms_id)
-    rooms=list(first_room) + last_rooms
+    rooms = Room.objects.all()
     return render(request, 'cleaner/cleaner_page.html', {'rooms': rooms})
 
 
