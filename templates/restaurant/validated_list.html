@@ -103,9 +103,11 @@
                                 </form>
                                 </div>
                             {% else %}
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#validarModal-{{ reserva.id }}">Assignar pedido
-                                </button>
+                                <div class="col ">
+                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                                            data-bs-target="#validarModal-{{ reserva.id }}">Assignar pedido
+                                    </button>
+                                </div>
                             {% endif %}
 
                         </td>
