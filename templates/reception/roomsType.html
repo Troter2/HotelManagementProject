@@ -23,49 +23,47 @@
         </div>
     </section>
     <div class="px-4">
-        {% for room in rooms %}
+    {% for room in rooms %}
 
-            {% if forloop.counter|divisibleby:2 %}
-                <div class="d-flex m-5" style="height: 400px">
-                    <div class="col-5 text-start  ">
-                        <p class="mx-4 mt-4 h3">{{ room.name.upper }}</p>
-                        <span class="h2 mx-4"><i class="bi bi-people"></i> {{ room.capacity }}</span>
-                        <span class="h2 mx-4">{{ room.square_meter }} m&sup2</span>
-                        <p class="h5 mx-4 mt-3">{{ room.description }}</p>
-                        <form action="" class="mx-4 mt-3">
-                            {% csrf_token %}
-                            <button class="room-button float-end"><a class="nav-link text-black"
-                                                                     href="{% url 'reserve_room' %}"> Reservar</a>
-                                <span></span>
-                            </button>
-                        </form>
-                    </div>
-                    <div class="col-7 room-image-container">
-                        <img src="{{ room.photo.url }}" class="w-100 img-fluid">
-                    </div>
+        {% if forloop.counter|divisibleby:2 %}
+            <div class="d-flex m-5" style="height: 400px">
+                <div class="col-5 text-start  ">
+                    <p class="mx-4 mt-4 h3">{{ room.name.upper }}</p>
+                    <span class="h2 mx-4"><i class="bi bi-people"></i> {{ room.capacity }}</span>
+                    <span class="h2 mx-4">{{ room.square_meter }} m&sup2</span>
+                    <p class="h5 mx-4 mt-3">{{ room.description }}</p>
+                    <form action="" class="mx-4 mt-3">
+                        {% csrf_token %}
+                        <button class="room-button float-end"><a class="nav-link text-black" href="{% url 'reserve_room' %}"> Reservar</a>
+                            <span></span>
+                        </button>
+                    </form>
                 </div>
-            {% else %}
+                <div class="col-7 room-image-container">
+                    <img src="{{ room.photo.url }}" class="w-100 img-fluid">
+                </div>
+            </div>
+        {% else %}
 
-                <div class="d-flex m-5" style="height: 400px">
-                    <div class="col-7 room-image-container">
-                        <img src="{{ room.photo.url }}" class="w-100 img-fluid">
-                    </div>
-                    <div class="col-5 text-end ">
-                        <p class="mx-4 mt-4 h3">{{ room.name.upper }}</p>
-                        <span class="h2 mx-4"><i class="bi bi-people"></i> {{ room.capacity }}</span>
-                        <span class="h2 mx-4">{{ room.square_meter }} m&sup2</span>
-                        <p class="h5 mx-4 mt-3">{{ room.description }}</p>
-                        <form action="" class="mx-4 mt-3">
-                            {% csrf_token %}
-                            <button class="room-button float-start"><a class="nav-link text-black"
-                                                                       href="{% url 'reserve_room' %}"> Reservar</a>
-                                <span></span>
-                            </button>
-                        </form>
-                    </div>
+            <div class="d-flex m-5" style="height: 400px">
+                <div class="col-7 room-image-container">
+                    <img src="{{ room.photo.url }}" class="w-100 img-fluid">
                 </div>
-            {% endif %}
-        {% endfor %}
-    </div>
+                <div class="col-5 text-end ">
+                    <p class="mx-4 mt-4 h3">{{ room.name.upper }}</p>
+                    <span class="h2 mx-4"><i class="bi bi-people"></i> {{ room.capacity }}</span>
+                    <span class="h2 mx-4">{{ room.square_meter }} m&sup2</span>
+                    <p class="h5 mx-4 mt-3">{{ room.description }}</p>
+                    <form action="" class="mx-4 mt-3">
+                        {% csrf_token %}
+                        <button class="room-button float-start"><a class="nav-link text-black" href="{% url 'reserve_room' %}"> Reservar</a>
+                            <span></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
 
 {% endblock %}

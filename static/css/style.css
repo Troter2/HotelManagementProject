@@ -144,11 +144,7 @@ body {
 }
 
 .home-title {
-    font: 500 4rem/5rem 'Spectral', serif
-}
-
-.custom_font {
-    font-family: 'Spectral', serif
+    font: 500 5rem/6rem 'Spectral', serif
 }
 
 .main-text-over-img {
@@ -178,7 +174,7 @@ body {
 }
 
 .home-card-title {
-    font: 2rem/2.6rem 'Spectral', serif;
+    font: 2.6rem/3.2rem 'Spectral', serif;
 }
 
 .home-card-content {
@@ -221,31 +217,5 @@ body {
 .close_filter:hover {
     color: #aaa; /* Cambio de color al pasar el ratón sobre el botón */
     text-decoration: none; /* Sin subrayado */
-}
-
-.no-blue:active {
-    background-color: transparent !important;
-}
-
-.number-input-group {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: none;
-    overflow: hidden;
-    padding: 5px;
-}
-
-.number-input-group button {
-    min-width: 40px;
-    border: none;
-    background-color: #6c757d;
-    color: #fff;
-}
-
-.number-input-group input {
-    border: none;
-    width: 100px;
-    text-align: center;
 }
 

@@ -131,7 +131,6 @@
                 <th scope="col">Nº Habitación</th>
                 <th scope="col">Fecha salida</th>
                 <th scope="col"></th>
-                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -144,9 +143,6 @@
                     <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#Pop-up-{{ reserva.id }}">Validar checkout
                     </button>
-                </td>
-                <td>
-                    <a href="{% url 'restaurant_reservation_page_uuid' uuid=reserva.reservation_number%}" class="btn btn-primary">Reservar en restaurante</a>
                 </td>
             </tr>
             {% endfor %}

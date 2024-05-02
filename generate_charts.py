@@ -10,7 +10,7 @@ dias_sprint = (fecha_fin - fecha_inicio).days
 
 # Datos de ejemplo para las issues cerradas por día (puedes obtener estos datos de tu sistema de seguimiento de problemas)
 # Aquí se muestran los datos proporcionados
-issues_cerradas_por_dia = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 6, 0, 0, 0, 0, 1, 1, 0, 0, 4, 14, 33]
+issues_cerradas_por_dia = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 2, 0, 0, 6, 0, 0, 0, 0, 1, 1, 0, 0, 4, 14, 33]
 
 # Fechas para el eje x (por ejemplo, el período del sprint)
 fechas = [fecha_inicio + datetime.timedelta(days=i) for i in range(dias_sprint)]
