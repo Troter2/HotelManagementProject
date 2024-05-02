@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -37,6 +39,8 @@ class RoomReservation(models.Model):
     guests_phone = models.CharField(max_length=100)
     guest_checkin = models.DateField(null=True, blank=True)
     guest_checkout = models.DateField(null=True, blank=True)
+    guest_checkin_hour = models.TimeField(null=False, default=datetime.time(13, 0, 0))
+    guest_checkout_hour = models.TimeField(null=False, default=datetime.time(10, 0, 0))
     guest_is_here = models.BooleanField(default=False)
     guests_number = models.IntegerField(default=0)
     price = models.DecimalField( max_digits=100, decimal_places=2)
@@ -58,4 +62,3 @@ class LostItem(models.Model):
     encounter_date = models.DateField(default=get_current_date)
     in_possesion = models.BooleanField(default=True)
     room_number = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
-

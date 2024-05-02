@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import login
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
 from User.views import add_guest_view, save_more_guest, save_guest, previous_week, next_week
@@ -31,15 +32,19 @@ from accounts.views import custom_login
 from django.conf import settings
 from django.conf.urls.static import static
 
+from register.views import login
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/register/", register.register, name="register"),
     path("accounts/", include("django.contrib.auth.urls")),
-    path('', reception_ini, name="home"),
+    path('login/', register.user_login, name='register.user_login'),
+    path('', reception_ini, name='home'),
+    path('home/',reception_ini, name='home'),
     path('cleaner/', cleaner_page, name='cleaner_page'),
     path('update_room_status/', update_room_status, name='update_room_status'),
     path('update_book_status', update_book_arrive, name='update_book_arrive'),
-    path('restaurant/reservations/', restaurant_reservation_page, name='restaurant_reservation_page'),
+    path('restaurant/reservations/', restaurant_reservation_page, name='reservation_page'),
     path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
     path('reception/reservations/filter/', booking_filter, name='booking_filter'),
     path('reception/checkout/', ocuped_rooms_view, name='ocuped_rooms_view'),
