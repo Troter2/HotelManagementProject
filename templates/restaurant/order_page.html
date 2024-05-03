@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Orden {% endblock %}
+{% block content %}
+    {% csrf_token %}
+    <div class="container text-center mt-3">
+        <h1 class="mb-5">Numero de Orden: {{ order.id }}</h1>
+    </div>
+    <div class="d-flex row m-0 p-0 mx-auto justify-content-center align-items-center">
+        {% for item in items %}
+            <div class="col-md-auto mb-3">
+                <div class="card rounded" style="width: 21rem;">
+                    <div class="d-flex align-items-center justify-content-center overflow-hidden">
+                        <img src="{{ item.img.url }}" alt="{{ item.name }}" class="img-fluid card-img-top"
+                             style="max-width: 100%; max-height: 200px; object-fit: cover;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">Precio: ${{ item.price }}</p>
+                        <div class="number-input-group">
+                            <button class="btn btn-transparent text-white" onclick="decreaseQuantity(this)">-</button>
+                            <input type="number" value="{{ item_quantities|default:0 }}" min="0" data-item_id="{{ item.id }}"
+                                   class="form-control text-center item-quantity">
+                            <button class="btn btn-transparent text-white" onclick="increaseQuantity(this)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="container bottom-0 end-0 mb-3">
+        <div class="d-flex justify-content-end">
+            <h5 class="ml3">Total: $<span id="total-price">0</span></h5>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button id="save-order-btn" class="btn btn-primary ml-2">
+                Guardar Pedido
+            </button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function decreaseQuantity(button) {
+            var input = button.nextElementSibling;
+            var currentValue = parseInt(input.value);
+            if (!isNaN(currentValue) && currentValue > 0) {
+                input.value = currentValue - 1;
+                calculateTotal();
+            }
+        }
+
+        function increaseQuantity(button) {
+            var input = button.previousElementSibling;
+            var currentValue = parseInt(input.value);
+            if (!isNaN(currentValue)) {
+                input.value = currentValue + 1;
+                calculateTotal();
+            }
+        }
+
+        function calculateTotal() {
+            var total = 0;
+
+            $('.card').each(function () {
+                var quantity = parseInt($(this).find('.item-quantity').val());
+                var priceText = $(this).find('.card-text').text();
+                var price = parseFloat(priceText.substring(priceText.indexOf('$') + 1));
+                var subtotal = quantity * price;
+                total += subtotal;
+            });
+
+            $('#total-price').text(total.toFixed(2));
+        }
+
+        $('#save-order-btn').on('click', function () {
+            saveOrder();
+        });
+
+        function saveOrder() {
+            var csrftoken = $('[name=csrfmiddlewaretoken]').val();
+
+            var order_id = '{{ order.id }}';
+            var items = document.getElementsByClassName("item-quantity");
+            var data = [];
+            Array.prototype.forEach.call(items, function (item) {
+                data.push({
+                    item_id: item.getAttribute("data-item_id"),
+                    amount: item.value
+                })
+            })
+
+            var orderData = {
+                order_id: order_id,
+                items: data
+            };
+
+            str_data = JSON.stringify(orderData)
+
+            let response = fetch("update_order/", {
+                method: 'POST',
+                body: str_data,
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken": csrftoken
+                },
+            }).then(function (response){
+                if(response.ok){
+                    navigateToURL('{% url 'orders_without_page' %}')
+                }
+            })
+        }
+    </script>
+{% endblock %}
