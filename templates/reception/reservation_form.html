@@ -52,8 +52,8 @@
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="text" name="guests_surname" class="form-control"
-                                                   id="guests_surname" placeholder="Apellidos" required value="
-                                                    {% if user_data.lastname %}{{ user_data.lastname }}{% endif %}">
+                                                   id="guests_surname" placeholder="Apellidos" required
+                                                   value="{% if user_data.lastname %}{{ user_data.lastname }}{% endif %}">
                                             <label for="guests_surname">Apellidos</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
@@ -85,13 +85,13 @@
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="date" name="guest_checkin" class="form-control"
                                                    id="guest_checkin"
-                                                   placeholder="Fecha de Entrada " onchange="CalculatePrice()">
+                                                   placeholder="Fecha de Entrada " onblur="CalculatePrice()" onchange="setMinDate()">
                                             <label for="guest_checkin">Fecha de Entrada</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="date" name="guest_checkout" class="form-control"
                                                    id="guest_checkout" placeholder="Fecha de Salida"
-                                                   onblur="CalculatePrice()">
+                                                   onblur="CalculatePrice()" disabled>
                                             <label for="guest_checkout">Fecha de Salida</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
@@ -139,6 +139,19 @@
 
     <script>
 
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("guest_checkin").setAttribute('min', today);
+
+        function setMinDate() {
+            var checkinDate = new Date(document.getElementById("guest_checkin").value);
+            var minDate = new Date(checkinDate);
+            minDate.setDate(minDate.getDate() + 1);
+
+            var minDateString = minDate.toISOString().split('T')[0];
+
+            document.getElementById("guest_checkout").setAttribute('min', minDateString);
+            document.getElementById("guest_checkout").removeAttribute("disabled");
+        }
         function CalculatePrice() {
             var inputCheckIn = new Date(document.getElementById("guest_checkin").value);
             var inputCheckOut = new Date(document.getElementById("guest_checkout").value);

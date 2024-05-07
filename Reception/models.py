@@ -42,6 +42,7 @@ class RoomReservation(models.Model):
     guest_checkin_hour = models.TimeField(null=False, default=datetime.time(13, 0, 0))
     guest_checkout_hour = models.TimeField(null=False, default=datetime.time(10, 0, 0))
     guest_is_here = models.BooleanField(default=False)
+    guest_leaved = models.BooleanField(default=False)
     guests_number = models.IntegerField(default=0)
     price = models.DecimalField( max_digits=100, decimal_places=2)
     room_number = models.ForeignKey(Room, on_delete=models.CASCADE)

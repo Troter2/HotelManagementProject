@@ -46,9 +46,9 @@ def update_book_arrive(request):
 def update_book_gone(request):
     if request.method == 'POST':
         reservation = RoomReservation.objects.get(id=request.POST.get('id'))
-        reservation.guest_is_here = True
+        reservation.guest_leaved = True
         reservation.save()
-    return redirect('reserved_rooms_view')
+    return redirect('ocuped_rooms_view')
 
 
 def reserved_rooms_view(request):
@@ -60,7 +60,7 @@ def reserved_rooms_view(request):
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=True, room_is_payed=False,
+    reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_leaved=False,
                                                     guest_checkout=datetime.today())
     context = {
         'reserves': reserves
@@ -179,10 +179,10 @@ def booking_filter(request):
     # Filtrar las reservas basadas en los parámetros recibidos
     reserves_filtradas = RoomReservation.objects.all()
     if nombre_habitacion:
-        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion, room_is_payed=False,
+        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion,
                                                        guest_is_here=False)
     if fecha:
-        reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha, room_is_payed=False, guest_is_here=False)
+        reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha, guest_is_here=False)
 
     # Renderizar la plantilla con las reservas filtradas
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
@@ -200,7 +200,7 @@ def booking_filter_check_out(request):
     nombre_habitacion = request.GET.get('nombre_habitacion', None)
     fecha = request.GET.get('fecha', None)
 
-    reserves_filtradas = RoomReservation.objects.all()
+    reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False)
     if nombre_habitacion:
         reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
     if fecha:

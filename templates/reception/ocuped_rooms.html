@@ -31,7 +31,7 @@
                 {% if reserva.room_is_payed %}
                 <div class="col-12">
                     <p>Estado de pago: Pagado</p>
-                    <form action="{% url 'update_book_arrive' %}" method="post">
+                    <form action="{% url 'update_book_gone' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ reserva.id }}">
                         <div class="modal-footer">
@@ -79,8 +79,7 @@
 {% endfor %}
 
 <!-- Modal para el filtro -->
-<div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true"
-     >
+<div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
