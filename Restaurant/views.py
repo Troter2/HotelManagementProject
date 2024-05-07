@@ -132,7 +132,11 @@ def set_order(request):
         if request.POST.get('reservation_id') == "" or request.POST.get('order_number') == "":
             pass
         else:
-            order = Order.objects.get(id=request.POST.get('order_number'))
+            order = Order.objects.filter(id=request.POST.get('order_number'))
+            if len(order) == 0:
+                booking = RestaurantReservation.objects.filter(validated=True)
+                return render(request, 'restaurant/validated_list.html', {'reservas': booking, 'error': "Pedido inexistente"})
+
             reservation = RestaurantReservation.objects.get(id=request.POST.get('reservation_id'))
             reservation.order_num = order
             order.total = calculate_total(order)

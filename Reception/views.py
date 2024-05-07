@@ -60,7 +60,8 @@ def reserved_rooms_view(request):
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_checkout=datetime.today())
+    reserves = RoomReservation.objects.all().filter(guest_is_here=True, room_is_payed=False,
+                                                    guest_checkout=datetime.today())
     context = {
         'reserves': reserves
     }
@@ -136,8 +137,7 @@ def reserve_room(request):
                     user.telefono = request.POST['guests_phone']
                     user.first_name = request.POST['guests_name']
                     user.last_name = request.POST['guests_surname']
-                    if user.email == "":
-                        user.email = request.POST['guests_email']
+                    user.email = request.POST['guests_email']
                     user.save()
 
             return render(request, 'reception/thank_you.html', {'id': room.id})
@@ -179,9 +179,10 @@ def booking_filter(request):
     # Filtrar las reservas basadas en los parámetros recibidos
     reserves_filtradas = RoomReservation.objects.all()
     if nombre_habitacion:
-        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
+        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion, room_is_payed=False,
+                                                       guest_is_here=False)
     if fecha:
-        reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha)
+        reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha, room_is_payed=False, guest_is_here=False)
 
     # Renderizar la plantilla con las reservas filtradas
     return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
@@ -231,11 +232,11 @@ def generate_reservation_pdf(request):
     buffer = BytesIO()
     c = canvas.Canvas(buffer)
 
-    img_path = 'static/img/Logo.png'  # Ruta al archivo de imagen del logo
+    img_path = 'static/img/Logo.png'
     img = ImageReader(img_path)
     c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
 
-    img_path = 'static/img/playa-pdf.jpg'  # Ruta al archivo de imagen del logo
+    img_path = 'static/img/playa-pdf.jpg'
     img = ImageReader(img_path)
     c.drawImage(img, x=0, y=550, width=600, height=220, mask='auto')
 
@@ -332,7 +333,7 @@ def thank_you(request):
 def filtrar_por_numero_reserva(request):
     if request.method == 'POST':
         numero_reserva = request.POST.get('numero_reserva')  # Obtener el número de reserva del formulario
-
+        numero_reserva = numero_reserva[:-1].lower()
         if numero_reserva:
             reservas_filtradas = RoomReservation.objects.filter(reservation_number=numero_reserva)
         else:
@@ -388,4 +389,4 @@ def add_lost_item(request):
 
         return redirect('cleaner_page')
 
-    return render(request, 'cleaner_page')
+    return render(request, 'cleaner/cleaner_page.html')
