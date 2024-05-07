@@ -266,6 +266,6 @@ def modify_order(request, order_id):
         else:
             data.append({"name": item.name, "price": item.price, "img": item.img, "amount": amount})
 
-    return render(request, 'restaurant/OrdersWithoutRes.html',
+    return render(request, 'restaurant/modify_order_page.html',
                   {'order': order, 'items': items, 'data': data})
 
