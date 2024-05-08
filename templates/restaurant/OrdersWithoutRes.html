@@ -26,7 +26,7 @@
                         <td>{{ order.date }}</td>
                         <td>{{ order.total }}</td>
                         <td>
-                            <a href="{% url 'modify_order' order_id=order.id %}">
+                            <a href="{% url "modify_order" order_id=order.id %}">
                                 <button class="btn btn-primary rounded">
                                     Modificar Orden
                                 </button>
