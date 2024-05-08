@@ -6,7 +6,7 @@
     <div class="reservations-list mt-3">
         <div class="container-fluid mb-3">
             <a href="{% url 'order_detail' %}">
-                <button class="btn-primary rounded mb-3">
+                <button class="btn btn-primary rounded mb-3">
                     Añadir Orden
                 </button>
             </a>
@@ -26,14 +26,15 @@
                         <td>{{ order.date }}</td>
                         <td>{{ order.total }}</td>
                         <td>
-                            <a href="{% url 'modify_order' order_id=order.id %}">
-                                <button class="btn-primary rounded">
+                            <a href="{% url "modify_order" order_id=order.id %}">
+                                <button class="btn btn-primary rounded">
                                     Modificar Orden
                                 </button>
                             </a>
                         </td>
                     </tr>
                 {% endfor %}
+
                 </tbody>
             </table>
         </div>
