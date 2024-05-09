@@ -364,8 +364,12 @@ def update_order(request):
             item_id = item_data['item_id']
             amount = item_data['amount']
             if int(amount) > 0:
-                item = Item.objects.get(pk=item_id)
-                ItemAmount.objects.get_or_create(item=item, amount=amount, order_id=order_id)
+                items = ItemAmount.objects.filter(item_id=item_id, order_id=order_id)
+                if len(items) > 0:
+                    items[0].amount = amount
+                    items[0].save()
+                else:
+                    ItemAmount.objects.get_or_create(item_id=item_id, amount=amount, order_id=order_id)
 
         order_total.total = calculate_total(order_total)
         order_total.save()
