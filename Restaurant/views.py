@@ -262,9 +262,9 @@ def modify_order(request, order_id):
     for item in items:
         amount = is_adquired(items_adquired, item)
         if amount is None:
-            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": 0})
+            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": 0, "id": item.pk})
         else:
-            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": amount})
+            data.append({"name": item.name, "price": item.price, "img": item.img, "amount": amount, "id": item.pk})
 
     return render(request, 'restaurant/modify_order_page.html',
                   {'order': order, 'items': items, 'data': data})

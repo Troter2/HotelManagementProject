@@ -85,7 +85,7 @@
             var data = [];
             Array.prototype.forEach.call(items, function (item) {
                 data.push({
-                    item_id: item.getAttribute("data-item_id"),
+                    item_id: item.dataset.item_id,
                     amount: item.value
                 })
             })
