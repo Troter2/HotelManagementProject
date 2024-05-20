@@ -17,29 +17,39 @@ def shift_management_page(request):
 
 # Create your views here.
 def add_guest_view(request, id):
-    return render(request, 'user/add_guest.html', {"book_id": id})
+    if request.user.has_perm('receptionist'):
+        return render(request, 'user/add_guest.html', {"book_id": id})
+    return redirect('home')
 
 
 def save_more_guest(request, id):
-    return render(request, 'user/add_guest.html', {"book_id": id})
+    if request.user.has_perm('receptionist'):
+        return render(request, 'user/add_guest.html', {"book_id": id})
+    return redirect('home')
 
 
 def save_guest(request, id):
-    form = CustomerForm(request.POST)
-    if form.is_valid():
-        Customer.objects.create(reservation=RoomReservation.objects.get(id=id), name=request.POST['name'],
-                                lastname=request.POST['lastname'], DNI=request.POST['DNI'])
-        return redirect('add_guest_view', id=id)
-    return render(request, 'reception/reservedRooms.html')
+    if request.user.has_perm('receptionist'):
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            Customer.objects.create(reservation=RoomReservation.objects.get(id=id), name=request.POST['name'],
+                                    lastname=request.POST['lastname'], DNI=request.POST['DNI'])
+            return redirect('add_guest_view', id=id)
+        return render(request, 'reception/reservedRooms.html')
+    return redirect('home')
 
 
 def previous_week(request):
-    current_date = datetime.datetime.now()
-    start_of_previous_week = current_date - datetime.timedelta(days=current_date.weekday(), weeks=1)
-    return redirect(reverse('shift_management_page'))
+    if request.user.has_perm('receptionist'):
+        current_date = datetime.datetime.now()
+        start_of_previous_week = current_date - datetime.timedelta(days=current_date.weekday(), weeks=1)
+        return redirect(reverse('shift_management_page'))
+    return redirect('home')
 
 
 def next_week(request):
-    current_date = datetime.datetime.now()
-    start_of_next_week = current_date + datetime.timedelta(days=(7 - current_date.weekday()))
-    return redirect(reverse('shift_management_page'))
+    if request.user.has_perm('receptionist'):
+        current_date = datetime.datetime.now()
+        start_of_next_week = current_date + datetime.timedelta(days=(7 - current_date.weekday()))
+        return redirect(reverse('shift_management_page'))
+    return redirect('home')
