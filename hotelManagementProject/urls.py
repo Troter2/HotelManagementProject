@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import login
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
-from User.views import add_guest_view, save_more_guest, save_guest, previous_week, next_week
+from User.views import add_guest_view, save_more_guest, save_guest
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
@@ -57,8 +57,6 @@ urlpatterns = [
     path('pay-reservation/', pay_reservation, name='pay_reservation'),
     path('rooms/', rooms_view, name='rooms_view'),
     path('restaurant/', restaurant_page, name='restaurant_page'),
-    path('previous_week/', previous_week, name='previous_week'),
-    path('next_week/', next_week, name='next_week'),
     path('reserve/', reserve_room, name='reserve_room'),
     path('contact/', contact, name='contact'),
     path('comprobante/', generate_reservation_pdf, name='comprobante'),
