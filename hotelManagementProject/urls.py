@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import login
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
-from User.views import add_guest_view, save_more_guest, save_guest
+from User.views import add_guest_view, save_more_guest, save_guest, user_profile
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
@@ -84,6 +84,7 @@ urlpatterns = [
     path('order/order_page', view_orders_without_reservation, name='orders_without_page'),
     path('order/<int:order_id>', modify_order, name='modify_order'),
     path('factura/', generate_order_pdf, name='factura'),
+    path('profile/', user_profile, name='user_profile'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
