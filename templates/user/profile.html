@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Mi Perfil {% endblock %}
+{% block content %}
+    <section class="h-100 gradient-form ">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-10">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-3 mx-md-4">
+                                    <div>
+                                        <a href="{% url 'home' %}" class="btn btn-secondary"
+                                           style="text-decoration: none">
+                                            <i class="bi bi-arrow-left"></i> Inicio
+                                        </a>
+                                    </div>
+                                    <div class="text-center">
+                                        <h1 class="text-center">Mi Perfil</h1>
+                                    </div>
+                                    <div class="text-lg-start container-fluid mb-3">
+                                        <strong>
+                                            Nombre
+                                        </strong>
+                                        <div class="mt-2 ml-3">
+                                            {{ request.user.first_name }}
+                                        </div>
+                                    </div>
+                                    <div class="text-lg-start container-fluid mb-3">
+                                        <strong>
+                                            Apellidos
+                                        </strong>
+                                        <div class="mt-2 ml-3">
+                                            {{ request.user.last_name }}
+                                        </div>
+                                    </div>
+                                    <div class="text-lg-start container-fluid mb-3">
+                                        <strong>
+                                            DNI
+                                        </strong>
+                                        <div class="mt-2 ml-3">
+                                            {{ request.user.DNI }}
+                                        </div>
+                                    </div>
+                                    <div class="text-lg-start container-fluid mb-3">
+                                        <strong>
+                                            Correo electrónico
+                                        </strong>
+                                        <div class="mt-2 ml-3">
+                                            {{ request.user.email }}
+                                        </div>
+                                    </div>
+                                    <div class="text-lg-start container-fluid mb-3">
+                                        <strong>
+                                            Telèfono
+                                        </strong>
+                                        <div class="mt-2 ml-3">
+                                            {{ request.user.telefono }}
+                                        </div>
+                                    </div>
+                                    <div class="text-lg-start container-fluid mb-3">
+                                        <strong>
+                                            Nombre de usuario
+                                        </strong>
+                                        <div class="mt-2 ml-3">
+                                            {{ request.user.username }}
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <button type="button" class="btn btn-primary "
+                                                onclick="navigateToURL('{% url 'home' %}')">
+                                            <i class="bi bi-pencil-fill"> Editar</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
+                                <div class="text-black px-3 py-4 p-md-5 h-100 "
+                                     style="background-image: url({% static 'img/fondo_usuario.avif' %});background-repeat: no-repeat;background-size: cover;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -29,3 +29,9 @@ def save_guest(request, id):
             return redirect('add_guest_view', id=id)
         return render(request, 'reception/reservedRooms.html')
     return redirect('home')
+
+
+def user_profile(request):
+    if request.user.is_authenticated:
+        return render(request, 'user/profile.html')
+    return redirect('home')
