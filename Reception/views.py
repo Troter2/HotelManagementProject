@@ -36,45 +36,55 @@ def rooms_view(request):
 
 
 def update_book_arrive(request):
-    if request.method == 'POST':
-        reservation = RoomReservation.objects.get(id=request.POST.get('id'))
-        reservation.guest_is_here = True
-        reservation.save()
-    return redirect('reserved_rooms_view')
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            reservation = RoomReservation.objects.get(id=request.POST.get('id'))
+            reservation.guest_is_here = True
+            reservation.save()
+        return redirect('reserved_rooms_view')
+    return redirect('home')
 
 
 def update_book_gone(request):
-    if request.method == 'POST':
-        reservation = RoomReservation.objects.get(id=request.POST.get('id'))
-        reservation.guest_leaved = True
-        reservation.save()
-    return redirect('ocuped_rooms_view')
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            reservation = RoomReservation.objects.get(id=request.POST.get('id'))
+            reservation.guest_leaved = True
+            reservation.save()
+        return redirect('ocuped_rooms_view')
+    return redirect('home')
 
 
 def reserved_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkin=datetime.today())
-    context = {
-        'reserves': reserves
-    }
-    return render(request, 'reception/reservedRooms.html', context)
+    if request.user.has_perm('recepcionist'):
+        reserves = RoomReservation.objects.all().filter(guest_is_here=False, guest_checkin=datetime.today())
+        context = {
+            'reserves': reserves
+        }
+        return render(request, 'reception/reservedRooms.html', context)
+    return redirect('home')
 
 
 def ocuped_rooms_view(request):
-    reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_leaved=False,
-                                                    guest_checkout=datetime.today())
-    context = {
-        'reserves': reserves
-    }
-    return render(request, 'reception/ocuped_rooms.html', context)
+    if request.user.has_perm('recepcionist'):
+        reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_leaved=False,
+                                                        guest_checkout=datetime.today())
+        context = {
+            'reserves': reserves
+        }
+        return render(request, 'reception/ocuped_rooms.html', context)
+    return redirect('home')
 
 
 def pay_reservation(request):
-    if request.method == 'POST':
-        reserva_id = request.POST.get('id')
-        reserva = RoomReservation.objects.get(pk=reserva_id)
-        reserva.room_is_payed = True
-        reserva.save()
-    return redirect('ocuped_rooms_view')
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            reserva_id = request.POST.get('id')
+            reserva = RoomReservation.objects.get(pk=reserva_id)
+            reserva.room_is_payed = True
+            reserva.save()
+        return redirect('ocuped_rooms_view')
+    return redirect('home')
 
 
 def habitaciones_libres(guest_entry, guest_leave, room_type=None):
@@ -172,20 +182,22 @@ def validate_guests_phone(guests_phone):
 
 
 def booking_filter(request):
-    # Obtener los parámetros de filtrado desde la URL
-    nombre_habitacion = request.GET.get('nombre_habitacion', None)
-    fecha = request.GET.get('fecha', None)
+    if request.user.has_perm('recepcionist'):
+        # Obtener los parámetros de filtrado desde la URL
+        nombre_habitacion = request.GET.get('nombre_habitacion', None)
+        fecha = request.GET.get('fecha', None)
 
-    # Filtrar las reservas basadas en los parámetros recibidos
-    reserves_filtradas = RoomReservation.objects.all()
-    if nombre_habitacion:
-        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion,
-                                                       guest_is_here=False)
-    if fecha:
-        reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha, guest_is_here=False)
+        # Filtrar las reservas basadas en los parámetros recibidos
+        reserves_filtradas = RoomReservation.objects.all()
+        if nombre_habitacion:
+            reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion,
+                                                           guest_is_here=False)
+        if fecha:
+            reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha, guest_is_here=False)
 
-    # Renderizar la plantilla con las reservas filtradas
-    return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
+        return render(request, 'reception/reservedRooms.html', {'reserves': reserves_filtradas})
+
+    return redirect('home')
 
 
 def what_todo(request):
@@ -197,31 +209,37 @@ def contact(request):
 
 
 def booking_filter_check_out(request):
-    nombre_habitacion = request.GET.get('nombre_habitacion', None)
-    fecha = request.GET.get('fecha', None)
+    if request.user.has_perm('recepcionist'):
+        nombre_habitacion = request.GET.get('nombre_habitacion', None)
+        fecha = request.GET.get('fecha', None)
 
-    reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False)
-    if nombre_habitacion:
-        reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
-    if fecha:
-        reserves_filtradas = reserves_filtradas.filter(guest_checkout=fecha)
+        reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False)
+        if nombre_habitacion:
+            reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
+        if fecha:
+            reserves_filtradas = reserves_filtradas.filter(guest_checkout=fecha)
 
-    return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+        return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+    return redirect('home')
 
 
 def lost_item_list(request):
-    items = LostItem.objects.all().filter(in_possesion=True)
+    if request.user.has_perm('recepcionist'):
+        items = LostItem.objects.all().filter(in_possesion=True)
 
-    return render(request, 'reception/lost_items_list.html', {'items': items})
+        return render(request, 'reception/lost_items_list.html', {'items': items})
+    return redirect('home')
 
 
 def update_item_reception(request):
-    if request.method == 'POST':
-        id = request.POST.get("id")
-        item = LostItem.objects.get(id=id)
-        item.in_possesion = False
-        item.save()
-    return redirect('lost_item_list')
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            id = request.POST.get("id")
+            item = LostItem.objects.get(id=id)
+            item.in_possesion = False
+            item.save()
+        return redirect('lost_item_list')
+    return redirect('home')
 
 
 def generate_reservation_pdf(request):
@@ -331,62 +349,74 @@ def thank_you(request):
 
 
 def filtrar_por_numero_reserva(request):
-    if request.method == 'POST':
-        numero_reserva = request.POST.get('numero_reserva')  # Obtener el número de reserva del formulario
-        numero_reserva = numero_reserva[:-1].lower()
-        if numero_reserva:
-            reservas_filtradas = RoomReservation.objects.filter(reservation_number=numero_reserva)
-        else:
-            # Si no se proporciona ningún número de reserva, obtener todas las reservas
-            reservas_filtradas = RoomReservation.objects.all()
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            numero_reserva = request.POST.get('numero_reserva')  # Obtener el número de reserva del formulario
+            numero_reserva = numero_reserva[:-1].lower()
+            if numero_reserva:
+                reservas_filtradas = RoomReservation.objects.filter(reservation_number=numero_reserva)
+            else:
+                # Si no se proporciona ningún número de reserva, obtener todas las reservas
+                reservas_filtradas = RoomReservation.objects.all()
 
-        # Pasar las reservas filtradas al template
-        return render(request, 'reception/reservedRooms.html', {'reserves': reservas_filtradas})
-    else:
-        # Si la solicitud no es POST, renderizar el formulario para filtrar
-        return render(request, 'reception/reservedRooms.html')
+            # Pasar las reservas filtradas al template
+            return render(request, 'reception/reservedRooms.html', {'reserves': reservas_filtradas})
+        else:
+            # Si la solicitud no es POST, renderizar el formulario para filtrar
+            return render(request, 'reception/reservedRooms.html')
+    return redirect('home')
 
 
 def order_detail(request):
-    order = Order.objects.create(total=0)
-    items = Item.objects.all()
-    return render(request, 'restaurant/order_page.html', {'order': order, 'items': items})
+    if request.user.has_perm('recepcionist'):
+        order = Order.objects.create(total=0)
+        items = Item.objects.all()
+        return render(request, 'restaurant/order_page.html', {'order': order, 'items': items})
+    return redirect('home')
 
 
 def update_order(request):
-    if request.method == 'POST':
-        order_data = json.loads(request.body.decode("utf-8"))
-        order_id = order_data['order_id']
-        order_total = Order.objects.get(id=order_id)
-        items_data = order_data['items']
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            order_data = json.loads(request.body.decode("utf-8"))
+            order_id = order_data['order_id']
+            order_total = Order.objects.get(id=order_id)
+            items_data = order_data['items']
 
-        for item_data in items_data:
-            item_id = item_data['item_id']
-            amount = item_data['amount']
-            if int(amount) > 0:
-                item = Item.objects.get(pk=item_id)
-                ItemAmount.objects.get_or_create(item=item, amount=amount, order_id=order_id)
+            for item_data in items_data:
+                item_id = item_data['item_id']
+                amount = item_data['amount']
+                if int(amount) > 0:
+                    items = ItemAmount.objects.filter(item_id=item_id, order_id=order_id)
+                    if len(items) > 0:
+                        items[0].amount = amount
+                        items[0].save()
+                    else:
+                        ItemAmount.objects.get_or_create(item_id=item_id, amount=amount, order_id=order_id)
 
-        order_total.total = calculate_total(order_total)
-        order_total.save()
+            order_total.total = calculate_total(order_total)
+            order_total.save()
 
-        return redirect('orders_without_page')
+            return redirect('orders_without_page')
+    return redirect('home')
 
 
 def add_lost_item(request):
-    if request.method == 'POST':
-        room_number = Room.objects.get(id=request.POST.get('room'))
-        item_name = request.POST.get('objectName')
-        encounter_hour = datetime.now().time()
-        encounter_date = datetime.now().date()
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            room_number = Room.objects.get(id=request.POST.get('room'))
+            item_name = request.POST.get('objectName')
+            encounter_hour = datetime.now().time()
+            encounter_date = datetime.now().date()
 
-        LostItem.objects.create(
-            item_name=item_name,
-            encounter_hour=encounter_hour,
-            encounter_date=encounter_date,
-            room_number=room_number
-        )
+            LostItem.objects.create(
+                item_name=item_name,
+                encounter_hour=encounter_hour,
+                encounter_date=encounter_date,
+                room_number=room_number
+            )
 
-        return redirect('cleaner_page')
+            return redirect('cleaner_page')
 
-    return render(request, 'cleaner/cleaner_page.html')
+        return render(request, 'cleaner/cleaner_page.html')
+    return redirect('home')

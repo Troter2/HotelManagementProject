@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import login
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
-from User.views import add_guest_view, save_more_guest, save_guest, previous_week, next_week
+from User.views import add_guest_view, save_more_guest, save_guest, user_profile
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
@@ -44,8 +44,8 @@ urlpatterns = [
     path('home/',reception_ini, name='home'),
     path('cleaner/', cleaner_page, name='cleaner_page'),
     path('update_room_status/', update_room_status, name='update_room_status'),
-    path('update_book_status', update_book_arrive, name='update_book_arrive'),
-    path('update_book_gone', update_book_gone, name='update_book_gone'),
+    path('update_book_status/', update_book_arrive, name='update_book_arrive'),
+    path('update_book_gone/', update_book_gone, name='update_book_gone'),
     path('restaurant/reservations/', restaurant_reservation_page, name='reservation_page'),
     path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
     path('reception/reservations/filter/', booking_filter, name='booking_filter'),
@@ -57,8 +57,6 @@ urlpatterns = [
     path('pay-reservation/', pay_reservation, name='pay_reservation'),
     path('rooms/', rooms_view, name='rooms_view'),
     path('restaurant/', restaurant_page, name='restaurant_page'),
-    path('previous_week/', previous_week, name='previous_week'),
-    path('next_week/', next_week, name='next_week'),
     path('reserve/', reserve_room, name='reserve_room'),
     path('contact/', contact, name='contact'),
     path('comprobante/', generate_reservation_pdf, name='comprobante'),
@@ -76,16 +74,17 @@ urlpatterns = [
     path('filtrar_por_numero_reserva/', filtrar_por_numero_reserva, name='filtrar_por_numero_reserva'),
     path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
     path('cleaner/lost_item/', add_lost_item, name='add_lost_item'),
-    path('camarero/validate', restaurant_validation_page, name='restaurant_validation_page'),
+    path('camarero/validate/', restaurant_validation_page, name='restaurant_validation_page'),
     path('order/', order_detail, name='order_detail'),
     path('order/update_order/', update_order, name='update_order'),
     path('order/thanks/', thanks, name='thanks'),
     path('order/set_order/', set_order, name='set_order'),
-    path('reception/lost_items', lost_item_list, name='lost_item_list'),
-    path('update_item_reception', update_item_reception, name='update_item_reception'),
+    path('reception/lost_items/', lost_item_list, name='lost_item_list'),
+    path('update_item_reception/', update_item_reception, name='update_item_reception'),
     path('order/order_page', view_orders_without_reservation, name='orders_without_page'),
     path('order/<int:order_id>', modify_order, name='modify_order'),
     path('factura/', generate_order_pdf, name='factura'),
+    path('profile/', user_profile, name='user_profile'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
