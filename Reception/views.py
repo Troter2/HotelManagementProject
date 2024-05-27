@@ -28,13 +28,11 @@ def reception_ini(request):
 
 
 def rooms_view(request):
-    if request.user.has_perm('recepcionist'):
-        rooms = RoomType.objects.all()
-        context = {
-            'rooms': rooms
-        }
-        return render(request, 'reception/roomsType.html', context)
-    return redirect('home')
+    rooms = RoomType.objects.all()
+    context = {
+        'rooms': rooms
+    }
+    return render(request, 'reception/roomsType.html', context)
 
 
 def update_book_arrive(request):
