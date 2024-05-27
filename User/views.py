@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 import datetime
+
+from Reception.forms import ReservationForm
 from Reception.models import RoomReservation
-from User.forms import CustomerForm
+from User.forms import CustomerForm, ChangeProfileForm
 from User.models import Customer
 from django.contrib.auth.models import User
 
@@ -34,4 +36,21 @@ def save_guest(request, id):
 def user_profile(request):
     if request.user.is_authenticated:
         return render(request, 'user/profile.html')
+    return redirect('home')
+
+
+def user_edit_profile(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = ChangeProfileForm(request.POST)
+            if form.is_valid():
+                request.user.first_name = request.POST['name']
+                request.user.last_name = request.POST['lastname']
+                request.user.email = request.POST['email']
+                request.user.telefono = request.POST['phone']
+                request.user.DNI = request.POST['DNI']
+                request.user.username = request.POST['username']
+                request.user.save()
+                return redirect('user_profile')
+        return render(request, 'user/edit_profile.html')
     return redirect('home')
