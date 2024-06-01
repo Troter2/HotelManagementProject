@@ -37,6 +37,35 @@
                 </div>
             </div>
         </div>
+        <!-- Modal para cancelar reserva -->
+        <div class="modal fade" id="Pop-up-cancel{{ reserva.id }}" tabindex="-1" role="dialog"
+             aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Cancelar reserva habitación Nº{{ reserva.room_number }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex row">
+                        <div>
+                            Estas seguro de cancelar la reserva de la habitación {{ reserva.room_number }}
+                            con fecha de entrada: {{ reserva.guest_checkin }} y fecha de
+                            salida: {{ reserva.guest_checkout }}
+                        </div>
+                    </div>
+                    <form action="{% url 'delete_booking_user' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ reserva.pk }}">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger " name="action" value="clean">Cancelar reserva
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     {% endfor %}
     <!-- Modal para el filtro -->
     <div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -70,35 +99,6 @@
             </div>
         </div>
     </div>
-    {% for reserva in reserves %}
-        <!-- Modal para cancelar reserva -->
-        <div class="modal fade" id="Pop-up-cancel{{ reserva.id }}" tabindex="-1" role="dialog"
-             aria-labelledby="ModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            Cancelar reserva habitación Nº{{ reserva.room_number }}
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex row">
-                        <div>
-                            Estas seguro de cancelar la reserva de la habitación {{ reserva.room_number }}
-                            con fecha de entrada: {{ reserva.guest_checkin }} y fecha de salida: {{ reserva.guest_checkout }}
-                        </div>
-                    </div>
-                    <form action="{% url 'delete_booking_user' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="id" value="{{ reserva.pk }}">
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger " name="action" value="clean">Cancelar reserva</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
     <h1 class="mx-3 my-3">Reservas del del ciente </h1>
     <!-- Botón de filtrado -->
     <div class="container-fluid">
