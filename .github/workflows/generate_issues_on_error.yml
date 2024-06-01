@@ -1,0 +1,27 @@
+name: Create Issue on workflow failure
+
+on:
+  workflow_run:
+    workflows: [ "Playwright Tests", "playwright" ]
+    types:
+      - completed
+
+jobs:
+  create_issue:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' && (github.event.workflow_run.head_branch == 'main' || github.event.workflow_run.head_branch == 'master' || github.event.workflow_run.head_branch == 'dev') }}
+    steps:
+      - name: Create Issue
+        uses: imjohnbo/issue-bot@v3
+        with:
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          title: "Workflow failure (${{ github.event.workflow_run.name }})"
+          body: |
+
+            - Commit: ${{ github.event.workflow_run.head_commit.id }}
+            - Status: ${{ github.event.workflow_run.conclusion }}
+            - Log: https://github.com/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}
+
+            Error en la comprovació dels test, analitza el log i fica solució al error
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
