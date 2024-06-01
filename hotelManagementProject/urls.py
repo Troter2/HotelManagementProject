@@ -23,7 +23,7 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
     filtrar_por_numero_reserva, order_detail, update_order, add_lost_item, lost_item_list, update_item_reception, \
-    update_book_gone
+    update_book_gone, delete_booking
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
     restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
@@ -48,6 +48,7 @@ urlpatterns = [
     path('update_book_gone/', update_book_gone, name='update_book_gone'),
     path('restaurant/reservations/', restaurant_reservation_page, name='reservation_page'),
     path('reception/reservations/', reserved_rooms_view, name='reserved_rooms_view'),
+    path('reception/reservations/delete_booking/', delete_booking, name='delete_booking'),
     path('reception/reservations/filter/', booking_filter, name='booking_filter'),
     path('reception/checkout/', ocuped_rooms_view, name='ocuped_rooms_view'),
     path('reception/checkout/filter/', booking_filter_check_out, name='booking_filter_check_out'),

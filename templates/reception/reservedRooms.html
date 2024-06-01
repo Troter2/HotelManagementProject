@@ -2,185 +2,218 @@
 {% load static %}
 {% block title %} Check-in {% endblock %}
 {% block content %}
-{% for reserva in reserves %}
-<!-- Modal -->
-<div class="modal fade" id="Pop-up-{{ reserva.id }}" tabindex="-1" role="dialog"
-     aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Reserva habitació Nº{{ reserva.room_number }}
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    {% for reserva in reserves %}
+        <!-- Modal -->
+        <div class="modal fade" id="Pop-up-{{ reserva.id }}" tabindex="-1" role="dialog"
+             aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Reserva habitació Nº{{ reserva.room_number }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex row">
+                        <div class="col-6">
+                            <p>DNI reserva: {{ reserva.DNI }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p>Nºreserva: {{ reserva.reservation_number }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p>Numero de huespedes: {{ reserva.guests_number }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p>Tipo de habitacion: {{ reserva.room_number.room_type.name }}</p>
+                        </div>
+                    </div>
+                    <form action="{% url 'update_book_arrive' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ reserva.id }}">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success " name="action" value="clean">Validar</button>
+                            <!-- You can add additional buttons here if needed -->
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-body d-flex row">
-                <div class="col-6">
-                    <p>DNI reserva: {{ reserva.DNI }}</p>
-                </div>
-                <div class="col-6">
-                    <p>Nºreserva: {{ reserva.reservation_number }}</p>
-                </div>
-                <div class="col-6">
-                    <p>Numero de huespedes: {{ reserva.guests_number }}</p>
-                </div>
-                <div class="col-6">
-                    <p>Tipo de habitacion: {{ reserva.room_number.room_type.name }}</p>
+        </div>
+        <!-- Modal para cancelar reserva -->
+        <div class="modal fade" id="Pop-up-cancel{{ reserva.id }}" tabindex="-1" role="dialog"
+             aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Cancelar reserva habitación Nº{{ reserva.room_number }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex row">
+                        <div>
+                            Estas seguro de cancelar la reserva de la habitación {{ reserva.room_number }}
+                            con fecha de entrada: {{ reserva.guest_checkin }} y fecha de
+                            salida: {{ reserva.guest_checkout }}
+                        </div>
+                    </div>
+                    <form action="{% url 'delete_booking' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ reserva.pk }}">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger " name="action" value="clean">Cancelar reserva
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <form action="{% url 'update_book_arrive' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="id" value="{{ reserva.id }}">
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success " name="action" value="clean">Validar</button>
-                    <!-- You can add additional buttons here if needed -->
+        </div>
+    {% endfor %}
+    <!-- Modal para el filtro -->
+    <div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filtro de Habitaciones Reservadas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </form>
+                <div class="modal-body">
+                    <form id="filtroForm">
+                        <div class="row">
+                            <div class="col-6 px-4">
+                                <label for="nombre_habitacion">Nombre de la habitación:</label>
+                                <input class="form-control" type="text" id="nombre_habitacion" name="nombre_habitacion">
+                            </div>
+                            <div class="col-6 px-4">
+                                <label for="fecha">Fecha:</label>
+                                <input class="form-control" type="date" id="fecha" name="fecha">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col text-end">
+                                <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para filtrar por número de reserva -->
+    <div class="modal fade" id="modalFiltrarPorNumero" tabindex="-1" aria-labelledby="modalFiltrarPorNumeroLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFiltrarPorNumeroLabel">Filtrar por Número de Reserva</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para filtrar por número de reserva -->
+                    <form action="{% url 'filtrar_por_numero_reserva' %}" method="post">
+                        {% csrf_token %}
+                        <label for="reservationNumberInput" class="form-label">Número de Reserva:</label>
+                        <input type="text" class="form-control" id="reservationNumberInput" name="numero_reserva">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        </div>
-    </div>
-</div>
-{% endfor %}
-
-<!-- Modal para el filtro -->
-<div class="modal fade" id="Modal_filter" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="filterModalLabel">Filtro de Habitaciones Reservadas</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="filtroForm">
-                    <div class="row">
-                        <div class="col-6 px-4">
-                            <label for="nombre_habitacion">Nombre de la habitación:</label>
-                            <input class="form-control" type="text" id="nombre_habitacion" name="nombre_habitacion">
-                        </div>
-                        <div class="col-6 px-4">
-                            <label for="fecha">Fecha:</label>
-                            <input class="form-control" type="date" id="fecha" name="fecha">
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col text-end">
-                            <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal para filtrar por número de reserva -->
-<div class="modal fade" id="modalFiltrarPorNumero" tabindex="-1" aria-labelledby="modalFiltrarPorNumeroLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalFiltrarPorNumeroLabel">Filtrar por Número de Reserva</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Formulario para filtrar por número de reserva -->
-                <form action="{% url 'filtrar_por_numero_reserva' %}" method="post">
-                    {% csrf_token %}
-                    <label for="reservationNumberInput" class="form-label">Número de Reserva:</label>
-                    <input type="text" class="form-control" id="reservationNumberInput" name="numero_reserva">
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Filtrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<h1 class="mx-3 my-3">Lista de habitaciones reservadas</h1>
-<!-- Botón de filtrado -->
-<div class="container-fluid">
-    <div class="row mt-3">
-        <div class="col-auto">
-            <button id="filtrarReservasBtn" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#Modal_filter">Filtrar Reservas
-            </button>
-        </div>
-        <div class="col-auto">
-            <button id="filtrarReservasBtn2" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#modalFiltrarPorNumero">Buscar por Numero Reserva
-            </button>
-        </div>
-    </div>
-</div>
-<div class="reservations-list mt-3">
+    <h1 class="mx-3 my-3">Lista de habitaciones reservadas</h1>
+    <!-- Botón de filtrado -->
     <div class="container-fluid">
-        <table class="table table-striped table-dark col-sm-11">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Nombre reserva</th>
-                <th scope="col">Nº Habitación</th>
-                <th scope="col">Fecha entrada</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for reserva in reserves %}
-            <tr>
-                <th>{{reserva.guests_name}}</th>
-                <td>{{reserva.room_number.room_number}}</td>
-                <td>{{reserva.guest_checkin}}</td>
-                <td>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                            data-bs-target="#Pop-up-{{ reserva.id }}">Validar checkin
-                    </button>
-                </td>
-                <td>
-                    <a type="button" class="btn btn-primary"
-                       href="{% url 'add_guest_view' id=reserva.id %}">Añadir huespedes</a>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="row mt-3">
+            <div class="col-auto">
+                <button id="filtrarReservasBtn" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#Modal_filter">Filtrar Reservas
+                </button>
+            </div>
+            <div class="col-auto">
+                <button id="filtrarReservasBtn2" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalFiltrarPorNumero">Buscar por Numero Reserva
+                </button>
+            </div>
+        </div>
     </div>
-</div>
+    <div class="reservations-list mt-3">
+        <div class="container-fluid">
+            <table class="table table-striped table-dark col-sm-11">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre reserva</th>
+                    <th scope="col">Nº Habitación</th>
+                    <th scope="col">Fecha entrada</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for reserva in reserves %}
+                    <tr>
+                        <th>{{ reserva.guests_name }}</th>
+                        <td>{{ reserva.room_number.room_number }}</td>
+                        <td>{{ reserva.guest_checkin }}</td>
+                        <td>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#Pop-up-{{ reserva.id }}">Validar checkin
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#Pop-up-cancel{{ reserva.id }}">Cancelar reserva</button>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-primary"
+                               href="{% url 'add_guest_view' id=reserva.id %}">Añadir huespedes</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<!-- Script para manejar el modal y el envío del formulario -->
-<script>
-    var btn = document.getElementById("filtrarReservasBtn");
-    var modal = document.getElementById("Modal_filter");
-    var span = document.getElementsByClassName("btn-close")[0];
+    <!-- Script para manejar el modal y el envío del formulario -->
+    <script>
+        var btn = document.getElementById("filtrarReservasBtn");
+        var modal = document.getElementById("Modal_filter");
+        var span = document.getElementsByClassName("btn-close")[0];
 
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
 
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
+        span.onclick = function () {
             modal.style.display = "none";
         }
-    }
-    document.getElementById("filtroForm").addEventListener("submit", function (event) {
-        event.preventDefault();
 
-        var nombreHabitacion = document.getElementById("nombre_habitacion").value;
-        var fecha = document.getElementById("fecha").value;
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        document.getElementById("filtroForm").addEventListener("submit", function (event) {
+            event.preventDefault();
 
-        // Construir la URL absoluta
-        var baseUrl = window.location.protocol + "//" + window.location.host;
-        var url = `${baseUrl}/reception/reservations/filter/?nombre_habitacion=${nombreHabitacion}&fecha=${fecha}`;
+            var nombreHabitacion = document.getElementById("nombre_habitacion").value;
+            var fecha = document.getElementById("fecha").value;
 
-        // Redirigir a la URL construida
-        window.location.href = url;
-    });
-    // Volver a habilitar el botón de filtrar después de cargar la página
-    window.onload = function () {
-        toggleFilterButton();
-    };
-</script>
+            // Construir la URL absoluta
+            var baseUrl = window.location.protocol + "//" + window.location.host;
+            var url = `${baseUrl}/reception/reservations/filter/?nombre_habitacion=${nombreHabitacion}&fecha=${fecha}`;
+
+            // Redirigir a la URL construida
+            window.location.href = url;
+        });
+        // Volver a habilitar el botón de filtrar después de cargar la página
+        window.onload = function () {
+            toggleFilterButton();
+        };
+    </script>
 {% endblock %}

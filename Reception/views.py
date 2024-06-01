@@ -246,6 +246,13 @@ def update_item_reception(request):
         return redirect('lost_item_list')
     return redirect('home')
 
+def delete_booking(request):
+    if request.user.has_perm('receptionist'):
+        borrar_reserva = request.POST['id']
+        reservation = RoomReservation.objects.get(pk=borrar_reserva)
+        reservation.delete()
+        return redirect(reserved_rooms_view)
+    return redirect('home')
 
 def generate_reservation_pdf(request):
     now = datetime.now()
