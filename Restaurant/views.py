@@ -3,7 +3,7 @@ from datetime import datetime
 import qrcode
 
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from reportlab.graphics.barcode import code39
 from io import BytesIO
 
@@ -79,11 +79,22 @@ def create_item_form(request):
             return redirect("restaurant_list_items")
     return redirect('home')
 
+
 def restaurant_validation_page(request):
     if request.user.has_perm('waiter'):
         booking = RestaurantReservation.objects.filter(validated=True)
         return render(request, 'restaurant/validated_list.html', {'reservas': booking})
     return redirect('home')
+
+
+def update_payment_status(request):
+    if request.method == 'POST':
+        reservation_id = request.POST.get('reservation_id')
+        action = request.POST.get('action')
+        reservation = get_object_or_404(RestaurantReservation, id=reservation_id)
+        reservation.order_num.is_paid = (action == 'pay')
+        reservation.order_num.save()
+    return redirect('restaurant_validation_page')
 
 
 def restaurant_reservation_page_uuid(request, uuid):
@@ -109,6 +120,7 @@ def restaurant_reservation_page_uuid(request, uuid):
 
         return render(request, 'restaurant/autoreservation_page.html', {'data': initial_data})
     return redirect('home')
+
 
 def reserved_tables(request):
     if request.user.has_perm('waiter'):
@@ -144,11 +156,13 @@ def calculate_total(order):
 def set_order(request):
     if request.user.has_perm('waiter'):
         if request.method == 'POST':
+            order_identifier = request.POST.get('order_number')
             if request.POST.get('reservation_id') == "" or request.POST.get('order_number') == "":
                 pass
             else:
-                order = Order.objects.filter(id=request.POST.get('order_number'))
-                if len(order) == 0:
+                try:
+                    order = Order.objects.get(identifier=order_identifier)
+                except Order.DoesNotExist:
                     booking = RestaurantReservation.objects.filter(validated=True)
                     return render(request, 'restaurant/validated_list.html',
                                   {'reservas': booking, 'error': "Pedido inexistente"})
