@@ -22,7 +22,7 @@
                 <tbody>
                 {% for order in orders_without_reservation %}
                     <tr>
-                        <th>{{ order.id }}</th>
+                        <th>{{ order.identifier }}</th>
                         <td>{{ order.date }}</td>
                         <td>{{ order.total }}</td>
                         <td>

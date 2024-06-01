@@ -27,7 +27,8 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
     restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
-    create_item_form, set_order, generate_order_pdf, view_orders_without_reservation, edit_product, modify_order
+    create_item_form, set_order, generate_order_pdf, view_orders_without_reservation, edit_product, modify_order, \
+    update_payment_status
 
 from accounts.views import custom_login
 from django.conf import settings
@@ -41,7 +42,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path('login/', register.user_login, name='register.user_login'),
     path('', reception_ini, name='home'),
-    path('home/',reception_ini, name='home'),
+    path('home/', reception_ini, name='home'),
     path('cleaner/', cleaner_page, name='cleaner_page'),
     path('update_room_status/', update_room_status, name='update_room_status'),
     path('update_book_status/', update_book_arrive, name='update_book_arrive'),
@@ -75,6 +76,7 @@ urlpatterns = [
     path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
     path('cleaner/lost_item/', add_lost_item, name='add_lost_item'),
     path('camarero/validate/', restaurant_validation_page, name='restaurant_validation_page'),
+    path('update_payment_status/', update_payment_status, name='update_payment_status'),
     path('order/', order_detail, name='order_detail'),
     path('order/update_order/', update_order, name='update_order'),
     path('order/thanks/', thanks, name='thanks'),
