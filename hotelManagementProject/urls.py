@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import login
 from django.urls import path, include
 from Cleaning.views import cleaner_page, update_room_status
-from User.views import add_guest_view, save_more_guest, save_guest, user_profile, user_edit_profile
+from User.views import add_guest_view, save_more_guest, save_guest, user_profile, user_edit_profile, list_reservations_user, booking_filter_user, delete_booking_user
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
@@ -86,6 +86,9 @@ urlpatterns = [
     path('factura/', generate_order_pdf, name='factura'),
     path('profile/', user_profile, name='user_profile'),
     path('profile/edit/', user_edit_profile, name='user_edit_profile'),
+    path('user_reservations/', list_reservations_user, name='list_reservations_user'),
+    path('user_reservations/filter/', booking_filter_user, name='booking_filter_user'),
+    path('user_reservations/delete_reserve/', delete_booking_user, name='delete_booking_user')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
