@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %} Inicio {% endblock %}
 {% block content %}
-    <div class=" w-100 min-vh-100 room-bg col-12 text-center d-flex "
+    <div class="w-100 min-vh-100 room-bg col-12 text-center d-flex"
          style="background-image: url({% static 'img/home-img.jpg' %}); background-repeat:no-repeat">
         <div class="text-center endark align-items-center d-flex">
             <p class="text-white h1  w-100 main-text-over-img">HOTEL<br>LAS PALMERAS</p>
@@ -24,10 +24,55 @@
                 tranquilidad necesarios tras un día
                 bien aprovechado posor la capital.</p>
 
-            <p class="h4 w-75 mx-auto my-4 text-start">En la 1ª planta le espera el Restaurante Las Palmeras. Un surtido de
+            <p class="h4 w-75 mx-auto my-4 text-start">En la 1ª planta le espera el Restaurante Las Palmeras. Un surtido
+                de
                 sabores emblemáticos y contrastes atrevidos
                 para disfrutar de la vida con cada nuevo bocado.</p>
         </div>
+        {% if promotions|length > 0 %}
+            <div class="container pb-3">
+                <div class="row">
+                    <div class="col">
+                        <div id="carouselPromotion" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active" data-bs-interval="20000">
+                                    <a href="#">
+                                        <img src="{% static promotions.0.image %}"
+                                             class="d-block overflow-hidden w-100"
+                                             style="height: 300px; overflow: hidden; object-fit: cover;" alt="...">
+                                        <div class="carousel-caption d-md-block endark-promo">
+                                            <h5><b>{{ promotions.0.title }}</b></h5>
+                                        </div>
+                                    </a>
+                                </div>
+                                {% for promotion in promotions|slice:"1:" %}
+                                    <div class="carousel-item" data-bs-interval="20000">
+                                        <a href="#">
+                                            <img src="{% static promotion.image %}"
+                                                 class="d-block overflow-hidden w-100"
+                                                 style="height: 300px; overflow: hidden; object-fit: cover;" alt="...">
+                                            <div class="carousel-caption d-md-block endark-promo">
+                                                <h5><b>{{ promotion.title }}</b></h5>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselPromotion"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselPromotion"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <div class="container pb-3">
             <div class="row">
                 <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'rooms_view' %}">
@@ -41,7 +86,8 @@
                         estrellas a un nuevo nivel.
                     </p>
                 </a>
-                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'restaurant_page' %}">
+                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;"
+                   href="{% url 'restaurant_page' %}">
                     <div class="home-image-container">
                         <img class="img-fluid home-image" src="{% static 'img/restaurant-img.jpg' %}">
                     </div>

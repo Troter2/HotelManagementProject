@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from reportlab.graphics.barcode import code39
 
+from Billing.models import Promotion
 from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm
 from io import BytesIO
@@ -24,7 +25,8 @@ from Restaurant.views import calculate_total
 
 
 def reception_ini(request):
-    return render(request, 'reception/home.html')
+    promotions = Promotion.objects.all()
+    return render(request, 'reception/home.html', {'promotions': promotions})
 
 
 def rooms_view(request):
@@ -116,12 +118,15 @@ def reserve_room(request):
             room_type = request.POST.get('room_type')
             free_rooms = habitaciones_libres(fecha_entrada, fecha_salida, room_type=room_type)
             guests_phone = request.POST.get('guests_phone')
+            guests_number = request.POST.get('guests_number')
             if not validar_dni(dni):
                 form.add_error('DNI', 'El DNI no es válido.')
             if len(free_rooms) < 1:
                 form.add_error('guest_checkin', 'No existe habitacion disponible para las fechas elegidas')
             if not validate_guests_phone(guests_phone):
                 form.add_error('guests_phone', 'El telefono introducido no es válido.')
+            if validate_guests_number(guests_number):
+                form.add_error('guests_number', 'El numero de huespedes no puede ser 0.')
             if len(form.errors) > 0:
                 return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
             form.instance.price = 60
@@ -181,6 +186,10 @@ def validate_guests_phone(guests_phone):
     return len(guests_phone) == 9 or len(guests_phone) == 11
 
 
+def validate_guests_number(guests_number):
+    return len(guests_number) == 0
+
+
 def booking_filter(request):
     if request.user.has_perm('recepcionist'):
 
@@ -215,10 +224,10 @@ def booking_filter_check_out(request):
         nombre_habitacion = request.GET.get('nombre_habitacion', None)
         fecha = request.GET.get('fecha', None)
 
-        reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False,guest_is_here=True)
+        reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False, guest_is_here=True)
 
         if not nombre_habitacion and not fecha:
-            reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False,guest_is_here=True)
+            reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False, guest_is_here=True)
         if nombre_habitacion:
             reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
         if fecha:
@@ -246,6 +255,7 @@ def update_item_reception(request):
         return redirect('lost_item_list')
     return redirect('home')
 
+
 def delete_booking(request):
     if request.user.has_perm('receptionist'):
         borrar_reserva = request.POST['id']
@@ -253,6 +263,7 @@ def delete_booking(request):
         reservation.delete()
         return redirect(reserved_rooms_view)
     return redirect('home')
+
 
 def generate_reservation_pdf(request):
     now = datetime.now()
