@@ -49,8 +49,32 @@
                 </div>
             </div>
         </div>
+        <!-- Modal de confirmación de pago -->
+        <div class="modal fade" id="confirmPayModal_{{ reserva.id }}" tabindex="-1"
+             aria-labelledby="confirmPayModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmPayModalLabel">Confirmar Pago</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de que deseas realizar el pago?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                        <form action="{% url 'update_payment_status' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="reservation_id" value="{{ reserva.id }}">
+                            <button type="submit" class="btn btn-success" name="action" value="pay">Sí</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     {% endfor %}
+
 
     <!-- Modal para el filtro -->
 
@@ -61,6 +85,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endif %}
+
     <div class="reservations-list mt-3">
         <div class="container-fluid">
             <table class="table table-striped table-dark col-sm-11">
@@ -94,18 +119,25 @@
                                     </button>
                                 </div>
                                 <div class="col">
-                                    <form action="{% url 'factura' %}" method="post" class="w-100">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="id" value="{{ reserva.id }}">
-                                        <button type="submit" class="btn btn-primary w-100">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor"
-                                                 class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
-                                                <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0"/>
-                                            </svg>
-                                            Generar factura
+                                    {% if reserva.order_num.is_paid == False %}
+                                        <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
+                                                data-bs-target="#confirmPayModal_{{ reserva.id }}">
+                                            Pagar
                                         </button>
-                                    </form>
+                                    {% else %}
+                                        <form action="{% url 'factura' %}" method="post" class="w-100">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ reserva.id }}">
+                                            <button type="submit" class="btn btn-primary w-100">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                     fill="currentColor"
+                                                     class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0"/>
+                                                </svg>
+                                                Generar Factura
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 </div>
                             {% else %}
 

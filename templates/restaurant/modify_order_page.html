@@ -4,7 +4,7 @@
 {% block content %}
     {% csrf_token %}
     <div class="container text-center mt-3">
-        <h1 class="mb-5">Numero de Orden: {{ order.id }}</h1>
+        <h1 class="mb-5">Numero de Orden: {{ order.identifier }}</h1>
     </div>
     <div class="d-flex row m-0 p-0 mx-auto justify-content-center align-items-center">
         {% for item in data %}

@@ -183,12 +183,14 @@ def validate_guests_phone(guests_phone):
 
 def booking_filter(request):
     if request.user.has_perm('recepcionist'):
-        # Obtener los parámetros de filtrado desde la URL
+
         nombre_habitacion = request.GET.get('nombre_habitacion', None)
         fecha = request.GET.get('fecha', None)
 
-        # Filtrar las reservas basadas en los parámetros recibidos
         reserves_filtradas = RoomReservation.objects.all()
+        if not nombre_habitacion and not fecha:
+            reserves_filtradas = RoomReservation.objects.filter(guest_is_here=False, guest_checkin=datetime.today())
+
         if nombre_habitacion:
             reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion,
                                                            guest_is_here=False)
@@ -213,7 +215,10 @@ def booking_filter_check_out(request):
         nombre_habitacion = request.GET.get('nombre_habitacion', None)
         fecha = request.GET.get('fecha', None)
 
-        reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False)
+        reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False,guest_is_here=True)
+
+        if not nombre_habitacion and not fecha:
+            reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False,guest_is_here=True)
         if nombre_habitacion:
             reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
         if fecha:
@@ -241,6 +246,13 @@ def update_item_reception(request):
         return redirect('lost_item_list')
     return redirect('home')
 
+def delete_booking(request):
+    if request.user.has_perm('receptionist'):
+        borrar_reserva = request.POST['id']
+        reservation = RoomReservation.objects.get(pk=borrar_reserva)
+        reservation.delete()
+        return redirect(reserved_rooms_view)
+    return redirect('home')
 
 def generate_reservation_pdf(request):
     now = datetime.now()
@@ -354,16 +366,14 @@ def filtrar_por_numero_reserva(request):
             numero_reserva = request.POST.get('numero_reserva')  # Obtener el número de reserva del formulario
             numero_reserva = numero_reserva[:-1].lower()
             if numero_reserva:
-                reservas_filtradas = RoomReservation.objects.filter(reservation_number=numero_reserva)
+                reservas_filtradas = RoomReservation.objects.filter(reservation_number=numero_reserva,
+                                                                    guest_is_here=False)
             else:
-                # Si no se proporciona ningún número de reserva, obtener todas las reservas
-                reservas_filtradas = RoomReservation.objects.all()
+                reservas_filtradas = RoomReservation.objects.filter(guest_is_here=False, guest_checkin=datetime.today())
 
-            # Pasar las reservas filtradas al template
             return render(request, 'reception/reservedRooms.html', {'reserves': reservas_filtradas})
         else:
-            # Si la solicitud no es POST, renderizar el formulario para filtrar
-            return render(request, 'reception/reservedRooms.html')
+            return reserved_rooms_view(request)
     return redirect('home')
 
 

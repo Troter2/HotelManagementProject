@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Editar Perfil {% endblock %}
+{% block content %}
+    <section class="h-100 gradient-form ">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-10">
+                    <div class="card rounded-3 text-black">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-3 mx-md-4">
+                                    <div>
+                                        <a href="{% url 'user_profile' %}" class="btn btn-secondary"
+                                           style="text-decoration: none">
+                                            <i class="bi bi-arrow-left"></i> Volver
+                                        </a>
+                                    </div>
+                                    <div class="text-center">
+                                        <h1 class="text-center">Mi Perfil</h1>
+                                    </div>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="name" class="form-control" id="name"
+                                                   placeholder="Nombre" required
+                                                   value="{% if request.user.first_name %}{{ request.user.first_name }}{% endif %}">
+                                            <label for="name">Nombre</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="lastname" class="form-control"
+                                                   id="lastname"
+                                                   placeholder="Apellidos" required
+                                                   value="{% if request.user.last_name %}{{ request.user.last_name }}{% endif %}">
+                                            <label for="lastname">Apellidos</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="DNI" class="form-control" id="DNI"
+                                                   placeholder="DNI" required
+                                                   value="{% if request.user.DNI %}{{ request.user.DNI }}{% endif %}">
+                                            <label for="DNI">DNI</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="email" class="form-control"
+                                                   id="email"
+                                                   placeholder="Correo Electrónico" required
+                                                   value="{% if request.user.email %}{{ request.user.email }}{% endif %}">
+                                            <label for="email">Correo Electrónico</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="phone" class="form-control"
+                                                   id="phone"
+                                                   placeholder="Apellidos" required
+                                                   value="{% if request.user.telefono %}{{ request.user.telefono }}{% endif %}">
+                                            <label for="phone">Teléfono</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="username" class="form-control"
+                                                   id="username"
+                                                   placeholder="Nombre de usuario" required
+                                                   value="{% if request.user.username %}{{ request.user.username }}{% endif %}">
+                                            <label for="username">Nombre de usuario</label>
+                                        </div>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-pencil-fill"> Guardar</i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-flex align-items-center d-none d-lg-block">
+                                <div class="text-black px-3 py-4 p-md-5 h-100 "
+                                     style="background-image: url({% static 'img/fondo_usuario.avif' %});background-repeat: no-repeat;background-size: cover;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
