@@ -29,45 +29,11 @@
                 sabores emblemáticos y contrastes atrevidos
                 para disfrutar de la vida con cada nuevo bocado.</p>
         </div>
-        <div class="container pb-3">
-            <div class="row">
-                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'rooms_view' %}">
-                    <div class="home-image-container">
-                        <img class="img-fluid home-image" src="{% static 'img/rooms-img.jpg' %}">
-                    </div>
-                    <p class="home-card-title">Habitaciones</p>
-                    <p class="home-card-content">
-                        ochenta habitaciones y suites reúnen el confort del estilo de
-                        vida de una residencia exclusiva. Elevando la experiencia de una habitación de hotel de 5
-                        estrellas a un nuevo nivel.
-                    </p>
-                </a>
-                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;"
-                   href="{% url 'restaurant_page' %}">
-                    <div class="home-image-container">
-                        <img class="img-fluid home-image" src="{% static 'img/restaurant-img.jpg' %}">
-                    </div>
-                    <p class="home-card-title">Gastronomia</p>
-                    <p class="home-card-content"><strong>Restaurant Las palmeras </strong>, nuestro restaurante en
-                        primera planta, incluye tanto las espléndidas vistas como&nbsp;una cocina honesta y atemporal
-                        basada en el producto.</p>
-                </a>
-                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'what_todo' %}">
-                    <div class="home-image-container">
-                        <img class="img-fluid home-image" src="{% static 'img/que-hacer-home.jpg' %}">
-                    </div>
-                    <p class="home-card-title">Experiencias</p>
-                    <p class="home-card-content">Disfruta de todas las experiancias maritimas que se ofrecen por la
-                        zona, o si prefieres una experiencia mas rural a escasos quinze minutos podra disfrutar de todo
-                        tipo de deportes de montaña.</p>
-                </a>
-            </div>
-        </div>
         {% if promotions|length > 0 %}
             <div class="container pb-3">
                 <div class="row">
                     <div class="col">
-                        <div id="carouselPromotion" class="carousel slide" data-bs-ride="true">
+                        <div id="carouselPromotion" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
                                 <div class="carousel-item active" data-bs-interval="20000">
                                     <a href="#">
@@ -107,6 +73,40 @@
                 </div>
             </div>
         {% endif %}
+        <div class="container pb-3">
+            <div class="row">
+                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'rooms_view' %}">
+                    <div class="home-image-container">
+                        <img class="img-fluid home-image" src="{% static 'img/rooms-img.jpg' %}">
+                    </div>
+                    <p class="home-card-title">Habitaciones</p>
+                    <p class="home-card-content">
+                        ochenta habitaciones y suites reúnen el confort del estilo de
+                        vida de una residencia exclusiva. Elevando la experiencia de una habitación de hotel de 5
+                        estrellas a un nuevo nivel.
+                    </p>
+                </a>
+                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;"
+                   href="{% url 'restaurant_page' %}">
+                    <div class="home-image-container">
+                        <img class="img-fluid home-image" src="{% static 'img/restaurant-img.jpg' %}">
+                    </div>
+                    <p class="home-card-title">Gastronomia</p>
+                    <p class="home-card-content"><strong>Restaurant Las palmeras </strong>, nuestro restaurante en
+                        primera planta, incluye tanto las espléndidas vistas como&nbsp;una cocina honesta y atemporal
+                        basada en el producto.</p>
+                </a>
+                <a class="col-12 col-xl-4  text-black" style="text-decoration: none;" href="{% url 'what_todo' %}">
+                    <div class="home-image-container">
+                        <img class="img-fluid home-image" src="{% static 'img/que-hacer-home.jpg' %}">
+                    </div>
+                    <p class="home-card-title">Experiencias</p>
+                    <p class="home-card-content">Disfruta de todas las experiancias maritimas que se ofrecen por la
+                        zona, o si prefieres una experiencia mas rural a escasos quinze minutos podra disfrutar de todo
+                        tipo de deportes de montaña.</p>
+                </a>
+            </div>
+        </div>
     </section>
 
 {% endblock %}
