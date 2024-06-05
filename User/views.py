@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.models import Group
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 import datetime
 
@@ -7,7 +8,8 @@ from Reception.models import RoomReservation
 from Reception.views import validar_dni, validate_guests_phone
 from User.forms import CustomerForm, ChangeProfileForm
 from User.models import Customer
-from django.contrib.auth.models import User
+
+from accounts.models import CustomUser
 
 
 # Create your views here.
@@ -20,6 +22,42 @@ def add_guest_view(request, id):
 def save_more_guest(request, id):
     if request.user.has_perm('receptionist'):
         return render(request, 'user/add_guest.html', {"book_id": id})
+    return redirect('home')
+
+
+# views.py
+
+
+def list_users(request):
+    if request.user.has_perm('rrhh'):
+        users = CustomUser.objects.all()[:15]
+        groups = Group.objects.all()
+        return render(request, 'rrhh/list-users.html', {'users': users, 'groups': groups})
+    return redirect('home')
+
+
+def edit_user(request, id):
+    user = get_object_or_404(CustomUser, id=id)
+    if request.method == 'POST':
+        selected_groups = request.POST.getlist('groups')
+        user.groups.set(selected_groups)
+        user.save()
+        return redirect('list_users')
+    return redirect('list_users')
+
+
+def delete_user(request, id):
+    if request.user.has_perm('rrhh'):
+        context = {}
+        error = None
+        try:
+            CustomUser.objects.get(pk=id).delete()
+        except:
+            error = 'No se pudo eliminar el usuario'
+        users = CustomUser.objects.all()[:15]
+        context.update({"users": users})
+        groups = Group.objects.all()
+        return render(request, 'rrhh/list-users.html', {'users': users, 'groups': groups, 'error': error})
     return redirect('home')
 
 
@@ -79,6 +117,7 @@ def booking_filter_user(request):
             reserves_filtradas = reserves_filtradas.filter(guest_checkin=fecha)
         return render(request, 'user/List_reserv_user.html', {'reserves': reserves_filtradas})
     return redirect('home')
+
 
 def delete_booking_user(request):
     if request.user.is_authenticated:

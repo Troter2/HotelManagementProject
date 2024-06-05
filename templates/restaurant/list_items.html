@@ -12,6 +12,7 @@
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
                     <form action="{% url 'create_product' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -26,6 +27,12 @@
                         </div>
                     </form>
                 </div>
+                {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show mx-3" role="alert">
+                        <strong>{{ error }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -94,7 +101,7 @@
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{% url 'edit_product' id=product.id %}" method="POST" >
+                                    <form action="{% url 'edit_product' id=product.id %}" method="POST">
                                         {% csrf_token %}
                                         <label for="add_name" class="form-label">Cambiar nombre:</label>
                                         <input type="text" class="form-control" id="modify-name-{{ product.id }}"
