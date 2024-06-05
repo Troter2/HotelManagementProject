@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Promociones del Hotel {% endblock %}
+{% block content %}
+<h1 class="mx-3 my-3">Lista de Promociones del Hotel</h1>
+<div class="promotions-list mt-3">
+    <div class="container-fluid">
+        <table class="table table-striped table-dark col-sm-11">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Imagen</th>
+                <th scope="col">Título</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Código de Descuento</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for oferta in ofertas %}
+            <tr>
+                <td><img src="{{ oferta.image.url }}" alt="{{ oferta.title }}" width="100"></td>
+                <td>{{ oferta.title }}</td>
+                <td>{{ oferta.description }}</td>
+                <td>{{ oferta.discount_code.code }}</td>
+                <td>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#Pop-up-{{ oferta.id }}">Ver Detalles
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modales de detalles -->
+{% for oferta in ofertas %}
+<div class="modal fade" id="Pop-up-{{ oferta.id }}" tabindex="-1" role="dialog"
+     aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Detalles de la Promoción Nº{{ oferta.id }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Título: {{ oferta.title }}</p>
+                <p>Descripción: {{ oferta.description }}</p>
+                <p>Código de Descuento: {{ oferta.discount_code.code }}</p>
+                <img src="{{ oferta.image.url }}" alt="{{ oferta.title }}" width="200">
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
