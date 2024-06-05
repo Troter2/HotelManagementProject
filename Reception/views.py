@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from reportlab.graphics.barcode import code39
 
+from Billing.models import Promotion
 from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm
 from io import BytesIO
@@ -24,7 +25,8 @@ from Restaurant.views import calculate_total
 
 
 def reception_ini(request):
-    return render(request, 'reception/home.html')
+    promotions = Promotion.objects.all()
+    return render(request, 'reception/home.html', {'promotions': promotions})
 
 
 def rooms_view(request):
