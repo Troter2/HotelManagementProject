@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import login
 from django.urls import path, include
+
+from Billing.views import list_offers, create_offer
 from Cleaning.views import cleaner_page, update_room_status
 from User.views import add_guest_view, save_more_guest, save_guest, user_profile, user_edit_profile, \
     list_reservations_user, booking_filter_user, delete_booking_user, list_users, delete_user, edit_user
@@ -28,7 +30,8 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
     restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
-    create_item_form, set_order, generate_order_pdf, view_orders_without_reservation, edit_product, modify_order
+    create_item_form, set_order, generate_order_pdf, view_orders_without_reservation, edit_product, modify_order, \
+    update_payment_status
 
 from accounts.views import custom_login
 from django.conf import settings
@@ -42,7 +45,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path('login/', register.user_login, name='register.user_login'),
     path('', reception_ini, name='home'),
-    path('home/',reception_ini, name='home'),
+    path('home/', reception_ini, name='home'),
     path('cleaner/', cleaner_page, name='cleaner_page'),
     path('update_room_status/', update_room_status, name='update_room_status'),
     path('update_book_status/', update_book_arrive, name='update_book_arrive'),
@@ -77,6 +80,7 @@ urlpatterns = [
     path('camarero/', restaurant_validation_page, name='restaurant_validation_page'),
     path('cleaner/lost_item/', add_lost_item, name='add_lost_item'),
     path('camarero/validate/', restaurant_validation_page, name='restaurant_validation_page'),
+    path('update_payment_status/', update_payment_status, name='update_payment_status'),
     path('order/', order_detail, name='order_detail'),
     path('order/update_order/', update_order, name='update_order'),
     path('order/thanks/', thanks, name='thanks'),
@@ -94,6 +98,8 @@ urlpatterns = [
     path('rrhh/users/', list_users, name='list_users'),
     path('rrhh/users/delete/<int:id>', delete_user, name='delete_user'),
     path('rrhh/users/edit/<int:id>', edit_user, name='edit_user'),
+    path('offer/', list_offers, name='list_offers'),
+    path('offer/create/', create_offer, name='create_offer'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

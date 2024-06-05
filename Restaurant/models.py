@@ -12,6 +12,28 @@ from Reception.models import Room, RoomReservation
 class Order(models.Model):
     date = models.DateField(default=datetime.datetime.now)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+    identifier = models.CharField(max_length=5, default='0000A', editable=True)
+    is_paid = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.identifier = self.generate_identifier()
+        super().save(*args, **kwargs)
+
+    def generate_identifier(self):
+        last_order = Order.objects.all().order_by('id').last()
+        if last_order:
+            last_identifier = last_order.identifier
+            last_number = int(last_identifier[:4])
+            last_letter = last_identifier[4]
+            new_number = (last_number + 1) % 10000
+            new_letter = last_letter
+            if new_number == 0:
+                new_letter = chr((ord(last_letter) + 1 - 65) % 26 + 65)
+            new_identifier = f'{new_number:04d}{new_letter}'
+        else:
+            new_identifier = '0000A'
+        return new_identifier
 
 
 class Item(models.Model):
