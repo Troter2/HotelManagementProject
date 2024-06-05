@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Crear Nueva Oferta {% endblock %}
+{% block content %}
+<h1 class="mx-3 my-3">Crear Nueva Oferta</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Crear Oferta</button>
+    <a href="{% url 'list_offers' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
