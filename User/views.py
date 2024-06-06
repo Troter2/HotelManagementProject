@@ -7,7 +7,7 @@ from datetime import datetime
 from Reception.forms import ReservationForm
 from Reception.models import RoomReservation
 from Reception.views import validar_dni, validate_guests_phone
-from User.forms import CustomerForm, ChangeProfileForm
+from User.forms import CustomerForm, ChangeProfileForm, AdminRegisterForm
 from User.models import Customer
 from Restaurant.models import RestaurantReservation
 
@@ -27,11 +27,31 @@ def save_more_guest(request, id):
     return redirect('home')
 
 
-# views.py
-
-
 def list_users(request):
     if request.user.has_perm('rrhh'):
+        users = CustomUser.objects.all()[:15]
+        groups = Group.objects.all()
+        form = AdminRegisterForm(request.POST)
+        return render(request, 'rrhh/list-users.html', {'users': users, 'groups': groups, 'form': form})
+    return redirect('home')
+
+
+def search_user_rrhh(request):
+    if request.user.has_perm('rrhh'):
+        user_or_email = request.POST.get('user_or_email')
+        result = CustomUser.objects.filter(username__icontains=user_or_email) | CustomUser.objects.filter(email__icontains=user_or_email)
+        groups = Group.objects.all()
+        form = AdminRegisterForm(request.POST)
+        return render(request, 'rrhh/list-users.html', {'users': result[:15], 'groups': groups, 'form': form})
+    return redirect('home')
+
+def register_admin(request):
+    if request.user.has_perm('rrhh'):
+        if request.method == 'POST':
+            form = AdminRegisterForm(request.POST)
+            if form.is_valid():
+                form.save()
+
         users = CustomUser.objects.all()[:15]
         groups = Group.objects.all()
         return render(request, 'rrhh/list-users.html', {'users': users, 'groups': groups})

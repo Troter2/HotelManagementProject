@@ -2,11 +2,12 @@
 {% load static %}
 {% block title %} Promociones del Hotel {% endblock %}
 {% block content %}
-<h1 class="mx-3 my-3">Lista de Promociones del Hotel</h1>
-<div class="container-fluid">
-    <div class="row mt-3">
-        <div class="col">
-            <a href="{% url 'create_offer' %}" class="btn btn-primary">Crear Oferta</a>
+    <h1 class="mx-3 my-3">Lista de Promociones del Hotel</h1>
+    <div class="container-fluid">
+        <div class="row mt-3">
+            <div class="col">
+                <a href="{% url 'create_offer' %}" class="btn btn-primary">Crear Oferta</a>
+            </div>
         </div>
     </div>
 </div>
@@ -33,6 +34,10 @@
                     </button>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#deleteModal-{{ oferta.id }}">Borrar
+                    </button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#Pop-up-edit-{{ oferta.id }}">
+                                Editar Oferta
                     </button>
                 </td>
             </tr>
@@ -76,6 +81,53 @@
                                 <button type="submit" class="btn btn-danger">Borrar</button>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+              
+            <!-- Modales de editar oferta-->
+            <div class="modal fade" id="Pop-up-edit-{{ oferta.id }}" tabindex="-1" role="dialog"
+                 aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                Editar oferta Nº{{ oferta.id }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{% url 'edit_offer' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="modal-body d-flex row ">
+                                <input type="hidden" name="id" value="{{ oferta.pk }}">
+                                <div class="col-12">
+                                    <p><strong>Imagen:</strong></p>
+                                    <div class="input-group mb-3">
+                                        <input type="file" class="form-control" id="image"
+                                               value=" {% static oferta.image %} " name="image">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="col-12">
+                                        <p><strong>Titulo:</strong></p>
+                                        <input type="text" class="form-control" id="title"
+                                               value="{{ oferta.title }}" name="title">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="col-12">
+                                        <p><strong>Descripcion:</strong></p>
+                                        <input type="text" class="form-control" id="description"
+                                               value="{{ oferta.description }}" name="description">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">
+                                        Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
