@@ -31,33 +31,57 @@
                     <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#Pop-up-{{ oferta.id }}">Ver Detalles
                     </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ oferta.id }}">Borrar
+                    </button>
                 </td>
             </tr>
+
+            <!-- Modal de detalles -->
+            <div class="modal fade" id="Pop-up-{{ oferta.id }}" tabindex="-1" role="dialog"
+                 aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                Detalles de la Promoción Nº{{ oferta.id }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Título:</strong> {{ oferta.title }}</p>
+                            <p><strong>Descripción:</strong> {{ oferta.description }}</p>
+                            <p><strong>Código de Descuento:</strong> {{ oferta.discount_code.discount_code }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de confirmación de borrado -->
+            <div class="modal fade" id="deleteModal-{{ oferta.id }}" tabindex="-1" role="dialog"
+                 aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirmar Borrado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas borrar la oferta <strong>{{ oferta.title }}</strong>?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form method="post" action="{% url 'delete_offer' oferta.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Borrar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
-
-<!-- Modales de detalles -->
-{% for oferta in ofertas %}
-<div class="modal fade" id="Pop-up-{{ oferta.id }}" tabindex="-1" role="dialog"
-     aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Detalles de la Promoción Nº{{ oferta.id }}
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Título:</strong> {{ oferta.title }}</p>
-                <p><strong>Descripción:</strong> {{ oferta.description }}</p>
-                <p><strong>Código de Descuento:</strong> {{ oferta.discount_code.discount_code }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-{% endfor %}
 {% endblock %}
