@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from Reception.models import Room,RoomType
 
+
 class CleanerViewsTestCase(TestCase):
     def setUp(self):
         # Creamos algunas habitaciones para usar en las pruebas

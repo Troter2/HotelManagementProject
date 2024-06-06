@@ -169,6 +169,21 @@
                             </ul>
                         </li>
                     {% endif %}
+                    {% if request.user|has_group:"rrhh" %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarRrhh" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                RRHH
+                            </a>
+                            <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
+                                <li class="dropdown-item rounded no-blue">
+                                    <a href="{% url 'list_users' %}">
+                                        Usuarios
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarUsuari" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">

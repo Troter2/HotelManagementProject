@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import login
 from django.urls import path, include
-
-from Billing.views import list_offers, create_offer, edit_offer
+from Billing.views import list_offers, create_offer, edit_offer, delete_offer
 from Cleaning.views import cleaner_page, update_room_status
-from User.views import add_guest_view, save_more_guest, save_guest, user_profile, user_edit_profile, list_reservations_user, booking_filter_user, delete_booking_user
+from User.views import add_guest_view, save_more_guest, save_guest, user_profile, user_edit_profile, \
+    list_reservations_user, booking_filter_user, delete_booking_user, list_users, delete_user, edit_user, \
+    register_admin, search_user_rrhh
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
@@ -94,9 +95,15 @@ urlpatterns = [
     path('user_reservations/', list_reservations_user, name='list_reservations_user'),
     path('user_reservations/filter/', booking_filter_user, name='booking_filter_user'),
     path('user_reservations/delete_reserve/', delete_booking_user, name='delete_booking_user'),
+    path('rrhh/users/', list_users, name='list_users'),
+    path('rrhh/users/delete/<int:id>', delete_user, name='delete_user'),
+    path('rrhh/users/edit/<int:id>', edit_user, name='edit_user'),
     path('offer/', list_offers, name='list_offers'),
     path('offer/create/', create_offer, name='create_offer'),
     path('offer/edit_offer/', edit_offer, name='edit_offer'),
+    path('rrhh/users/create', register_admin, name='register_admin'),
+    path('rrhh/users/search', search_user_rrhh, name='search_user_rrhh'),
+    path('offer/delete/<int:offer_id>/', delete_offer, name='delete_offer'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
