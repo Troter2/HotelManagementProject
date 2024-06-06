@@ -215,10 +215,10 @@ def booking_filter_check_out(request):
         nombre_habitacion = request.GET.get('nombre_habitacion', None)
         fecha = request.GET.get('fecha', None)
 
-        reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False,guest_is_here=True)
+        reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False, guest_is_here=True)
 
         if not nombre_habitacion and not fecha:
-            reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False,guest_is_here=True)
+            reserves_filtradas = RoomReservation.objects.filter(guest_leaved=False, guest_is_here=True)
         if nombre_habitacion:
             reserves_filtradas = reserves_filtradas.filter(guests_name=nombre_habitacion)
         if fecha:
@@ -230,7 +230,7 @@ def booking_filter_check_out(request):
 
 def lost_item_list(request):
     if request.user.has_perm('recepcionist'):
-        items = LostItem.objects.all().filter(in_possesion=True)
+        items = LostItem.objects.all()
 
         return render(request, 'reception/lost_items_list.html', {'items': items})
     return redirect('home')
@@ -240,9 +240,18 @@ def update_item_reception(request):
     if request.user.has_perm('recepcionist'):
         if request.method == 'POST':
             id = request.POST.get("id")
-            item = LostItem.objects.get(id=id)
-            item.in_possesion = False
-            item.save()
+            context = {}
+            try:
+                item_to_delete = LostItem.objects.get(id=int(id))
+                item_to_delete.delete()
+            except:
+                items = LostItem.objects.all()
+                context.update({'error': 'No se pudo entregar el objeto, porfavor intentelo de nuevo'})
+            items = LostItem.objects.all()
+            context.update({'items': items})
+            return render(request, 'reception/lost_items_list.html',
+                          context)
+
         return redirect('lost_item_list')
     return redirect('home')
 
