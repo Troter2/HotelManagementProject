@@ -27,13 +27,15 @@ def restaurant_page(request):
 
 
 def restaurant_reservation_page(request):
-    if request.method == 'POST':
-        form = RestaurantBookingForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('thanks')
-    else:
-        form = RestaurantBookingForm()
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = RestaurantBookingForm(request.POST)
+            if form.is_valid():
+                booking = form.save(commit=False)
+                booking.user = request.user
+                booking.save()
+                return redirect('thanks')
+    form = RestaurantBookingForm()
     return render(request, 'restaurant/reservation_page.html', {'form': form})
 
 
