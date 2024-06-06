@@ -2,41 +2,13 @@
 {% load static %}
 {% block title %} Habitaciones del cliente {% endblock %}
 {% block content %}
-    {% for reserva in reserves %}
-        <!-- Modal Información-->
-        <div class="modal fade" id="Pop-up-{{ reserva.id }}" tabindex="-1" role="dialog"
-             aria-labelledby="ModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            Reserva habitació Nº{{ reserva.room_number }}
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex row">
-                        <div class="col-6">
-                            <p>DNI reserva: {{ reserva.DNI }}</p>
-                        </div>
-                        <div class="col-6">
-                            <p>Nºreserva: {{ reserva.reservation_number }}</p>
-                        </div>
-                        <div class="col-6">
-                            <p>Numero de huespedes: {{ reserva.guests_number }}</p>
-                        </div>
-                        <div class="col-6">
-                            <p>Tipo de habitacion: {{ reserva.room_number.room_type.name }}</p>
-                        </div>
-                        <div class="col-6">
-                            <p>Fecha de entrada: {{ reserva.guest_checkin }}</p>
-                        </div>
-                        <div class="col-6">
-                            <p>Fecha de salida: {{ reserva.guest_checkout }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Mostrar mensaje de error -->
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
         </div>
+    {% endif %}
+    {% for reserva in reserves %}
         <!-- Modal para cancelar reserva -->
         <div class="modal fade" id="Pop-up-cancel{{ reserva.id }}" tabindex="-1" role="dialog"
              aria-labelledby="ModalLabel" aria-hidden="true">
@@ -44,18 +16,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
-                            Cancelar reserva habitación Nº{{ reserva.room_number }}
+                            Cancelar reserva restaurante
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex row">
                         <div>
-                            Estas seguro de cancelar la reserva de la habitación {{ reserva.room_number }}
-                            con fecha de entrada: {{ reserva.guest_checkin }} y fecha de
-                            salida: {{ reserva.guest_checkout }}
+                            Estas seguro de cancelar la reserva del restaurante con fecha de entrada:
+                            {{ reserva.date_entrance }} y hora de entrada: {{ reserva.entrance_hours }}
                         </div>
                     </div>
-                    <form action="{% url 'delete_booking_user' %}" method="post">
+                    <form action="{% url 'delete_restaurant_user' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ reserva.pk }}">
                         <div class="modal-footer">
@@ -76,14 +47,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body align-self-md-auto">
-                    <form id="filtroFormUser" action="{% url 'booking_filter_user' %}" method="post">
+                    <form id="filtroFormUser" action="{% url 'restaurant_filter_user' %}" method="post">
                         {% csrf_token %}
                         <div class="row align-items-center">
                             <div class="col align-self-start">
                             </div>
                             <div class="col-6 px-4 align-self-center">
-                                <label for="fecha">Fecha:</label>
-                                <input class="form-control" type="date" id="fecha" name="fecha">
+                                <label for="date">Fecha:</label>
+                                <input class="form-control" type="date" id="date" name="date">
                             </div>
                             <div class="col align-self-end">
                             </div>
@@ -117,39 +88,20 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Nombre reserva</th>
-                    <th scope="col">Nº Habitación</th>
+                    <th scope="col">Hora entrada</th>
                     <th scope="col">Fecha entrada</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for reserva in reserves %}
                     <tr>
-                        <th>{{ reserva.guests_name }}</th>
-                        <td>{{ reserva.room_number.room_number }}</td>
-                        <td>{{ reserva.guest_checkin }}</td>
-                        <td>
-                            <button type="button" class="btn btn-success  bi bi-eye-fill" data-bs-toggle="modal"
-                                    data-bs-target="#Pop-up-{{ reserva.id }}">
-                            </button>
-                        </td>
+                        <th>{{ reserva.client_name }}</th>
+                        <td>{{ reserva.entrance_hours }}</td>
+                        <td>{{ reserva.date_entrance }}</td>
                         <td>
                             <button type="button" class="btn btn-danger bi bi-x-octagon-fill" data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-cancel{{ reserva.id }}"></button>
-                        </td>
-                        <td>
-                            <form action="{% url 'comprobante' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="id" value="{{ reserva.pk }}">
-                                <button type="submit" class="btn btn-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                         class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
-                                        <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0"/>
-                                    </svg>
-                                </button>
-                            </form>
                         </td>
                     </tr>
                 {% endfor %}

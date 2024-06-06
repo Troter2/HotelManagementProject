@@ -1,13 +1,15 @@
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-import datetime
+from django.utils import timezone
+from datetime import datetime
 
 from Reception.forms import ReservationForm
 from Reception.models import RoomReservation
 from Reception.views import validar_dni, validate_guests_phone
 from User.forms import CustomerForm, ChangeProfileForm, AdminRegisterForm
 from User.models import Customer
+from Restaurant.models import RestaurantReservation
 
 from accounts.models import CustomUser
 
@@ -145,4 +147,54 @@ def delete_booking_user(request):
         reservation = RoomReservation.objects.get(pk=borrar_reserva)
         reservation.delete()
         return redirect(list_reservations_user)
+    return redirect('home')
+
+
+def list_restaurant_user(request):
+    if request.user.is_authenticated:
+        reserves = RestaurantReservation.objects.all().filter(user=request.user)
+        context = {
+            'reserves': reserves
+        }
+        return render(request, 'user/List_restaurant_user.html', context)
+    return redirect('home')
+
+
+def restaurant_filter_user(request):
+    if request.user.is_authenticated:
+        fecha = request.POST['date']
+        reserves_filtradas = RestaurantReservation.objects.all().filter(user=request.user)
+        if fecha:
+            reserves_filtradas = reserves_filtradas.filter(date_entrance=fecha)
+        return render(request, 'user/List_restaurant_user.html', {'reserves': reserves_filtradas})
+    return redirect('home')
+
+
+def delete_restaurant_user(request):
+    if request.user.is_authenticated:
+        borrar_reserva = request.POST['id']
+        try:
+            reservation = RestaurantReservation.objects.get(pk=borrar_reserva, user=request.user)
+            current_time = timezone.now()
+            reservation_time = timezone.make_aware(
+                datetime.combine(reservation.date_entrance, reservation.entrance_hours))
+            time_difference = reservation_time - current_time
+
+            if time_difference.total_seconds() < 3 * 60 * 60:
+                reserves = RestaurantReservation.objects.filter(user=request.user)
+                context = {
+                    'reserves': reserves,
+                    'error': "No se puede cancelar la reserva con menos de 3 horas de antelación."
+                }
+                return render(request, 'user/List_restaurant_user.html', context)
+            else:
+                reservation.delete()
+                return redirect('list_restaurant_user')
+        except RestaurantReservation.DoesNotExist:
+            reserves = RestaurantReservation.objects.filter(user=request.user)
+            context = {
+                'reserves': reserves,
+                'error': "Reserva no encontrada."
+            }
+            return render(request, 'user/List_restaurant_user.html', context)
     return redirect('home')

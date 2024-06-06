@@ -21,7 +21,7 @@ from Billing.views import list_offers, create_offer, edit_offer, delete_offer
 from Cleaning.views import cleaner_page, update_room_status
 from User.views import add_guest_view, save_more_guest, save_guest, user_profile, user_edit_profile, \
     list_reservations_user, booking_filter_user, delete_booking_user, list_users, delete_user, edit_user, \
-    register_admin, search_user_rrhh
+    list_restaurant_user, delete_restaurant_user, restaurant_filter_user, register_admin, search_user_rrhh
 from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_view, rooms_view, \
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
@@ -95,6 +95,9 @@ urlpatterns = [
     path('user_reservations/', list_reservations_user, name='list_reservations_user'),
     path('user_reservations/filter/', booking_filter_user, name='booking_filter_user'),
     path('user_reservations/delete_reserve/', delete_booking_user, name='delete_booking_user'),
+    path('user_restaurant/', list_restaurant_user, name='list_restaurant_user'),
+    path('user_reservations_restaurant/filter/', restaurant_filter_user, name='restaurant_filter_user'),
+    path('user_restaurant/delete_reserve/', delete_restaurant_user, name='delete_restaurant_user'),
     path('rrhh/users/', list_users, name='list_users'),
     path('rrhh/users/delete/<int:id>', delete_user, name='delete_user'),
     path('rrhh/users/edit/<int:id>', edit_user, name='edit_user'),

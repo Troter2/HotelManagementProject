@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.db.models.functions import datetime
 
-from Reception.models import Room, RoomReservation
+from Reception.models import Room, RoomReservation, CustomUser
 
 
 # Create your models here.
@@ -50,6 +50,7 @@ class ItemAmount(models.Model):
 
 
 class RestaurantReservation(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     client_name = models.CharField(max_length=100)
     room_reservation = models.ForeignKey(RoomReservation, on_delete=models.CASCADE, blank=True, null=True)
     entrance_hours = models.TimeField()
