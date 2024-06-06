@@ -12,11 +12,23 @@ def list_offers(request):
     return redirect('home')
 
 def create_offer(request):
-    if request.method == 'POST':
-        form = PromotionForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('list_offers')
-    else:
-        form = PromotionForm()
-    return render(request, 'billing/create_offer.html', {'form': form})
+    if request.user.has_perm('accountant'):
+        if request.method == 'POST':
+            form = PromotionForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('list_offers')
+        else:
+            form = PromotionForm()
+        return render(request, 'billing/create_offer.html', {'form': form})
+    return redirect('home')
+def edit_offer(request):
+    if request.user.has_perm('accountant'):
+        offer = Promotion.objects.get(pk=request.POST['id'])
+        if 'image' in request.FILES:
+            offer.image = request.FILES['image']
+        offer.title = request.POST['title']
+        offer.description = request.POST['description']
+        offer.save()
+        return redirect('list_offers')
+    return redirect('home')
