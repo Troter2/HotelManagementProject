@@ -58,3 +58,9 @@ class RestaurantReservation(models.Model):
     costumers_number = models.IntegerField(default=0)
     validated = models.BooleanField(default=False)
     order_num = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
+
+
+class RestaurantInvoice(models.Model):
+    reserved_room = models.ForeignKey(RoomReservation, on_delete=models.CASCADE, blank=True, null=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    content = models.JSONField()
