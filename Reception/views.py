@@ -389,7 +389,7 @@ def filtrar_por_numero_reserva(request):
 def order_detail(request):
     if request.user.has_perm('recepcionist'):
         order = Order.objects.create(total=0)
-        items = Item.objects.all()
+        items = Item.objects.filter(active=True)
         return render(request, 'restaurant/order_page.html', {'order': order, 'items': items})
     return redirect('home')
 
