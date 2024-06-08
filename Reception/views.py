@@ -91,11 +91,13 @@ def ocuped_rooms_view(request):
 
 
 def pay_reservation(request):
+    print("entre")
     if request.user.has_perm('recepcionist'):
         if request.method == 'POST':
             reserva_id = request.POST.get('id')
             reserva = RoomReservation.objects.get(pk=reserva_id)
             reserva.room_is_payed = True
+            reserva.guest_leaved = True
             reserva.save()
         return redirect('ocuped_rooms_view')
     return redirect('home')
@@ -256,7 +258,6 @@ def booking_filter_check_out(request):
             'reserves': room_reservations_with_prices
         }
         return render(request, 'reception/ocuped_rooms.html', context)
-        return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
     return redirect('home')
 
 

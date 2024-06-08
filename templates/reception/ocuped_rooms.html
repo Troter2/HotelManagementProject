@@ -22,7 +22,7 @@
                             <p>Nºreserva: {{ reserva.room_reservation.reservation_number }}</p>
                         </div>
                         <div class="col-6">
-                            <p>Telefono: {{ reserva.room_reservation.guests_number }}</p>
+                            <p>Telefono: {{ reserva.room_reservation.guests_phone }}</p>
                         </div>
                         <div class="col-6">
                             <p>Tipo de habitacion: {{ reserva.room_reservation.room_number.room_type.name }}</p>
@@ -64,7 +64,7 @@
             </div>
         </div>
         <!-- Modal de pago -->
-        <div class="modal fade" id="payModal{{ reserva.id }}" tabindex="-1" role="dialog"
+        <div class="modal fade" id="payModal{{ reserva.room_reservation.id }}" tabindex="-1" role="dialog"
              aria-labelledby="payModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -77,11 +77,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Precio: {{ reserva.price }}</p>
+                        <p>Precio: {{ reserva.restaurant_price|floatformat:2 }}€</p>
                         <form action="{% url 'pay_reservation' %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="id" value="{{ reserva.id }}">
-                            <button type="submit" class="btn btn-primary">Pagar</button>
+                            <input type="hidden" name="id" value="{{ reserva.room_reservation.id }}">
+                            <button type="submit" class="btn btn-success">Pagar</button>
                         </form>
                     </div>
                 </div>
@@ -146,9 +146,9 @@
                 <tbody>
                 {% for reserva in reserves %}
                     <tr>
-                        <th>{{ reserva.guests_name }}</th>
-                        <td>{{ reserva.room_number.room_number }}</td>
-                        <td>{{ reserva.guest_checkout }}</td>
+                        <th>{{ reserva.room_reservation.guests_name }}</th>
+                        <td>{{ reserva.room_reservation.room_number.room_number }}</td>
+                        <td>{{ reserva.room_reservation.guest_checkout }}</td>
                         <td class="d-none d-md-table-cell">
                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-{{ reserva.room_reservation.id }}">Validar checkout
