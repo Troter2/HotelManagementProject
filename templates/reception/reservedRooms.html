@@ -159,20 +159,49 @@
                         <th>{{ reserva.guests_name }}</th>
                         <td>{{ reserva.room_number.room_number }}</td>
                         <td>{{ reserva.guest_checkin }}</td>
-                        <td>
+                        <td class="d-none d-md-table-cell">
                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-{{ reserva.id }}">Validar checkin
                             </button>
                         </td>
-                        <td>
+                        <td class="d-none d-md-table-cell">
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#Pop-up-cancel{{ reserva.id }}">Cancelar reserva</button>
+                                    data-bs-target="#Pop-up-cancel{{ reserva.id }}">Cancelar reserva
+                            </button>
                         </td>
-                        <td>
+                        <td class="d-none d-md-table-cell">
                             <a type="button" class="btn btn-primary"
                                href="{% url 'add_guest_view' id=reserva.id %}">Añadir huespedes</a>
                         </td>
+                        <td class="d-md-none" colspan="3">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton-{{ reserva.id }}" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Mostrar acciones
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end"
+                                    aria-labelledby="dropdownMenuButton-{{ reserva.id }}">
+                                    <li>
+                                        <button class="dropdown-item text-success" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#Pop-up-{{ reserva.id }}">Validar checkin
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#Pop-up-cancel{{ reserva.id }}">Cancelar reserva
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-primary"
+                                           href="{% url 'add_guest_view' id=reserva.id %}">Añadir huespedes</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
+
+
                 {% endfor %}
                 </tbody>
             </table>
@@ -215,5 +244,7 @@
         window.onload = function () {
             toggleFilterButton();
         };
+
+
     </script>
 {% endblock %}

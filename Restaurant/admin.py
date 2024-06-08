@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Restaurant.models import RestaurantReservation,Order, ItemAmount, Item
+from Restaurant.models import RestaurantReservation, Order, ItemAmount, Item
 
 # Register your models here.
 

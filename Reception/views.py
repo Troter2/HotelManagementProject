@@ -1,4 +1,6 @@
 import datetime
+from decimal import Decimal
+
 import barcode
 from datetime import datetime
 from datetime import date
@@ -11,7 +13,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from reportlab.graphics.barcode import code39
 
-from Billing.models import Promotion
 from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm
 from io import BytesIO
@@ -20,8 +21,9 @@ from reportlab.lib.utils import ImageReader
 import uuid
 from Reception.models import LostItem
 
-from Restaurant.models import Order, Item, ItemAmount
+from Restaurant.models import Order, Item, ItemAmount, RestaurantReservation
 from Restaurant.views import calculate_total
+from Billing.models import Promotion, Coupon
 
 
 def reception_ini(request):
@@ -69,21 +71,37 @@ def reserved_rooms_view(request):
 
 def ocuped_rooms_view(request):
     if request.user.has_perm('recepcionist'):
-        reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_leaved=False,
-                                                        guest_checkout=datetime.today())
+        room_reservations = RoomReservation.objects.filter(guest_is_here=True, guest_leaved=False,
+                                                           guest_checkout=datetime.today())
+        room_reservations_with_prices = []
+
+        for room_reservation in room_reservations:
+            restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            total_sum = restaurant_reservations.aggregate(total=Sum('order_num__total'))['total'] or 0
+
+            room_reservation_data = {
+                'other_spends': total_sum,
+                'room_reservation': room_reservation,
+                'restaurant_price': total_sum + room_reservation.price
+            }
+
+            room_reservations_with_prices.append(room_reservation_data)
+
         context = {
-            'reserves': reserves
+            'reserves': room_reservations_with_prices
         }
         return render(request, 'reception/ocuped_rooms.html', context)
     return redirect('home')
 
 
 def pay_reservation(request):
+    print("entre")
     if request.user.has_perm('recepcionist'):
         if request.method == 'POST':
             reserva_id = request.POST.get('id')
             reserva = RoomReservation.objects.get(pk=reserva_id)
             reserva.room_is_payed = True
+            reserva.guest_leaved = True
             reserva.save()
         return redirect('ocuped_rooms_view')
     return redirect('home')
@@ -109,6 +127,9 @@ def habitaciones_libres(guest_entry, guest_leave, room_type=None):
 
 def reserve_room(request):
     roomTypes = RoomType.objects.all()
+    active_coupons = Coupon.objects.filter(active=True)
+    coupons_data = {coupon.discount_code: float(coupon.discount_percentage) for coupon in active_coupons}
+
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -119,6 +140,9 @@ def reserve_room(request):
             free_rooms = habitaciones_libres(fecha_entrada, fecha_salida, room_type=room_type)
             guests_phone = request.POST.get('guests_phone')
             guests_number = request.POST.get('guests_number')
+            coupon_code = request.POST.get('coupon_code')
+            discount_percentage = coupons_data.get(coupon_code, 0)
+
             if not validar_dni(dni):
                 form.add_error('DNI', 'El DNI no es válido.')
             if len(free_rooms) < 1:
@@ -128,23 +152,29 @@ def reserve_room(request):
             if validate_guests_number(guests_number):
                 form.add_error('guests_number', 'El numero de huespedes no puede ser 0.')
             if len(form.errors) > 0:
-                return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
-            form.instance.price = 60
+                return render(request, 'reception/reservation_form.html',
+                              {'form': form, 'roomTypes': roomTypes, 'coupons': coupons_data})
+
             uid = uuid.uuid4()
             nights = (fecha_salida - fecha_entrada).days
-            room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
-                                                  guests_name=request.POST['guests_name'],
-                                                  guests_surname=request.POST['guests_surname'],
-                                                  guests_email=request.POST['guests_email'],
-                                                  guests_phone=request.POST['guests_phone'],
-                                                  guest_checkin=request.POST['guest_checkin'],
-                                                  guest_checkout=request.POST['guest_checkout'],
-                                                  guests_number=request.POST['guests_number'],
-                                                  price=(RoomType.objects.filter(id=request.POST['room_type'])[
-                                                             0].price + int(
-                                                      request.POST['guests_number'])) * nights,
-                                                  room_number=free_rooms[0]
-                                                  )
+            room_type = RoomType.objects.filter(id=request.POST['room_type'])[0].price
+            turistic_import = int(guests_number) * nights
+            total_price = (room_type * nights) + turistic_import
+            discounted_price = total_price - (total_price * (Decimal(discount_percentage) / 100))
+            room = RoomReservation.objects.create(
+                reservation_number=uid,
+                DNI=request.POST['DNI'],
+                guests_name=request.POST['guests_name'],
+                guests_surname=request.POST['guests_surname'],
+                guests_email=request.POST['guests_email'],
+                guests_phone=request.POST['guests_phone'],
+                guest_checkin=request.POST['guest_checkin'],
+                guest_checkout=request.POST['guest_checkout'],
+                guests_number=request.POST['guests_number'],
+                price=discounted_price,
+                room_number=free_rooms[0]
+            )
+
             if 'save_data' in request.POST and request.POST['save_data'] == 'on':
                 if request.user.is_authenticated:
                     user = request.user
@@ -156,6 +186,7 @@ def reserve_room(request):
                     user.save()
 
             return render(request, 'reception/thank_you.html', {'id': room.id})
+
     else:
         form = ReservationForm()
         if request.user.is_authenticated:
@@ -168,8 +199,10 @@ def reserve_room(request):
                 'phone': user.telefono,
             }
             return render(request, 'reception/reservation_form.html',
-                          {'form': form, 'roomTypes': roomTypes, 'user_data': user_data})
-        return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+                          {'form': form, 'roomTypes': roomTypes, 'user_data': user_data, 'coupons': coupons_data})
+
+        return render(request, 'reception/reservation_form.html',
+                      {'form': form, 'roomTypes': roomTypes, 'coupons': coupons_data})
 
 
 def validar_dni(dni):
@@ -233,13 +266,30 @@ def booking_filter_check_out(request):
         if fecha:
             reserves_filtradas = reserves_filtradas.filter(guest_checkout=fecha)
 
-        return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+        room_reservations_with_prices = []
+
+        for room_reservation in reserves_filtradas:
+            restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            total_sum = restaurant_reservations.aggregate(total=Sum('order_num__total'))['total'] or 0
+
+            room_reservation_data = {
+                'other_spends': total_sum,
+                'room_reservation': room_reservation,
+                'restaurant_price': total_sum + room_reservation.price
+            }
+
+            room_reservations_with_prices.append(room_reservation_data)
+
+        context = {
+            'reserves': room_reservations_with_prices
+        }
+        return render(request, 'reception/ocuped_rooms.html', context)
     return redirect('home')
 
 
 def lost_item_list(request):
     if request.user.has_perm('recepcionist'):
-        items = LostItem.objects.all().filter(in_possesion=True)
+        items = LostItem.objects.all()
 
         return render(request, 'reception/lost_items_list.html', {'items': items})
     return redirect('home')
@@ -249,9 +299,18 @@ def update_item_reception(request):
     if request.user.has_perm('recepcionist'):
         if request.method == 'POST':
             id = request.POST.get("id")
-            item = LostItem.objects.get(id=id)
-            item.in_possesion = False
-            item.save()
+            context = {}
+            try:
+                item_to_delete = LostItem.objects.get(id=int(id))
+                item_to_delete.delete()
+            except:
+                items = LostItem.objects.all()
+                context.update({'error': 'No se pudo entregar el objeto, porfavor intentelo de nuevo'})
+            items = LostItem.objects.all()
+            context.update({'items': items})
+            return render(request, 'reception/lost_items_list.html',
+                          context)
+
         return redirect('lost_item_list')
     return redirect('home')
 
@@ -391,7 +450,7 @@ def filtrar_por_numero_reserva(request):
 def order_detail(request):
     if request.user.has_perm('recepcionist'):
         order = Order.objects.create(total=0)
-        items = Item.objects.all()
+        items = Item.objects.filter(active=True)
         return render(request, 'restaurant/order_page.html', {'order': order, 'items': items})
     return redirect('home')
 

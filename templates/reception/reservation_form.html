@@ -42,8 +42,6 @@
                                                    value="{% if user_data.dni %}{{ user_data.dni }}{% endif %}">
                                             <label for="DNI">DNI</label>
                                         </div>
-
-
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="text" name="guests_name" class="form-control" id="guests_name"
                                                    placeholder="Nombre" required
@@ -53,7 +51,9 @@
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="text" name="guests_surname" class="form-control"
                                                    id="guests_surname" placeholder="Apellidos" required
-                                                   value="{% if user_data.lastname %}{{ user_data.lastname }}{% endif %}">
+                                                    {% if user_data.lastname %}
+                                                   value="{{ user_data.lastname }}"
+                                                    {% endif %}>
                                             <label for="guests_surname">Apellidos</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
@@ -85,7 +85,8 @@
                                         <div class="mb-4 mx-4 form-floating">
                                             <input type="date" name="guest_checkin" class="form-control"
                                                    id="guest_checkin"
-                                                   placeholder="Fecha de Entrada " onblur="CalculatePrice()" onchange="setMinDate()">
+                                                   placeholder="Fecha de Entrada " onblur="CalculatePrice()"
+                                                   onchange="setMinDate()">
                                             <label for="guest_checkin">Fecha de Entrada</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
@@ -95,10 +96,15 @@
                                             <label for="guest_checkout">Fecha de Salida</label>
                                         </div>
                                         <div class="mb-4 mx-4 form-floating">
-                                            <input type="number"  name="guests_number" class="form-control"
+                                            <input type="number" name="guests_number" class="form-control"
                                                    id="guests_number" placeholder="Número de Huéspedes" required min="0"
                                                    onblur="CalculatePrice()">
                                             <label for="guests_number">Número de Huéspedes</label>
+                                        </div>
+                                        <div class="mb-4 mx-4 form-floating">
+                                            <input type="text" name="coupon_code" class="form-control" id="coupon_code"
+                                                   placeholder="Código de cupón" onblur="CalculatePrice()">
+                                            <label for="coupon_code">Código de cupón</label>
                                         </div>
                                         {% if request.user.is_authenticated %}
                                             <div class="mb-4 mx-4 form-check">
@@ -152,26 +158,29 @@
             document.getElementById("guest_checkout").setAttribute('min', minDateString);
             document.getElementById("guest_checkout").removeAttribute("disabled");
         }
+
+
         function CalculatePrice() {
+            var coupons = {{ coupons|safe }};
             var inputCheckIn = new Date(document.getElementById("guest_checkin").value);
             var inputCheckOut = new Date(document.getElementById("guest_checkout").value);
             var days = (inputCheckOut.getTime() - inputCheckIn.getTime()) / (1000 * 60 * 60 * 24);
             var guestsNumber = parseInt(document.getElementById("guests_number").value);
             var reserveButton = document.getElementById("bugButton");
+            var couponCode = document.getElementById("coupon_code").value.trim();
+            var discountPercentage = coupons[couponCode] || 0;
 
             if (days < 0) {
                 // Si los valores no son válidos, establecer los resultados como 0
                 document.getElementById("precio_habitacion").textContent = "0";
                 document.getElementById("importe_turístico").textContent = "0";
-                document.getElementById("precio_total").textContent = "0";
-                reserveButton.disabled = true;
-                reserveButton.classList.add("disabled");
             } else if (inputCheckIn && inputCheckOut && !isNaN(days) && days && guestsNumber > 0) {
                 var roomTypeSelect = document.getElementById("room_type");
                 var roomPrice = parseFloat(roomTypeSelect.options[roomTypeSelect.selectedIndex].dataset.price);
 
                 var turisticImport = guestsNumber * days;
                 var totalImport = (roomPrice * days) + turisticImport;
+                totalImport = totalImport * ((100 - discountPercentage) / 100);
 
                 document.getElementById("precio_habitacion").textContent = roomPrice;
                 document.getElementById("importe_turístico").textContent = turisticImport;
