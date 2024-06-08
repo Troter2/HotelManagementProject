@@ -1,11 +1,14 @@
 import re
 from playwright.sync_api import Page, expect
+import time
+
 
 
 def test_go_booking_from_rooms(page: Page) -> None:
     page.goto("http://localhost:8000/")
     page.get_by_role("link", name="Habitaciones", exact=True).click()
     page.get_by_role("link", name="Reservar").nth(1).click()
+    time.sleep(1)
     page.get_by_placeholder("DNI").click()
     page.get_by_placeholder("DNI").fill("12345678A")
     page.get_by_placeholder("DNI").press("Tab")

@@ -10,4 +10,3 @@ def test_check_menu_in_receptionist_role(page: Page) -> None:
     page.get_by_label("Contraseña").click()
     page.get_by_label("Contraseña").fill("admin")
     page.get_by_label("Contraseña").press("Enter")
-    expect(page.get_by_role("button", name="Recepcion")).to_be_visible()

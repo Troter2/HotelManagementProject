@@ -1,5 +1,6 @@
 import re
 from playwright.sync_api import Page, expect
+import time
 
 
 def test_book_logged(page: Page) -> None:
@@ -11,6 +12,7 @@ def test_book_logged(page: Page) -> None:
     page.get_by_label("Contraseña").fill("admin")
     page.get_by_role("main").get_by_role("button", name="Log in").click()
     page.get_by_role("link", name="Reservar").click()
+    time.sleep(1)
     page.get_by_placeholder("DNI").click()
     page.get_by_placeholder("DNI").fill("12345678H")
     page.get_by_placeholder("Apellidos").click()
