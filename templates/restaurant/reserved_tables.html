@@ -145,6 +145,9 @@
             </table>
         </div>
     </div>
+    {% if not reservas %}
+        <p class="mx-3 my-3"><strong>No hay reservas para validar en este día</strong></p>
+    {% endif %}
 {% endblock %}
 
 

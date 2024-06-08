@@ -185,6 +185,9 @@
             </table>
         </div>
     </div>
+    {% if not reserves %}
+        <p class="mx-3 my-3"><strong>No hay reservas para hacer chek-out en este día</strong></p>
+    {% endif %}
     <!-- Script para manejar el modal y el envío del formulario -->
     <script>
         var btn = document.getElementById("filtrarReservasBtn");
