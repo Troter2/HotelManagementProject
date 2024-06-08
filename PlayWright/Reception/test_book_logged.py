@@ -13,8 +13,6 @@ def test_book_logged(page: Page) -> None:
     page.get_by_role("main").get_by_role("button", name="Log in").click()
     page.get_by_role("link", name="Reservar").click()
     time.sleep(1)
-    page.get_by_placeholder("DNI").click()
-    page.get_by_placeholder("DNI").fill("12345678H")
     page.get_by_placeholder("Apellidos").click()
     page.get_by_placeholder("Apellidos").fill("guti")
     page.get_by_placeholder("Fecha de Entrada ").fill("2024-12-12")
