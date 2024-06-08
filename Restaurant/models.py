@@ -45,7 +45,7 @@ class Item(models.Model):
 
 class ItemAmount(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.IntegerField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
 
