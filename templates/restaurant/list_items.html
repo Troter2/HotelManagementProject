@@ -19,7 +19,7 @@
                         <label for="add_name" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="add_name" name="name">
                         <label for="add_price" class="form-label">Precio:</label>
-                        <input type="number" class="form-control" id="add_price" name="price">
+                        <input type="number" step="0.01" class="form-control" id="add_price" name="price">
                         <label for="add_img" class="form-label">Imagen:</label>
                         <input type="file" class="form-control" id="add_img" name="img" accept="image/*">
                         <div class="modal-footer">
@@ -63,7 +63,7 @@
                 {% for product in products %}
                     <tr>
                         <th>{{ product.name }}</th>
-                        <td>{{ product.price }}</td>
+                        <td>{{ product.price }}€</td>
                         <td>
                             <form action="{% url 'restaurant_update_item' %}" method="POST">
                                 {% csrf_token %}

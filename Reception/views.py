@@ -19,7 +19,7 @@ from reportlab.lib.utils import ImageReader
 import uuid
 from Reception.models import LostItem
 
-from Restaurant.models import Order, Item, ItemAmount
+from Restaurant.models import Order, Item, ItemAmount, RestaurantReservation
 from Restaurant.views import calculate_total
 
 
@@ -67,10 +67,24 @@ def reserved_rooms_view(request):
 
 def ocuped_rooms_view(request):
     if request.user.has_perm('recepcionist'):
-        reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_leaved=False,
-                                                        guest_checkout=datetime.today())
+        room_reservations = RoomReservation.objects.filter(guest_is_here=True, guest_leaved=False,
+                                                           guest_checkout=datetime.today())
+        room_reservations_with_prices = []
+
+        for room_reservation in room_reservations:
+            restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            total_sum = restaurant_reservations.aggregate(total=Sum('order_num__total'))['total'] or 0
+
+            room_reservation_data = {
+                'other_spends': total_sum,
+                'room_reservation': room_reservation,
+                'restaurant_price': total_sum + room_reservation.price
+            }
+
+            room_reservations_with_prices.append(room_reservation_data)
+
         context = {
-            'reserves': reserves
+            'reserves': room_reservations_with_prices
         }
         return render(request, 'reception/ocuped_rooms.html', context)
     return redirect('home')
@@ -224,6 +238,24 @@ def booking_filter_check_out(request):
         if fecha:
             reserves_filtradas = reserves_filtradas.filter(guest_checkout=fecha)
 
+        room_reservations_with_prices = []
+
+        for room_reservation in reserves_filtradas:
+            restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            total_sum = restaurant_reservations.aggregate(total=Sum('order_num__total'))['total'] or 0
+
+            room_reservation_data = {
+                'other_spends': total_sum,
+                'room_reservation': room_reservation,
+                'restaurant_price': total_sum + room_reservation.price
+            }
+
+            room_reservations_with_prices.append(room_reservation_data)
+
+        context = {
+            'reserves': room_reservations_with_prices
+        }
+        return render(request, 'reception/ocuped_rooms.html', context)
         return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
     return redirect('home')
 
@@ -255,6 +287,7 @@ def update_item_reception(request):
         return redirect('lost_item_list')
     return redirect('home')
 
+
 def delete_booking(request):
     if request.user.has_perm('receptionist'):
         borrar_reserva = request.POST['id']
@@ -262,6 +295,7 @@ def delete_booking(request):
         reservation.delete()
         return redirect(reserved_rooms_view)
     return redirect('home')
+
 
 def generate_reservation_pdf(request):
     now = datetime.now()

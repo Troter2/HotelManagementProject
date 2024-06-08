@@ -120,10 +120,18 @@
                                 </div>
                                 <div class="col">
                                     {% if reserva.order_num.is_paid == False %}
-                                        <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
-                                                data-bs-target="#confirmPayModal_{{ reserva.id }}">
-                                            Pagar
-                                        </button>
+                                        {% if reserva.room_reservation %}
+                                            <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
+                                                    data-bs-target="#confirmPayModal_{{ reserva.id }}">
+                                                Vincular
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
+                                                    data-bs-target="#confirmPayModal_{{ reserva.id }}">
+                                                Pagar
+                                            </button>
+                                        {% endif %}
+
                                     {% else %}
                                         <form action="{% url 'factura' %}" method="post" class="w-100">
                                             {% csrf_token %}
