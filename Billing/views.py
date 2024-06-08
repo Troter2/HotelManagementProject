@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from Billing.forms import PromotionForm
 from Billing.models import Promotion
-
+from Restaurant.models import RestaurantReservation
 
 # Create your views here.
 def list_offers(request):
@@ -12,16 +12,22 @@ def list_offers(request):
     return redirect('home')
 
 def create_offer(request):
-    if request.user.has_perm('accountant'):
-        if request.method == 'POST':
-            form = PromotionForm(request.POST, request.FILES)
-            if form.is_valid():
-                form.save()
-                return redirect('list_offers')
-        else:
-            form = PromotionForm()
-        return render(request, 'billing/create_offer.html', {'form': form})
-    return redirect('home')
+  if request.user.has_perm('accountant'):
+    if request.method == 'POST':
+        form = PromotionForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('list_offers')
+    else:
+        form = PromotionForm()
+    return render(request, 'billing/create_offer.html', {'form': form})
+ return redirect('home')
+
+def list_restaurant_and_room(request):
+  if request.user.has_perm('accountant'):
+    reservations = RestaurantReservation.objects.filter(room_reservation__isnull=False)
+    return render(request, 'billing/list_reservations.html', {'reservas': reservations})
+
   
 def edit_offer(request):
     if request.user.has_perm('accountant'):
@@ -43,4 +49,5 @@ def delete_offer(request, offer_id):
         promotion.delete()
         return redirect('list_offers')
     return redirect('home')
+
 

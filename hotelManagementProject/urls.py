@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import login
 from django.urls import path, include
-from Billing.views import list_offers, create_offer, edit_offer, delete_offer
+
+from Billing.views import list_offers, create_offer, edit_offer, delete_offer, list_restaurant_and_room
+
 from Cleaning.views import cleaner_page, update_room_status
 from User.views import add_guest_view, save_more_guest, save_guest, user_profile, user_edit_profile, \
     list_reservations_user, booking_filter_user, delete_booking_user, list_users, delete_user, edit_user, \
@@ -103,6 +105,7 @@ urlpatterns = [
     path('rrhh/users/edit/<int:id>', edit_user, name='edit_user'),
     path('offer/', list_offers, name='list_offers'),
     path('offer/create/', create_offer, name='create_offer'),
+    path('list_restaurant_and_room/', list_restaurant_and_room, name='list_restaurant_and_room'),
     path('offer/edit_offer/', edit_offer, name='edit_offer'),
     path('rrhh/users/create', register_admin, name='register_admin'),
     path('rrhh/users/search', search_user_rrhh, name='search_user_rrhh'),
