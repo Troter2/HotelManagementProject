@@ -466,7 +466,7 @@ def update_order(request):
             for item_data in items_data:
                 item_id = item_data['item_id']
                 amount = item_data['amount']
-                if int(amount) > 0:
+                if int(amount) >= 0:
                     items = ItemAmount.objects.filter(item_id=item_id, order_id=order_id)
                     if len(items) > 0:
                         items[0].amount = amount
