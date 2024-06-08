@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 
 from Billing.forms import PromotionForm
 from Billing.models import Promotion
+from Restaurant.models import RestaurantReservation
 
 
 # Create your views here.
@@ -20,3 +21,8 @@ def create_offer(request):
     else:
         form = PromotionForm()
     return render(request, 'billing/create_offer.html', {'form': form})
+
+
+def list_restaurant_and_room(request):
+    reservations = RestaurantReservation.objects.filter(room_reservation__isnull=False)
+    return render(request, 'billing/list_reservations.html', {'reservas': reservations})
