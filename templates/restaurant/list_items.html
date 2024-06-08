@@ -19,7 +19,7 @@
                         <label for="add_name" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="add_name" name="name">
                         <label for="add_price" class="form-label">Precio:</label>
-                        <input type="number" class="form-control" id="add_price" name="price">
+                        <input type="number" step="0.01" class="form-control" id="add_price" name="price">
                         <label for="add_img" class="form-label">Imagen:</label>
                         <input type="file" class="form-control" id="add_img" name="img" accept="image/*">
                         <div class="modal-footer">
@@ -63,8 +63,9 @@
                 {% for product in products %}
                     <tr>
                         <th>{{ product.name }}</th>
-                        <td>{{ product.price }}</td>
-                        <td>
+
+                        <td>{{ product.price }}€</td>
+                        <td class="d-none d-md-table-cell">
                             <form action="{% url 'restaurant_update_item' %}" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="id" value="{{ product.id }}">
@@ -81,14 +82,48 @@
                                 {% endif %}
                             </form>
                         </td>
-                        <td>
-                            <button type="button"
-                                    class="btn btn-success"
-                                    data-bs-toggle="modal"
+                        <td class="d-none d-md-table-cell">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-modify-{{ product.id }}">Editar producto
                             </button>
                         </td>
+                        <td class="d-md-none" colspan="2">
+                            <div class="dropdown w-100">
+                                <button class="btn btn-secondary dropdown-toggle w-100" type="button"
+                                        id="dropdownMenuButton-{{ product.id }}" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Mostrar acciones
+                                </button>
+                                <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton-{{ product.id }}">
+                                    <li>
+                                        <form action="{% url 'restaurant_update_item' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ product.id }}">
+                                            {% if product.active %}
+                                                <button type="submit" class="dropdown-item text-danger" name="action"
+                                                        value="deactivate"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#validarModal-{{ product.id }}">Desactivar
+                                                </button>
+                                            {% else %}
+                                                <button type="submit" class="dropdown-item text-success" name="action"
+                                                        value="active"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#Pop-up-{{ product.id }}">Activar
+                                                </button>
+                                            {% endif %}
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-success" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#Pop-up-modify-{{ product.id }}">Editar producto
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
+
                     <div class="modal fade" id="Pop-up-modify-{{ product.id }}" tabindex="-1" role="dialog"
                          aria-labelledby="addModal" aria-hidden="true">
                         <div class="modal-dialog" role="document">

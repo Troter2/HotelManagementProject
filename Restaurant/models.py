@@ -58,4 +58,5 @@ class RestaurantReservation(models.Model):
     costumers_number = models.IntegerField(default=0)
     validated = models.BooleanField(default=False)
     order_num = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
+    paid = models.BooleanField(default=False)
 
