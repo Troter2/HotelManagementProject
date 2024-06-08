@@ -167,4 +167,8 @@
             </table>
         </div>
     </div>
+
+    {% if not ofertas %}
+        <p class="mx-3 my-3"><strong>No hay ofertas disponibles</strong></p>
+    {% endif %}
 {% endblock %}

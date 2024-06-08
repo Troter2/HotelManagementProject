@@ -30,4 +30,7 @@
             </table>
         </div>
     </div>
+    {% if not reservas %}
+        <p class="mx-3 my-3"><strong>No hay reservas </strong></p>
+    {% endif %}
 {% endblock %}
