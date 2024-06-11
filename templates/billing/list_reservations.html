@@ -17,11 +17,11 @@
                 <tbody>
                 {% for reserva in reservas %}
                     <tr>
-                        <td>{{ reserva.client_name }}</td>
-                        <td>{{ reserva.date_entrance }}</td>
-                        <td>{{ reserva.entrance_hours }}</td>
+                        <td>{{ reserva.guests_name }}</td>
+                        <td>{{ reserva.guest_checkin }}</td>
+                        <td>{{ reserva.guest_checkout }}</td>
                         <td>
-                            <a href="{% url 'details_reservation' reserva.room_reservation.id %}"
+                            <a href="{% url 'details_reservation' reserva.id %}"
                                class="btn btn-success">Ver Detalles</a>
                         </td>
                     </tr>

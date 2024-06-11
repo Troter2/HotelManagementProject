@@ -2,32 +2,10 @@
 {% load static %}
 {% block title %}Detalles de la Reserva{% endblock %}
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <h2 class="my-3">Factura y Reservas de Restaurante</h2>
-                <div class="grid row mt-4">
-                    <div class="col-6  col-xl-3  card rounded mx-3 p-3">
-                        <div class="header">
-                            <h3>Factura habitación</h3>
-                        </div>
-                        <div class="col">
-                            <p>ID de Habitación: {{ room_reservation.room_number.id }}</p>
-                        </div>
-                    </div>
-                    {% for restaurant_reservation in restaurant_reservations %}
-                        <div class="col-6 col-xl-3  card rounded mx-3 p-3">
-                            <div class="header">
-                                <h3>Fecha de Reserva</h3>
-                            </div>
-                            <div class="details">
-                                <p>{{ restaurant_reservation.date_entrance }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
+    <div class="container-fluid content">
+        <div class="row m-3">
+
+            <div class="col-12 col-md-6 my-3">
                 <h2>Número de Reserva: {{ room_reservation.reservation_number }}</h2>
                 <h3>Detalles de la Reserva de Habitación</h3>
                 <p><strong>Cliente:</strong> {{ room_reservation.guests_name }} {{ room_reservation.guests_surname }}
@@ -41,7 +19,7 @@
                 <p><strong>Número de Huéspedes:</strong> {{ room_reservation.guests_number }}</p>
                 <p><strong>Precio:</strong> {{ room_reservation.price }}</p>
                 <p><strong>Habitación Pagada:</strong> {{ room_reservation.room_is_payed }}</p>
-
+                {% if restaurant_reservations %}
                 <h3>Reservas de Restaurante Asociadas</h3>
                 <ul>
                     {% for restaurant_reservation in restaurant_reservations %}
@@ -51,6 +29,14 @@
                         </li>
                     {% endfor %}
                 </ul>
+            {% endif %}
+            </div>
+            <div class="col-12 col-md-6">
+                <h2 class="my-3">Factura y Reservas relacionadas</h2>
+
+                <embed src="{% url 'generate_room_invoice_for_preview' %}?uuid={{ room_reservation.reservation_number }}"
+                       class="w-100 h-100">
+
             </div>
         </div>
     </div>
