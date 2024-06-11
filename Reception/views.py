@@ -1,4 +1,5 @@
 import datetime
+from PyPDF2 import PdfMerger
 from decimal import Decimal
 
 import barcode
@@ -12,6 +13,7 @@ from django.db.models import Q, F, Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from reportlab.graphics.barcode import code39
+from reportlab.lib.pagesizes import letter
 
 from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm
@@ -22,7 +24,7 @@ import uuid
 from Reception.models import LostItem
 
 from Restaurant.models import Order, Item, ItemAmount, RestaurantReservation
-from Restaurant.views import calculate_total
+from Restaurant.views import calculate_total, create_order_pdf_bytes
 from Billing.models import Promotion, Coupon
 
 
@@ -103,6 +105,109 @@ def pay_reservation(request):
             reserva.room_is_payed = True
             reserva.guest_leaved = True
             reserva.save()
+        return redirect('ocuped_rooms_view')
+    return redirect('home')
+
+
+def generate_room_invoice(request):
+    if request.user.has_perm(['recepcionist', 'accountant']):
+        if request.method == 'GET':
+            buffer_main = BytesIO()
+
+            reserve_uuid = request.GET.get('uuid')
+            room_reservation = get_object_or_404(RoomReservation, reservation_number=reserve_uuid)
+            restaurant_reservation = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="reporte.pdf"'
+
+            c = canvas.Canvas(buffer_main, pagesize=letter)
+
+            img_path = 'static/img/Logo.png'
+            img = ImageReader(img_path)
+            c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(80, 795)
+            titleObject.textLine("Restaurante las Palmeras")
+            c.drawText(titleObject)
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(30, 745)
+            titleObject.textLine("Factura nº" + str(room_reservation.id))
+            c.drawText(titleObject)
+
+            text = f"Nº huespedes: {room_reservation.guests_number}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 720)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-in: {room_reservation.guest_checkin}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 690)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio por noche: {room_reservation.room_number.room_type.price}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 670)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Nº noches: {(room_reservation.guest_checkout - room_reservation.guest_checkin).days}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 650)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-out: {room_reservation.guest_checkout}"
+            titleObject = c.beginText(30, 740)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 690)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            c.showPage()
+            c.save()
+
+            buffers = [buffer_main]
+
+            for reservation in restaurant_reservation:
+                if reservation.order_num:
+                    buffer_individual = create_order_pdf_bytes(reservation)
+                    buffers.append(buffer_individual)
+
+            merger = PdfMerger()
+            for buffer in buffers:
+                merger.append(buffer)
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="combined.pdf"'
+
+            merger.write(response)
+            merger.close()
+
+            return response
+
+
+print("test")
+
+
+def pay_reservation_with_invoices(request):
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            reserva_id = request.POST.get('id')
+            reserva = RoomReservation.objects.get(pk=reserva_id)
+            reserva.room_is_payed = True
+            reserva.guest_leaved = True
+            reserva.save()
+
         return redirect('ocuped_rooms_view')
     return redirect('home')
 
