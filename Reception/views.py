@@ -195,8 +195,98 @@ def generate_room_invoice(request):
 
             return response
 
+def generate_room_invoice_for_preview(request):
+    if request.user.has_perm(['recepcionist', 'accountant']):
+        if request.method == 'GET':
+            buffer_main = BytesIO()
 
-print("test")
+            reserve_uuid = request.GET.get('uuid')
+            room_reservation = get_object_or_404(RoomReservation, reservation_number=reserve_uuid)
+            restaurant_reservation = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="reporte.pdf"'
+
+            c = canvas.Canvas(buffer_main, pagesize=letter)
+
+            img_path = 'static/img/Logo.png'
+            img = ImageReader(img_path)
+            c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(80, 795)
+            titleObject.textLine("Restaurante las Palmeras")
+            c.drawText(titleObject)
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(30, 745)
+            titleObject.textLine("Factura nº" + str(room_reservation.id))
+            c.drawText(titleObject)
+
+            text = f"Nº huespedes: {room_reservation.guests_number}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 720)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-in: {room_reservation.guest_checkin}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 690)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio por noche: {room_reservation.room_number.room_type.price}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 670)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Nº noches: {(room_reservation.guest_checkout - room_reservation.guest_checkin).days}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 650)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-out: {room_reservation.guest_checkout}"
+            titleObject = c.beginText(30, 740)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 690)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            c.showPage()
+            c.save()
+
+            buffer_main.seek(0)
+            buffers = [buffer_main]
+
+            for reservation in restaurant_reservation:
+                if reservation.order_num:
+                    buffer_individual = create_order_pdf_bytes(reservation)
+                    buffers.append(buffer_individual)
+
+            merger = PdfMerger()
+            for buffer in buffers:
+                merger.append(buffer)
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="combined.pdf"'
+
+            merger.write(response)
+            merger.close()
+
+            return response
+        else:
+            return HttpResponse("Method not allowed", status=405)
+    else:
+        return HttpResponse("Permission denied", status=403)
+
+
 
 
 def pay_reservation_with_invoices(request):

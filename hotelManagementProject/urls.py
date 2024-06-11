@@ -29,7 +29,8 @@ from Reception.views import reception_ini, reserved_rooms_view, ocuped_rooms_vie
     contact, what_todo, generate_reservation_pdf, thank_you, \
     update_book_arrive, pay_reservation, booking_filter, reserve_room, booking_filter_check_out, \
     filtrar_por_numero_reserva, order_detail, update_order, add_lost_item, lost_item_list, update_item_reception, \
-    update_book_gone, delete_booking
+    update_book_gone, delete_booking, pay_reservation_with_invoices, generate_room_invoice, \
+    generate_room_invoice_for_preview
 from register import views as register
 from Restaurant.views import restaurant_reservation_page, restaurant_page, reserved_tables, update_validation, \
     restaurant_reservation_page_uuid, restaurant_validation_page, thanks, restaurant_list_items, create_product, \
@@ -112,6 +113,9 @@ urlpatterns = [
     path('rrhh/users/search', search_user_rrhh, name='search_user_rrhh'),
     path('offer/delete/<int:offer_id>/', delete_offer, name='delete_offer'),
     path('details_reservation/<int:reservation_id>/', details_reservation, name='details_reservation'),
+    path('pay_reservation_with_invoices', pay_reservation_with_invoices, name='pay_reservation_with_invoices'),
+    path('generate_room_invoice', generate_room_invoice, name='generate_room_invoice'),
+    path('generate_room_invoice_for_preview', generate_room_invoice_for_preview, name='generate_room_invoice_for_preview'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

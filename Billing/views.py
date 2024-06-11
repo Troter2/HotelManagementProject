@@ -29,7 +29,7 @@ def create_offer(request):
 
 def list_restaurant_and_room(request):
     if request.user.has_perm('accountant'):
-        reservations = RestaurantReservation.objects.filter(room_reservation__isnull=False)
+        reservations = RoomReservation.objects.filter(guest_leaved=True)
         return render(request, 'billing/list_reservations.html', {'reservas': reservations})
 
 
