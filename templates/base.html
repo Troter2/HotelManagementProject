@@ -159,13 +159,16 @@
                                 Contable
                             </a>
                             <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarContable">
-                                <div class="nav-link-div" onclick="navigateToURL('{% url 'list_offers' %}')">
-                                    <li class="dropdown-item rounded no-blue">
-                                        <a href="{% url 'list_offers' %}">
-                                            Ofertas
-                                        </a>
-                                    </li>
-                                </div>
+                                <li class="dropdown-item rounded no-blue">
+                                    <a href="{% url 'list_offers' %}">
+                                        Ofertas
+                                    </a>
+                                </li>
+                                <li class="dropdown-item rounded no-blue">
+                                    <a href="{% url 'list_restaurant_and_room' %}">
+                                        Listado de Reservas
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     {% endif %}

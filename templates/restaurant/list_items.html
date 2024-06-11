@@ -157,7 +157,9 @@
             </table>
         </div>
     </div>
-
+    {% if not products %}
+        <p class="mx-3 my-3"><strong>No hay productos</strong></p>
+    {% endif %}
 {% endblock %}
 
 
