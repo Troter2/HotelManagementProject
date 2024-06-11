@@ -44,7 +44,7 @@
                             <div class="col-12">
                                 <p>Estado de pago: Pendiente</p>
                             </div>
-                                <hr>
+                            <hr>
                             <div class="col-12">
                                 <p>Precio estancia: {{ reserva.room_reservation.price|floatformat:2 }}€</p>
                                 <p>Otros gastos: {{ reserva.other_spends|floatformat:2 }}€</p>
@@ -76,12 +76,22 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body row">
                         <p>Precio: {{ reserva.restaurant_price|floatformat:2 }}€</p>
+
+
+                    </div>
+                    <div class="modal-footer">
                         <form action="{% url 'pay_reservation' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="id" value="{{ reserva.room_reservation.id }}">
-                            <button type="submit" class="btn btn-success">Pagar</button>
+                            <button type="submit" class="btn btn-primary float-start">Pagar</button>
+                        </form>
+
+                        <form action="{% url 'pay_reservation_with_invoices' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ reserva.room_reservation.id }}">
+                            <button type="submit" class="btn btn-primary float-start">Pagar con facturas</button>
                         </form>
                     </div>
                 </div>
@@ -161,14 +171,16 @@
                         <td class="d-md-none" colspan="3">
                             <div class="dropdown w-100">
                                 <button class="btn btn-secondary dropdown-toggle w-100" type="button"
-                                        id="dropdownMenuButton-{{ reserva.room_reservation.id }}" data-bs-toggle="dropdown"
+                                        id="dropdownMenuButton-{{ reserva.room_reservation.id }}"
+                                        data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                     Mostrar acciones
                                 </button>
                                 <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton-{{ reserva.id }}">
                                     <li>
                                         <button class="dropdown-item text-success" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#Pop-up-{{ reserva.room_reservation.id }}">Validar checkout
+                                                data-bs-target="#Pop-up-{{ reserva.room_reservation.id }}">Validar
+                                            checkout
                                         </button>
                                     </li>
                                     <li>

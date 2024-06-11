@@ -188,9 +188,15 @@ def thanks(request):
 
 
 def generate_order_pdf(request):
-    now = datetime.now()
     id = request.POST.get('id', '')
     reservation = RestaurantReservation.objects.get(pk=id)
+    buffer = create_order_pdf_bytes(reservation)
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
+    return response
+
+def create_order_pdf_bytes(reservation):
     items_amounts = []
     if reservation.order_num:
         order = reservation.order_num
@@ -265,12 +271,7 @@ def generate_order_pdf(request):
     t.drawOn(c, 30, 600)
 
     c.save()
-
-    buffer.seek(0)
-    response = HttpResponse(buffer, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
-    return response
-
+    return buffer
 
 def view_orders_without_reservation(request):
     if request.user.has_perm('waiter'):
