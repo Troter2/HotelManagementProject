@@ -6,134 +6,200 @@
     <div class="container-fluid">
         <div class="row mt-3">
             <div class="col">
-                <a href="{% url 'create_offer' %}" class="btn btn-primary">Crear Oferta</a>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#create-promotion" class="btn btn-primary">
+                    Crear Oferta
+                </button>
             </div>
         </div>
     </div>
-</div>
-<div class="promotions-list mt-3">
-    <div class="container-fluid">
-        <table class="table table-striped table-dark col-sm-11">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Título</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Código de Descuento</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for oferta in ofertas %}
-            <tr>
-                <td>{{ oferta.title }}</td>
-                <td>{{ oferta.description }}</td>
-                <td>{{ oferta.discount_code.discount_code }}</td>
-                <td>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                            data-bs-target="#Pop-up-{{ oferta.id }}">Ver Detalles
-                    </button>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal-{{ oferta.id }}">Borrar
-                    </button>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+    </div>
+    <div class="promotions-list mt-3">
+        <div class="container-fluid">
+            <table class="table table-striped table-dark col-sm-11">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Código de Descuento</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for oferta in ofertas %}
+                    <tr>
+                        <td>{{ oferta.title }}</td>
+                        <td>{{ oferta.description }}</td>
+                        <td>{{ oferta.discount_code.discount_code }}</td>
+                        <td>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#Pop-up-{{ oferta.id }}">Ver Detalles
+                            </button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal-{{ oferta.id }}">Borrar
+                            </button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-edit-{{ oferta.id }}">
                                 Editar Oferta
-                    </button>
-                </td>
-            </tr>
+                            </button>
+                        </td>
+                    </tr>
 
-            <!-- Modal de detalles -->
-            <div class="modal fade" id="Pop-up-{{ oferta.id }}" tabindex="-1" role="dialog"
-                 aria-labelledby="ModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">
-                                Detalles de la Promoción Nº{{ oferta.id }}
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>Título:</strong> {{ oferta.title }}</p>
-                            <p><strong>Descripción:</strong> {{ oferta.description }}</p>
-                            <p><strong>Código de Descuento:</strong> {{ oferta.discount_code.discount_code }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal de confirmación de borrado -->
-            <div class="modal fade" id="deleteModal-{{ oferta.id }}" tabindex="-1" role="dialog"
-                 aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteModalLabel">Confirmar Borrado</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>¿Estás seguro de que deseas borrar la oferta <strong>{{ oferta.title }}</strong>?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <form method="post" action="{% url 'delete_offer' oferta.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Borrar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-              
-            <!-- Modales de editar oferta-->
-            <div class="modal fade" id="Pop-up-edit-{{ oferta.id }}" tabindex="-1" role="dialog"
-                 aria-labelledby="ModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">
-                                Editar oferta Nº{{ oferta.id }}
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form action="{% url 'edit_offer' %}" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="modal-body d-flex row ">
-                                <input type="hidden" name="id" value="{{ oferta.pk }}">
-                                <div class="col-12">
-                                    <p><strong>Imagen:</strong></p>
-                                    <div class="input-group mb-3">
-                                        <input type="file" class="form-control" id="image"
-                                               value=" {% static oferta.image %} " name="image">
-                                    </div>
+                    <!-- Modal de detalles -->
+                    <div class="modal fade" id="Pop-up-{{ oferta.id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="ModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">
+                                        Detalles de la Promoción Nº{{ oferta.id }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
-                                <div class="col-6">
-                                    <div class="col-12">
-                                        <p><strong>Titulo:</strong></p>
-                                        <input type="text" class="form-control" id="title"
-                                               value="{{ oferta.title }}" name="title">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="col-12">
-                                        <p><strong>Descripcion:</strong></p>
-                                        <input type="text" class="form-control" id="description"
-                                               value="{{ oferta.description }}" name="description">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">
-                                        Guardar
-                                    </button>
+                                <div class="modal-body">
+                                    <p><strong>Título:</strong> {{ oferta.title }}</p>
+                                    <p><strong>Descripción:</strong> {{ oferta.description }}</p>
+                                    <p><strong>Código de Descuento:</strong> {{ oferta.discount_code.discount_code }}
+                                    </p>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-            </div>
-            {% endfor %}
-            </tbody>
-        </table>
+
+                    <!-- Modal de confirmación de borrado -->
+                    <div class="modal fade" id="deleteModal-{{ oferta.id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Borrado</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>¿Estás seguro de que deseas borrar la oferta <strong>{{ oferta.title }}</strong>?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar
+                                    </button>
+                                    <form method="post" action="{% url 'delete_offer' oferta.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Borrar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal de editar oferta-->
+                    <div class="modal fade" id="Pop-up-edit-{{ oferta.id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="ModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">
+                                        Editar oferta Nº{{ oferta.id }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <form action="{% url 'edit_offer' %}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="modal-body d-flex row ">
+                                        <input type="hidden" name="id" value="{{ oferta.pk }}">
+                                        <div class="col-12">
+                                            <p><strong>Imagen:</strong></p>
+                                            <div class="input-group mb-3">
+                                                <input type="file" class="form-control" id="image"
+                                                       value=" {% static oferta.image %} " name="image">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="col-12">
+                                                <p><strong>Titulo:</strong></p>
+                                                <input type="text" class="form-control" id="title"
+                                                       value="{{ oferta.title }}" name="title">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="col-12">
+                                                <p><strong>Descripcion:</strong></p>
+                                                <input type="text" class="form-control" id="description"
+                                                       value="{{ oferta.description }}" name="description">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">
+                                                Guardar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+
+    <!-- Modal para crear un cupon -->
+    <div class="modal fade" id="create-promotion" tabindex="-1" role="dialog"
+         aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Crear Promocion
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{% url 'create_offer' %}" enctype="multipart/form-data">
+                    <div class="modal-body d-flex row ">
+                        {% csrf_token %}
+                        <div class="col-12">
+                            <p><strong>Imagen:</strong></p>
+                            <div class="input-group mb-3">
+                                <input type="file" class="form-control" id="image"
+                                       name="image">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="col-12">
+                                <p><strong>Titulo:</strong></p>
+                                <input type="text" class="form-control"
+                                       id="title" name="title">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="col-12">
+                                <p><strong>Descripcion:</strong></p>
+                                <input type="text" class="form-control"
+                                       id="description" name="description">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <p><strong>Codigo:</strong></p>
+                            <div class="col-12">
+                                <select class="form-select" id="discount_code" name="discount_code">
+                                    {% for cupon in cupones %}
+                                        {% if cupon.active == True %}
+                                            <option value="cupon.discount_code">{{ cupon.discount_code }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Crear</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
