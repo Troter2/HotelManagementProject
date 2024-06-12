@@ -39,6 +39,10 @@
             </table>
         </div>
     </div>
+
+    {% if not orders_without_reservation %}
+        <p class="mx-3 my-3"><strong>No hay tickets pendientes</strong></p>
+    {% endif %}
 {% endblock %}
 
 

@@ -30,7 +30,7 @@
                         <td>{{ oferta.title }}</td>
                         <td>{{ oferta.description }}</td>
                         <td>{{ oferta.discount_code.discount_code }}</td>
-                        <td>
+                        <td class="d-none d-md-table-cell">
                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#Pop-up-{{ oferta.id }}">Ver Detalles
                             </button>
@@ -38,9 +38,34 @@
                                     data-bs-target="#deleteModal-{{ oferta.id }}">Borrar
                             </button>
                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                    data-bs-target="#Pop-up-edit-{{ oferta.id }}">
-                                Editar Oferta
+                                    data-bs-target="#Pop-up-edit-{{ oferta.id }}">Editar Oferta
                             </button>
+                        </td>
+                        <td class="d-md-none" colspan="3">
+                            <div class="dropdown w-100">
+                                <button class="btn btn-secondary dropdown-toggle w-100" type="button"
+                                        id="dropdownMenuButton-{{ oferta.id }}" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Mostrar acciones
+                                </button>
+                                <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton-{{ oferta.id }}">
+                                    <li>
+                                        <button class="dropdown-item text-success" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#Pop-up-{{ oferta.id }}">Ver Detalles
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal-{{ oferta.id }}">Borrar
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-success" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#Pop-up-edit-{{ oferta.id }}">Editar Oferta
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
 
@@ -93,6 +118,7 @@
                     </div>
 
                     <!-- Modal de editar oferta-->
+
                     <div class="modal fade" id="Pop-up-edit-{{ oferta.id }}" tabindex="-1" role="dialog"
                          aria-labelledby="ModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -146,6 +172,7 @@
     </div>
 
     <!-- Modal para crear un cupon -->
+
     <div class="modal fade" id="create-promotion" tabindex="-1" role="dialog"
          aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -202,4 +229,7 @@
         </div>
     </div>
 
+    {% if not ofertas %}
+        <p class="mx-3 my-3"><strong>No hay ofertas disponibles</strong></p>
+    {% endif %}
 {% endblock %}

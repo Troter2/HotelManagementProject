@@ -157,4 +157,7 @@
             </table>
         </div>
     </div>
+    {% if not reserves %}
+        <p class="mx-3 my-3"><strong>No ha realizado ninguna reserva</strong></p>
+    {% endif %}
 {% endblock %}

@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from Billing.forms import PromotionForm, CouponForm
 from Billing.models import Promotion, Coupon
+from Reception.models import RoomReservation
+from Restaurant.models import RestaurantReservation
 
 
 # Create your views here.
@@ -11,7 +13,6 @@ def list_offers(request):
         coupons = Coupon.objects.all()
         return render(request, 'billing/list_offers.html', {'ofertas': promotions, 'cupones': coupons})
     return redirect('home')
-
 
 def list_coupons(request):
     if request.user.has_perm('accountant'):
@@ -52,7 +53,6 @@ def edit_coupon(request):
         return redirect('list_coupons')
     return redirect('home')
 
-
 def create_offer(request):
     if request.user.has_perm('accountant') and request.method == 'POST':
         form = PromotionForm(request.POST, request.FILES)
@@ -60,6 +60,11 @@ def create_offer(request):
             form.save()
         return redirect('list_offers')
     return redirect('home')
+
+  def list_restaurant_and_room(request):
+    if request.user.has_perm('accountant'):
+        reservations = RoomReservation.objects.filter(guest_leaved=True)
+        return render(request, 'billing/list_reservations.html', {'reservas': reservations})
 
 
 def edit_offer(request):
@@ -83,3 +88,8 @@ def delete_offer(request, offer_id):
         promotion.delete()
         return redirect('list_offers')
     return redirect('home')
+
+def details_reservation(request, reservation_id):
+    room_reservation = get_object_or_404(RoomReservation, pk=reservation_id)
+    restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+    return render(request, 'billing/details_reservation.html', {'room_reservation': room_reservation, 'restaurant_reservations': restaurant_reservations})

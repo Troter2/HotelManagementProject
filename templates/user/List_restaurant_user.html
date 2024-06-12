@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %} Habitaciones del cliente {% endblock %}
+{% block title %} Reservas restaurante del cliente {% endblock %}
 {% block content %}
     <!-- Mostrar mensaje de error -->
     {% if error %}
@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-    <h1 class="mx-3 my-3">Reservas del cliente </h1>
+    <h1 class="mx-3 my-3">Reservas restaurante del cliente </h1>
     <!-- Botón de filtrado -->
     <div class="container-fluid">
         <div class="row mt-3">
@@ -109,4 +109,7 @@
             </table>
         </div>
     </div>
+    {% if not reserves %}
+        <p class="mx-3 my-3"><strong>No ha realizado ninguna reserva</strong></p>
+    {% endif %}
 {% endblock %}
