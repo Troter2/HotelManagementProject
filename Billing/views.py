@@ -55,6 +55,7 @@ def delete_offer(request, offer_id):
         return redirect('list_offers')
     return redirect('home')
 
+
 def details_reservation(request, reservation_id):
     room_reservation = get_object_or_404(RoomReservation, pk=reservation_id)
     restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
