@@ -10,5 +10,10 @@ class PromotionForm(forms.ModelForm):
 
     discount_code = forms.ModelChoiceField(
         queryset=Coupon.objects.filter(active=True),
-        label="Código de Descuento"
+        label="discount_code"
     )
+
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = ['discount_code', 'discount_percentage']
