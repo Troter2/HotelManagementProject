@@ -124,52 +124,88 @@ def generate_room_invoice(request):
 
             img_path = 'static/img/Logo.png'
             img = ImageReader(img_path)
-            c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
+            c.drawImage(img, x=20, y=720, width=50, height=50, mask='auto')
 
             titleObject = c.beginText(80, 770)
             titleObject.setFont("Helvetica", 21)
-            titleObject.setTextOrigin(80, 795)
+            titleObject.setTextOrigin(80, 735)
             titleObject.textLine("Restaurante las Palmeras")
             c.drawText(titleObject)
 
             titleObject = c.beginText(80, 770)
             titleObject.setFont("Helvetica", 21)
-            titleObject.setTextOrigin(30, 745)
+            titleObject.setTextOrigin(30, 685)
             titleObject.textLine("Factura nº" + str(room_reservation.id))
             c.drawText(titleObject)
 
             text = f"Nº huespedes: {room_reservation.guests_number}"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(450, 720)
+            titleObject.setTextOrigin(450, 630)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
             text = f"Check-in: {room_reservation.guest_checkin}"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(30, 690)
+            titleObject.setTextOrigin(30, 630)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
             text = f"Precio por noche: {room_reservation.room_number.room_type.price}"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(30, 670)
+            titleObject.setTextOrigin(30, 610)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
             text = f"Nº noches: {(room_reservation.guest_checkout - room_reservation.guest_checkin).days}"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(30, 650)
+            titleObject.setTextOrigin(30, 590)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
             text = f"Check-out: {room_reservation.guest_checkout}"
             titleObject = c.beginText(30, 740)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(450, 690)
+            titleObject.setTextOrigin(450, 630)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio sin impuestos: {room_reservation.price - (room_reservation.guests_number *
+                                                                      (room_reservation.guest_checkout -
+                                                                       room_reservation.guest_checkin).days)}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 570)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Impuesto turístico: {room_reservation.guests_number *
+                                          (room_reservation.guest_checkout -
+                                           room_reservation.guest_checkin).days}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 550)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            suma = 0
+            for reservation in restaurant_reservation:
+                suma += reservation.order_num.total
+
+            text = f"Servicios extra: {suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 530)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Total: {room_reservation.price + suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica-Bold", 12)
+            titleObject.setTextOrigin(30, 510)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
@@ -195,6 +231,7 @@ def generate_room_invoice(request):
 
             return response
 
+
 def generate_room_invoice_for_preview(request):
     if request.user.has_perm(['recepcionist', 'accountant']):
         if request.method == 'GET':
@@ -210,52 +247,88 @@ def generate_room_invoice_for_preview(request):
 
             img_path = 'static/img/Logo.png'
             img = ImageReader(img_path)
-            c.drawImage(img, x=20, y=780, width=50, height=50, mask='auto')
+            c.drawImage(img, x=20, y=720, width=50, height=50, mask='auto')
 
             titleObject = c.beginText(80, 770)
             titleObject.setFont("Helvetica", 21)
-            titleObject.setTextOrigin(80, 795)
+            titleObject.setTextOrigin(80, 735)
             titleObject.textLine("Restaurante las Palmeras")
             c.drawText(titleObject)
 
             titleObject = c.beginText(80, 770)
             titleObject.setFont("Helvetica", 21)
-            titleObject.setTextOrigin(30, 745)
+            titleObject.setTextOrigin(30, 685)
             titleObject.textLine("Factura nº" + str(room_reservation.id))
             c.drawText(titleObject)
 
             text = f"Nº huespedes: {room_reservation.guests_number}"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(450, 720)
+            titleObject.setTextOrigin(450, 630)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
             text = f"Check-in: {room_reservation.guest_checkin}"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(30, 690)
+            titleObject.setTextOrigin(30, 630)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
-            text = f"Precio por noche: {room_reservation.room_number.room_type.price}"
+            text = f"Precio por noche: {room_reservation.room_number.room_type.price}€"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(30, 670)
+            titleObject.setTextOrigin(30, 610)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
             text = f"Nº noches: {(room_reservation.guest_checkout - room_reservation.guest_checkin).days}"
             titleObject = c.beginText(30, 770)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(30, 650)
+            titleObject.setTextOrigin(30, 590)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
             text = f"Check-out: {room_reservation.guest_checkout}"
             titleObject = c.beginText(30, 740)
             titleObject.setFont("Helvetica", 12)
-            titleObject.setTextOrigin(450, 690)
+            titleObject.setTextOrigin(450, 610)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio sin impuestos: {room_reservation.price - (room_reservation.guests_number *
+                                                                      (room_reservation.guest_checkout -
+                                                                       room_reservation.guest_checkin).days)}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 570)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Impuesto turístico: {room_reservation.guests_number *
+                                          (room_reservation.guest_checkout -
+                                           room_reservation.guest_checkin).days}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 550)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            suma = 0
+            for reservation in restaurant_reservation:
+                suma += reservation.order_num.total
+
+            text = f"Servicios extra: {suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 530)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Total: {room_reservation.price + suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica-Bold", 12)
+            titleObject.setTextOrigin(30, 510)
             titleObject.textLine(text)
             c.drawText(titleObject)
 
@@ -285,8 +358,6 @@ def generate_room_invoice_for_preview(request):
             return HttpResponse("Method not allowed", status=405)
     else:
         return HttpResponse("Permission denied", status=403)
-
-
 
 
 def pay_reservation_with_invoices(request):
