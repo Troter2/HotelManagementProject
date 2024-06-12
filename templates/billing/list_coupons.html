@@ -34,7 +34,7 @@
                                 <form method="post" action="{% url 'edit_status_coupon' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="id_coupon" value="{{ cupon.pk }}">
-                                    <button type="submit" class="btn btn-success">activo</button>
+                                    <button type="submit" class="btn btn-success">Activo</button>
                                 </form>
                             </td>
                         {% else %}
@@ -42,7 +42,7 @@
                                 <form method="post" action="{% url 'edit_status_coupon' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="id_coupon" value="{{ cupon.pk }}">
-                                    <button type="submit" class="btn btn-danger">inactivo</button>
+                                    <button type="submit" class="btn btn-danger">Inactivo</button>
                                 </form>
                             </td>
                         {% endif %}

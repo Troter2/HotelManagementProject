@@ -187,7 +187,7 @@
                                 <select class="form-select" id="discount_code" name="discount_code">
                                     {% for cupon in cupones %}
                                         {% if cupon.active == True %}
-                                            <option value="cupon.discount_code">{{ cupon.discount_code }}</option>
+                                            <option value="{{ cupon.id }}">{{ cupon.discount_code }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
