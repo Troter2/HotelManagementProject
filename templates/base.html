@@ -159,9 +159,40 @@
                                 Contable
                             </a>
                             <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarContable">
+                                <div class="nav-link-div" onclick="navigateToURL('{% url 'list_offers' %}')">
+                                    <li class="dropdown-item rounded no-blue">
+                                        <a href="{% url 'list_offers' %}">
+                                            Ofertas
+                                        </a>
+                                    </li>
+                                </div>
+                                <div class="nav-link-div" onclick="navigateToURL('{% url 'list_coupons' %}')">
+                                    <li class="dropdown-item rounded no-blue">
+                                        <a href="{% url 'list_coupons' %}">
+                                            Cupones
+                                        </a>
+                                    </li>
+                                </div>
+                                <div class="nav-link-div" onclick="navigateToURL('{% url 'list_restaurant_and_room' %}')">
+                                    <li class="dropdown-item rounded no-blue">
+                                        <a href="{% url 'list_restaurant_and_room' %}">
+                                            Listado de Reservas
+                                        </a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    {% if request.user|has_group:"rrhh" %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarRrhh" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                RRHH
+                            </a>
+                            <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
                                 <li class="dropdown-item rounded no-blue">
-                                    <a href="{% url 'list_offers' %}">
-                                        Ofertas
+                                    <a href="{% url 'list_users' %}">
+                                        Usuarios
                                     </a>
                                 </li>
                             </ul>
@@ -183,7 +214,14 @@
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'list_reservations_user' %}')">
                                 <li class="dropdown-item rounded no-blue">
                                     <a href="{% url 'list_reservations_user' %}">
-                                        Mis Reservas
+                                        Mis Habitaciones
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="nav-link-div" onclick="navigateToURL('{% url 'list_restaurant_user' %}')">
+                                <li class="dropdown-item rounded no-blue">
+                                    <a href="{% url 'list_restaurant_user' %}">
+                                        Mis Comidas
                                     </a>
                                 </li>
                             </div>
@@ -216,7 +254,8 @@
         </div>
     </div>
 </nav>
-<main class="overflow-auto">
+<main class="">
+
     {% block content %} {% endblock %}
 </main>
 
@@ -224,7 +263,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-
 <script>
     function navigateToURL(url) {
         window.location.href = url;

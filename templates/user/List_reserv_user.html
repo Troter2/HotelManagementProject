@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %} Reservas del cliente {% endblock %}
+{% block title %} Habitaciones del cliente {% endblock %}
 {% block content %}
     {% for reserva in reserves %}
         <!-- Modal Información-->
@@ -99,7 +99,7 @@
             </div>
         </div>
     </div>
-    <h1 class="mx-3 my-3">Reservas del del ciente </h1>
+    <h1 class="mx-3 my-3">Reservas del cliente </h1>
     <!-- Botón de filtrado -->
     <div class="container-fluid">
         <div class="row mt-3">
@@ -157,4 +157,7 @@
             </table>
         </div>
     </div>
+    {% if not reserves %}
+        <p class="mx-3 my-3"><strong>No ha realizado ninguna reserva</strong></p>
+    {% endif %}
 {% endblock %}

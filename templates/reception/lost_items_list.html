@@ -5,6 +5,7 @@
 {% block content %}
     {% for item in items %}
         <!-- Modal -->
+
         <div class="modal fade" id="Pop-up-{{ item.id }}" tabindex="-1" role="dialog"
              aria-labelledby="ModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -49,7 +50,7 @@
                     <form id="filtroForm">
                         <div class="row">
                             <div class="col-6 px-4">
-                                <label for="nombre_habitacion">Nombre de la habitación:</label>
+                                <label for="nombre_habitacion">Numero de la habitación:</label>
                                 <input class="form-control" type="text" id="nombre_habitacion" name="nombre_habitacion">
                             </div>
                             <div class="col-6 px-4">
@@ -69,6 +70,16 @@
     </div>
 
     <h1 class="mx-3 my-3">Objetos perdidos</h1>
+    {% if error %}
+        <div class="w-100">
+            <div class="alert alert-warning alert-dismissible fade show mx-auto  w-50 " role="alert">
+                <strong>ERROR</strong> {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+
+
     <!-- Botón de filtrado -->
     <div class="container-fluid">
         <div class="row mt-3">
@@ -109,7 +120,9 @@
         </div>
     </div>
 
-
+    {% if not items %}
+        <p class="mx-3 my-3"><strong>No hay objetos perdidos</strong></p>
+    {% endif %}
 {% endblock %}
 
 

@@ -1,4 +1,7 @@
 import datetime
+from PyPDF2 import PdfMerger
+from decimal import Decimal
+
 import barcode
 from datetime import datetime
 from datetime import date
@@ -10,8 +13,8 @@ from django.db.models import Q, F, Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from reportlab.graphics.barcode import code39
+from reportlab.lib.pagesizes import letter
 
-from Billing.models import Promotion
 from Reception.models import RoomReservation, RoomType, Room
 from Reception.forms import ReservationForm
 from io import BytesIO
@@ -20,8 +23,9 @@ from reportlab.lib.utils import ImageReader
 import uuid
 from Reception.models import LostItem
 
-from Restaurant.models import Order, Item, ItemAmount
-from Restaurant.views import calculate_total
+from Restaurant.models import Order, Item, ItemAmount, RestaurantReservation
+from Restaurant.views import calculate_total, create_order_pdf_bytes
+from Billing.models import Promotion, Coupon
 
 
 def reception_ini(request):
@@ -69,22 +73,302 @@ def reserved_rooms_view(request):
 
 def ocuped_rooms_view(request):
     if request.user.has_perm('recepcionist'):
-        reserves = RoomReservation.objects.all().filter(guest_is_here=True, guest_leaved=False,
-                                                        guest_checkout=datetime.today())
+        room_reservations = RoomReservation.objects.filter(guest_is_here=True, guest_leaved=False,
+                                                           guest_checkout=datetime.today())
+        room_reservations_with_prices = []
+
+        for room_reservation in room_reservations:
+            restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            total_sum = restaurant_reservations.aggregate(total=Sum('order_num__total'))['total'] or 0
+
+            room_reservation_data = {
+                'other_spends': total_sum,
+                'room_reservation': room_reservation,
+                'restaurant_price': total_sum + room_reservation.price
+            }
+
+            room_reservations_with_prices.append(room_reservation_data)
+
         context = {
-            'reserves': reserves
+            'reserves': room_reservations_with_prices
         }
         return render(request, 'reception/ocuped_rooms.html', context)
     return redirect('home')
 
 
 def pay_reservation(request):
+    print("entre")
     if request.user.has_perm('recepcionist'):
         if request.method == 'POST':
             reserva_id = request.POST.get('id')
             reserva = RoomReservation.objects.get(pk=reserva_id)
             reserva.room_is_payed = True
+            reserva.guest_leaved = True
             reserva.save()
+        return redirect('ocuped_rooms_view')
+    return redirect('home')
+
+
+def generate_room_invoice(request):
+    if request.user.has_perm(['recepcionist', 'accountant']):
+        if request.method == 'GET':
+            buffer_main = BytesIO()
+
+            reserve_uuid = request.GET.get('uuid')
+            room_reservation = get_object_or_404(RoomReservation, reservation_number=reserve_uuid)
+            restaurant_reservation = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="reporte.pdf"'
+
+            c = canvas.Canvas(buffer_main, pagesize=letter)
+
+            img_path = 'static/img/Logo.png'
+            img = ImageReader(img_path)
+            c.drawImage(img, x=20, y=720, width=50, height=50, mask='auto')
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(80, 735)
+            titleObject.textLine("Restaurante las Palmeras")
+            c.drawText(titleObject)
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(30, 685)
+            titleObject.textLine("Factura nº" + str(room_reservation.id))
+            c.drawText(titleObject)
+
+            text = f"Nº huespedes: {room_reservation.guests_number}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 630)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-in: {room_reservation.guest_checkin}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 630)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio por noche: {room_reservation.room_number.room_type.price}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 610)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Nº noches: {(room_reservation.guest_checkout - room_reservation.guest_checkin).days}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 590)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-out: {room_reservation.guest_checkout}"
+            titleObject = c.beginText(30, 740)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 630)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio sin impuestos: {room_reservation.price - (room_reservation.guests_number *
+                                                                      (room_reservation.guest_checkout -
+                                                                       room_reservation.guest_checkin).days)}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 570)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Impuesto turístico: {room_reservation.guests_number *
+                                          (room_reservation.guest_checkout -
+                                           room_reservation.guest_checkin).days}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 550)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            suma = 0
+            for reservation in restaurant_reservation:
+                suma += reservation.order_num.total
+
+            text = f"Servicios extra: {suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 530)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Total: {room_reservation.price + suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica-Bold", 12)
+            titleObject.setTextOrigin(30, 510)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            c.showPage()
+            c.save()
+
+            buffers = [buffer_main]
+
+            for reservation in restaurant_reservation:
+                if reservation.order_num:
+                    buffer_individual = create_order_pdf_bytes(reservation)
+                    buffers.append(buffer_individual)
+
+            merger = PdfMerger()
+            for buffer in buffers:
+                merger.append(buffer)
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="combined.pdf"'
+
+            merger.write(response)
+            merger.close()
+
+            return response
+
+
+def generate_room_invoice_for_preview(request):
+    if request.user.has_perm(['recepcionist', 'accountant']):
+        if request.method == 'GET':
+            buffer_main = BytesIO()
+
+            reserve_uuid = request.GET.get('uuid')
+            room_reservation = get_object_or_404(RoomReservation, reservation_number=reserve_uuid)
+            restaurant_reservation = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="reporte.pdf"'
+
+            c = canvas.Canvas(buffer_main, pagesize=letter)
+
+            img_path = 'static/img/Logo.png'
+            img = ImageReader(img_path)
+            c.drawImage(img, x=20, y=720, width=50, height=50, mask='auto')
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(80, 735)
+            titleObject.textLine("Restaurante las Palmeras")
+            c.drawText(titleObject)
+
+            titleObject = c.beginText(80, 770)
+            titleObject.setFont("Helvetica", 21)
+            titleObject.setTextOrigin(30, 685)
+            titleObject.textLine("Factura nº" + str(room_reservation.id))
+            c.drawText(titleObject)
+
+            text = f"Nº huespedes: {room_reservation.guests_number}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 630)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-in: {room_reservation.guest_checkin}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 630)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio por noche: {room_reservation.room_number.room_type.price}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 610)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Nº noches: {(room_reservation.guest_checkout - room_reservation.guest_checkin).days}"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 590)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Check-out: {room_reservation.guest_checkout}"
+            titleObject = c.beginText(30, 740)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(450, 610)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Precio sin impuestos: {room_reservation.price - (room_reservation.guests_number *
+                                                                      (room_reservation.guest_checkout -
+                                                                       room_reservation.guest_checkin).days)}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 570)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Impuesto turístico: {room_reservation.guests_number *
+                                          (room_reservation.guest_checkout -
+                                           room_reservation.guest_checkin).days}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 550)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            suma = 0
+            for reservation in restaurant_reservation:
+                suma += reservation.order_num.total
+
+            text = f"Servicios extra: {suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica", 12)
+            titleObject.setTextOrigin(30, 530)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            text = f"Total: {room_reservation.price + suma}€"
+            titleObject = c.beginText(30, 770)
+            titleObject.setFont("Helvetica-Bold", 12)
+            titleObject.setTextOrigin(30, 510)
+            titleObject.textLine(text)
+            c.drawText(titleObject)
+
+            c.showPage()
+            c.save()
+
+            buffer_main.seek(0)
+            buffers = [buffer_main]
+
+            for reservation in restaurant_reservation:
+                if reservation.order_num:
+                    buffer_individual = create_order_pdf_bytes(reservation)
+                    buffers.append(buffer_individual)
+
+            merger = PdfMerger()
+            for buffer in buffers:
+                merger.append(buffer)
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="combined.pdf"'
+
+            merger.write(response)
+            merger.close()
+
+            return response
+        else:
+            return HttpResponse("Method not allowed", status=405)
+    else:
+        return HttpResponse("Permission denied", status=403)
+
+
+def pay_reservation_with_invoices(request):
+    if request.user.has_perm('recepcionist'):
+        if request.method == 'POST':
+            reserva_id = request.POST.get('id')
+            reserva = RoomReservation.objects.get(pk=reserva_id)
+            reserva.room_is_payed = True
+            reserva.guest_leaved = True
+            reserva.save()
+
         return redirect('ocuped_rooms_view')
     return redirect('home')
 
@@ -109,6 +393,9 @@ def habitaciones_libres(guest_entry, guest_leave, room_type=None):
 
 def reserve_room(request):
     roomTypes = RoomType.objects.all()
+    active_coupons = Coupon.objects.filter(active=True)
+    coupons_data = {coupon.discount_code: float(coupon.discount_percentage) for coupon in active_coupons}
+
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
@@ -119,6 +406,9 @@ def reserve_room(request):
             free_rooms = habitaciones_libres(fecha_entrada, fecha_salida, room_type=room_type)
             guests_phone = request.POST.get('guests_phone')
             guests_number = request.POST.get('guests_number')
+            coupon_code = request.POST.get('coupon_code')
+            discount_percentage = coupons_data.get(coupon_code, 0)
+
             if not validar_dni(dni):
                 form.add_error('DNI', 'El DNI no es válido.')
             if len(free_rooms) < 1:
@@ -128,23 +418,29 @@ def reserve_room(request):
             if validate_guests_number(guests_number):
                 form.add_error('guests_number', 'El numero de huespedes no puede ser 0.')
             if len(form.errors) > 0:
-                return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
-            form.instance.price = 60
+                return render(request, 'reception/reservation_form.html',
+                              {'form': form, 'roomTypes': roomTypes, 'coupons': coupons_data})
+
             uid = uuid.uuid4()
             nights = (fecha_salida - fecha_entrada).days
-            room = RoomReservation.objects.create(reservation_number=uid, DNI=request.POST['DNI'],
-                                                  guests_name=request.POST['guests_name'],
-                                                  guests_surname=request.POST['guests_surname'],
-                                                  guests_email=request.POST['guests_email'],
-                                                  guests_phone=request.POST['guests_phone'],
-                                                  guest_checkin=request.POST['guest_checkin'],
-                                                  guest_checkout=request.POST['guest_checkout'],
-                                                  guests_number=request.POST['guests_number'],
-                                                  price=(RoomType.objects.filter(id=request.POST['room_type'])[
-                                                             0].price + int(
-                                                      request.POST['guests_number'])) * nights,
-                                                  room_number=free_rooms[0]
-                                                  )
+            room_type = RoomType.objects.filter(id=request.POST['room_type'])[0].price
+            turistic_import = int(guests_number) * nights
+            total_price = (room_type * nights) + turistic_import
+            discounted_price = total_price - (total_price * (Decimal(discount_percentage) / 100))
+            room = RoomReservation.objects.create(
+                reservation_number=uid,
+                DNI=request.POST['DNI'],
+                guests_name=request.POST['guests_name'],
+                guests_surname=request.POST['guests_surname'],
+                guests_email=request.POST['guests_email'],
+                guests_phone=request.POST['guests_phone'],
+                guest_checkin=request.POST['guest_checkin'],
+                guest_checkout=request.POST['guest_checkout'],
+                guests_number=request.POST['guests_number'],
+                price=discounted_price,
+                room_number=free_rooms[0]
+            )
+
             if 'save_data' in request.POST and request.POST['save_data'] == 'on':
                 if request.user.is_authenticated:
                     user = request.user
@@ -156,6 +452,7 @@ def reserve_room(request):
                     user.save()
 
             return render(request, 'reception/thank_you.html', {'id': room.id})
+
     else:
         form = ReservationForm()
         if request.user.is_authenticated:
@@ -168,8 +465,10 @@ def reserve_room(request):
                 'phone': user.telefono,
             }
             return render(request, 'reception/reservation_form.html',
-                          {'form': form, 'roomTypes': roomTypes, 'user_data': user_data})
-        return render(request, 'reception/reservation_form.html', {'form': form, 'roomTypes': roomTypes})
+                          {'form': form, 'roomTypes': roomTypes, 'user_data': user_data, 'coupons': coupons_data})
+
+        return render(request, 'reception/reservation_form.html',
+                      {'form': form, 'roomTypes': roomTypes, 'coupons': coupons_data})
 
 
 def validar_dni(dni):
@@ -233,13 +532,30 @@ def booking_filter_check_out(request):
         if fecha:
             reserves_filtradas = reserves_filtradas.filter(guest_checkout=fecha)
 
-        return render(request, 'reception/ocuped_rooms.html', {'reserves': reserves_filtradas})
+        room_reservations_with_prices = []
+
+        for room_reservation in reserves_filtradas:
+            restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
+            total_sum = restaurant_reservations.aggregate(total=Sum('order_num__total'))['total'] or 0
+
+            room_reservation_data = {
+                'other_spends': total_sum,
+                'room_reservation': room_reservation,
+                'restaurant_price': total_sum + room_reservation.price
+            }
+
+            room_reservations_with_prices.append(room_reservation_data)
+
+        context = {
+            'reserves': room_reservations_with_prices
+        }
+        return render(request, 'reception/ocuped_rooms.html', context)
     return redirect('home')
 
 
 def lost_item_list(request):
     if request.user.has_perm('recepcionist'):
-        items = LostItem.objects.all().filter(in_possesion=True)
+        items = LostItem.objects.all()
 
         return render(request, 'reception/lost_items_list.html', {'items': items})
     return redirect('home')
@@ -249,9 +565,18 @@ def update_item_reception(request):
     if request.user.has_perm('recepcionist'):
         if request.method == 'POST':
             id = request.POST.get("id")
-            item = LostItem.objects.get(id=id)
-            item.in_possesion = False
-            item.save()
+            context = {}
+            try:
+                item_to_delete = LostItem.objects.get(id=int(id))
+                item_to_delete.delete()
+            except:
+                items = LostItem.objects.all()
+                context.update({'error': 'No se pudo entregar el objeto, porfavor intentelo de nuevo'})
+            items = LostItem.objects.all()
+            context.update({'items': items})
+            return render(request, 'reception/lost_items_list.html',
+                          context)
+
         return redirect('lost_item_list')
     return redirect('home')
 
@@ -391,7 +716,7 @@ def filtrar_por_numero_reserva(request):
 def order_detail(request):
     if request.user.has_perm('recepcionist'):
         order = Order.objects.create(total=0)
-        items = Item.objects.all()
+        items = Item.objects.filter(active=True)
         return render(request, 'restaurant/order_page.html', {'order': order, 'items': items})
     return redirect('home')
 
@@ -407,7 +732,7 @@ def update_order(request):
             for item_data in items_data:
                 item_id = item_data['item_id']
                 amount = item_data['amount']
-                if int(amount) > 0:
+                if int(amount) >= 0:
                     items = ItemAmount.objects.filter(item_id=item_id, order_id=order_id)
                     if len(items) > 0:
                         items[0].amount = amount

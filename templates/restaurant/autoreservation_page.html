@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="mb-3 mx-4 form-floating">
                                         <input type="number" name="costumers_number" class="form-control"
-                                               id="costumers_number" placeholder="Name">
+                                               id="costumers_number"  placeholder="Número de Comensales" required min="1">
                                         <label for="costumers_number">Numero de comensales</label>
                                     </div>
                                     <div class="mb-3 mx-4 form-floating">
@@ -62,4 +62,8 @@
         </div>
     </div>
 </section>
+    <script>
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("date_entrance").setAttribute('min', today);
+    </script>
 {% endblock %}

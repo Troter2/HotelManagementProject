@@ -27,19 +27,21 @@ def restaurant_page(request):
 
 
 def restaurant_reservation_page(request):
-    if request.method == 'POST':
-        form = RestaurantBookingForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('thanks')
-    else:
-        form = RestaurantBookingForm()
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = RestaurantBookingForm(request.POST)
+            if form.is_valid():
+                booking = form.save(commit=False)
+                booking.user = request.user
+                booking.save()
+                return redirect('thanks')
+    form = RestaurantBookingForm()
     return render(request, 'restaurant/reservation_page.html', {'form': form})
 
 
 def restaurant_list_items(request):
     if request.user.has_perm('waiter'):
-        items = Item.objects.all()
+        items = Item.objects.all().filter(active=True)
         return render(request, 'restaurant/list_items.html', {"products": items})
     return redirect('home')
 
@@ -59,6 +61,11 @@ def edit_product(request, id):
         if request.method == 'POST':
             form = ItemFormWithoutImg(request.POST)
             if form.is_valid():
+                old_item = Item.objects.get(pk=id)
+                old_item.active = False
+                old_item.save()
+                Item.objects.create(name=request.POST.get('name'), price=request.POST.get('price'), img=old_item.img)
+
                 item = Item.objects.all().get(id=id)
                 item.name = request.POST['name']
                 item.price = request.POST['price']
@@ -181,9 +188,16 @@ def thanks(request):
 
 
 def generate_order_pdf(request):
-    now = datetime.now()
     id = request.POST.get('id', '')
     reservation = RestaurantReservation.objects.get(pk=id)
+    buffer = create_order_pdf_bytes(reservation)
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
+    return response
+
+
+def create_order_pdf_bytes(reservation):
     items_amounts = []
     if reservation.order_num:
         order = reservation.order_num
@@ -258,11 +272,7 @@ def generate_order_pdf(request):
     t.drawOn(c, 30, 600)
 
     c.save()
-
-    buffer.seek(0)
-    response = HttpResponse(buffer, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
-    return response
+    return buffer
 
 
 def view_orders_without_reservation(request):
@@ -285,10 +295,8 @@ def is_adquired(adquired, item):
 def modify_order(request, order_id):
     if request.user.has_perm('waiter'):
         order = Order.objects.get(id=order_id)
-        items = Item.objects.all()
-        item_quantities = {}
+        items = Item.objects.filter(active=True)
         items_adquired = ItemAmount.objects.all().filter(order=order)
-        items_amount = ItemAmount.objects.all().filter(order=order)
         data = []
 
         for item in items:

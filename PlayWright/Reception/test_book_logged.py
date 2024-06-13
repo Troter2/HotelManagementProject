@@ -1,5 +1,6 @@
 import re
 from playwright.sync_api import Page, expect
+import time
 
 
 def test_book_logged(page: Page) -> None:
@@ -11,10 +12,10 @@ def test_book_logged(page: Page) -> None:
     page.get_by_label("Contraseña").fill("admin")
     page.get_by_role("main").get_by_role("button", name="Log in").click()
     page.get_by_role("link", name="Reservar").click()
-    page.get_by_placeholder("Fecha de Entrada ").fill("2024-10-24")
-    page.get_by_placeholder("Fecha de Salida").fill("2024-10-26")
+    time.sleep(1)
+    page.get_by_placeholder("Fecha de Entrada ").fill("2024-12-12")
+    page.get_by_placeholder("Fecha de Salida").fill("2024-12-25")
     page.get_by_placeholder("Número de Huéspedes").click()
     page.get_by_placeholder("Número de Huéspedes").fill("2")
-    page.get_by_text("Precio Habitación: 0 Importe").click()
     page.get_by_role("button", name="Reservar").click()
     #expect(page.get_by_role("button", name="Descargar Comprobante")).to_be_visible()

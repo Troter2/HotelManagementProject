@@ -132,6 +132,11 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.endark p {
+    font-size: 4rem
+
+}
+
 .endark-promo {
     position: absolute;
     top: 0;
@@ -150,11 +155,6 @@ body {
     border-top-left-radius: 10px;
     border-bottom-right-radius: 10px;
     z-index: 10;
-}
-
-.endark p {
-    font-size: 4rem
-
 }
 
 .dropdown-item a {
