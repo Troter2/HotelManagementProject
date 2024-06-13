@@ -14,6 +14,7 @@ def list_offers(request):
         return render(request, 'billing/list_offers.html', {'ofertas': promotions, 'cupones': coupons})
     return redirect('home')
 
+
 def list_coupons(request):
     if request.user.has_perm('accountant'):
         coupons = Coupon.objects.all()
@@ -53,6 +54,7 @@ def edit_coupon(request):
         return redirect('list_coupons')
     return redirect('home')
 
+
 def create_offer(request):
     if request.user.has_perm('accountant') and request.method == 'POST':
         form = PromotionForm(request.POST, request.FILES)
@@ -61,7 +63,8 @@ def create_offer(request):
         return redirect('list_offers')
     return redirect('home')
 
-  def list_restaurant_and_room(request):
+
+def list_restaurant_and_room(request):
     if request.user.has_perm('accountant'):
         reservations = RoomReservation.objects.filter(guest_leaved=True)
         return render(request, 'billing/list_reservations.html', {'reservas': reservations})
@@ -89,7 +92,9 @@ def delete_offer(request, offer_id):
         return redirect('list_offers')
     return redirect('home')
 
+
 def details_reservation(request, reservation_id):
     room_reservation = get_object_or_404(RoomReservation, pk=reservation_id)
     restaurant_reservations = RestaurantReservation.objects.filter(room_reservation=room_reservation)
-    return render(request, 'billing/details_reservation.html', {'room_reservation': room_reservation, 'restaurant_reservations': restaurant_reservations})
+    return render(request, 'billing/details_reservation.html',
+                  {'room_reservation': room_reservation, 'restaurant_reservations': restaurant_reservations})
