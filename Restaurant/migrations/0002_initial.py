@@ -10,19 +10,14 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('Reception', '0001_initial'),
+        ('Restaurant', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='roomreservation',
-            name='usuario',
+            model_name='restaurantreservation',
+            name='user',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='room',
-            name='room_type',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='Reception.roomtype'),
         ),
     ]
