@@ -196,6 +196,7 @@ def generate_order_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
     return response
 
+
 def create_order_pdf_bytes(reservation):
     items_amounts = []
     if reservation.order_num:
@@ -272,6 +273,7 @@ def create_order_pdf_bytes(reservation):
 
     c.save()
     return buffer
+
 
 def view_orders_without_reservation(request):
     if request.user.has_perm('waiter'):
