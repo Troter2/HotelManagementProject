@@ -1,4 +1,6 @@
 import datetime
+from itertools import chain
+
 from PyPDF2 import PdfMerger
 from decimal import Decimal
 
@@ -554,6 +556,17 @@ def booking_filter_check_out(request):
 def lost_item_list(request):
     if request.user.has_perm('recepcionist'):
         items = LostItem.objects.all()
+        if request.method == 'GET':
+            room_number = request.GET.get('nombre_habitacion')
+            date = request.GET.get('fecha')
+            if room_number and date:
+                list1 = LostItem.objects.filter(room_number=room_number)
+                list2 = LostItem.objects.filter(date=date)
+                items=chain(list1,list2)
+            elif date:
+                items = LostItem.objects.filter(encounter_date=date)
+            if room_number:
+                items = LostItem.objects.filter(room_number=get_object_or_404(Room,room_number=room_number))
 
         return render(request, 'reception/lost_items_list.html', {'items': items})
     return redirect('home')

@@ -269,7 +269,7 @@ def create_order_pdf_bytes(reservation):
     t.setStyle(style)
     t.setStyle(style)
     t.wrapOn(c, 0, 0)
-    t.drawOn(c, 30, 600)
+    t.drawOn(c, 30, 550)
 
     c.save()
     return buffer
