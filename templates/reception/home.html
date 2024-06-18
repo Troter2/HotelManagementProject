@@ -34,25 +34,24 @@
                         <div id="carouselPromotion" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
                                 <div class="carousel-item active" data-bs-interval="20000">
-                                    <a href="#">
-                                        <img src="{% static promotions.0.image %}"
-                                             class="d-block overflow-hidden w-100"
-                                             style="height: 300px; overflow: hidden; object-fit: cover;" alt="...">
-                                        <div class="carousel-caption d-md-block endark-promo">
-                                            <h5><b>{{ promotions.0.title }}</b></h5>
-                                        </div>
-                                    </a>
+                                    <img src="{% static promotions.0.image %}"
+                                         class="d-block overflow-hidden w-100"
+                                         style="height: 300px; overflow: hidden; object-fit: cover;" alt="...">
+                                    <div class="carousel-caption d-md-block endark-promo">
+                                        <h5><b>{{ promotions.0.title }}<br></b><span
+                                                class="fs-5 ">Codigo: {{ promotions.0.discount_code.discount_code }}</span>
+                                        </h5>
+                                    </div>
                                 </div>
                                 {% for promotion in promotions|slice:"1:" %}
                                     <div class="carousel-item" data-bs-interval="20000">
-                                        <a href="#">
-                                            <img src="{% static promotion.image %}"
-                                                 class="d-block overflow-hidden w-100"
-                                                 style="height: 300px; overflow: hidden; object-fit: cover;" alt="...">
-                                            <div class="carousel-caption d-md-block endark-promo">
-                                                <h5><b>{{ promotion.title }}</b></h5>
-                                            </div>
-                                        </a>
+                                        <img src="{% static promotion.image %}"
+                                             class="d-block overflow-hidden w-100"
+                                             style="height: 300px; overflow: hidden; object-fit: cover;" alt="...">
+                                        <div class="carousel-caption d-md-block endark-promo">
+                                            <h5><b>{{ promotion.title }}</b></h5>
+                                            <p>{{ promotion.discount_code.discount_code }}</p>
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>

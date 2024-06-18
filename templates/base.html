@@ -160,21 +160,22 @@
                             </a>
                             <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarContable">
                                 <div class="nav-link-div" onclick="navigateToURL('{% url 'list_offers' %}')">
-                                    <li class="dropdown-item rounded no-blue">
+                                    <li class="dropdown-item my-2 no-blue">
                                         <a href="{% url 'list_offers' %}">
                                             Ofertas
                                         </a>
                                     </li>
                                 </div>
                                 <div class="nav-link-div" onclick="navigateToURL('{% url 'list_coupons' %}')">
-                                    <li class="dropdown-item rounded no-blue">
+                                    <li class="dropdown-item my-2 no-blue">
                                         <a href="{% url 'list_coupons' %}">
                                             Cupones
                                         </a>
                                     </li>
                                 </div>
-                                <div class="nav-link-div" onclick="navigateToURL('{% url 'list_restaurant_and_room' %}')">
-                                    <li class="dropdown-item rounded no-blue">
+                                <div class="nav-link-div"
+                                     onclick="navigateToURL('{% url 'list_restaurant_and_room' %}')">
+                                    <li class="dropdown-item my-2 no-blue">
                                         <a href="{% url 'list_restaurant_and_room' %}">
                                             Listado de Reservas
                                         </a>
@@ -190,7 +191,7 @@
                                 RRHH
                             </a>
                             <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarRecepcio">
-                                <li class="dropdown-item rounded no-blue">
+                                <li class="dropdown-item my-2 no-blue">
                                     <a href="{% url 'list_users' %}">
                                         Usuarios
                                     </a>
@@ -205,21 +206,21 @@
                         </a>
                         <ul class="dropdown-menu bg-light my-0 py-0 text-black-50" aria-labelledby="navbarUsuari">
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'user_profile' %}')">
-                                <li class="dropdown-item rounded no-blue">
+                                <li class="dropdown-item my-2 no-blue">
                                     <a href="{% url 'user_profile' %}">
                                         Perfil
                                     </a>
                                 </li>
                             </div>
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'list_reservations_user' %}')">
-                                <li class="dropdown-item rounded no-blue">
+                                <li class="dropdown-item my-2 no-blue">
                                     <a href="{% url 'list_reservations_user' %}">
                                         Mis Habitaciones
                                     </a>
                                 </li>
                             </div>
                             <div class="nav-link-div" onclick="navigateToURL('{% url 'list_restaurant_user' %}')">
-                                <li class="dropdown-item rounded no-blue">
+                                <li class="dropdown-item my-2 no-blue">
                                     <a href="{% url 'list_restaurant_user' %}">
                                         Mis Comidas
                                     </a>
